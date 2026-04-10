@@ -1,0 +1,57 @@
+server:
+  port: ${GATEWAY_PORT:8080}
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8091}
+          predicates:
+            - Path=/auth/**
+        - id: banking-service
+          uri: ${BANKING_SERVICE_URL:http://localhost:8090}
+          predicates:
+            - Path=/api/**
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+
+jwt:
+  secret: ${JWT_SECRET:devsu-banking-secret-key-for-jwt-token-generation-2024-must-be-at-least-256-bits}
+
+features:
+  flags:
+    clients:
+      enabled: ${FEATURE_CLIENTS_ENABLED:true}
+      description: "Client management endpoints"
+      path-pattern: "/api/clientes/**"
+    accounts:
+      enabled: ${FEATURE_ACCOUNTS_ENABLED:true}
+      description: "Account management endpoints"
+      path-pattern: "/api/cuentas/**"
+    transactions:
+      enabled: ${FEATURE_TRANSACTIONS_ENABLED:true}
+      description: "Transaction management endpoints"
+      path-pattern: "/api/movimientos/**"
+    reports:
+      enabled: ${FEATURE_REPORTS_ENABLED:true}
+      description: "Report generation endpoints"
+      path-pattern: "/api/reportes/**"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,metrics,env
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    com.devsu.banking.gateway: INFO

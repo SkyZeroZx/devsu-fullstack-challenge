@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://auth-service:8091}
+          predicates:
+            - Path=/auth/**
+        - id: banking-service
+          uri: ${BANKING_SERVICE_URL:http://banking-service:8090}
+          predicates:
+            - Path=/api/**
