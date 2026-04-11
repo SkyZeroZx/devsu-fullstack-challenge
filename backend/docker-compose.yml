@@ -1,0 +1,105 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: devsu-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-devsu_banking}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - banking-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: devsu-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - banking-network
+
+  banking-service:
+    build:
+      context: .
+      dockerfile: banking-service/Dockerfile
+    container_name: devsu-banking-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-devsu_banking}
+      DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      REDIS_HOST: redis
+      SERVER_PORT: 8090
+    ports:
+      - "8090:8090"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - banking-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: devsu-auth-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-devsu_banking}
+      DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      SERVER_PORT: 8091
+      JWT_SECRET: ${JWT_SECRET:-devsu-banking-secret-key-for-jwt-token-generation-2024-must-be-at-least-256-bits}
+    ports:
+      - "8091:8091"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - banking-network
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: devsu-api-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      BANKING_SERVICE_URL: http://banking-service:8090
+      AUTH_SERVICE_URL: http://auth-service:8091
+      GATEWAY_PORT: 8080
+      JWT_SECRET: ${JWT_SECRET:-devsu-banking-secret-key-for-jwt-token-generation-2024-must-be-at-least-256-bits}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - banking-service
+      - auth-service
+    networks:
+      - banking-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  banking-network:
+    driver: bridge

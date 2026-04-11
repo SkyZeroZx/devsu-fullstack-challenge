@@ -1,0 +1,48 @@
+# docker-compose.staging.yml
+# Usage: docker compose -f docker-compose.yml -f docker-compose.staging.yml up --build
+#
+# First run: postgres auto-runs BaseDatos.sql (schema) from docker-entrypoint-initdb.d.
+# Then the seed service inserts admin + 50 records per table (idempotent).
+# banking-service, auth-service and api-gateway wait for the seed to finish.
+
+services:
+
+  seed:
+    image: postgres:16-alpine
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB:-devsu_banking}
+      PGUSER: ${POSTGRES_USER:-postgres}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      SEED_PROFILE: staging
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    volumes:
+      - ./scripts:/scripts:ro
+    command: sh /scripts/seed.sh
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - banking-network
+    restart: "no"
+
+  banking-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker,staging
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+
+  auth-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker,staging
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+
+  api-gateway:
+    depends_on:
+      - banking-service
+      - auth-service
