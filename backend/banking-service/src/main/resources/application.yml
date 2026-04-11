@@ -1,0 +1,51 @@
+server:
+  port: ${SERVER_PORT:8090}
+
+spring:
+  application:
+    name: banking-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/devsu_banking}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2000ms
+      connect-timeout: 1000ms
+  cache:
+    type: redis
+
+banking:
+  daily-withdrawal-limit: ${DAILY_WITHDRAWAL_LIMIT:1000}
+
+cache:
+  ttl:
+    clients:      ${CACHE_TTL_CLIENTS:PT10M}
+    accounts:     ${CACHE_TTL_ACCOUNTS:PT10M}
+    transactions: ${CACHE_TTL_TRANSACTIONS:PT5M}
+    list:         ${CACHE_TTL_LIST:PT2M}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.devsu.banking: INFO
+    org.hibernate.SQL: WARN
