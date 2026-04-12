@@ -1,0 +1,7 @@
+{
+  "numeroCuenta": "#string",
+  "tipoCuenta": "#string",
+  "saldoInicial": "#number",
+  "estado": "#boolean",
+  "clienteId": "#string"
+}
