@@ -22,6 +22,8 @@ jwt:
   secret: ${JWT_SECRET:devsu-banking-secret-key-for-jwt-token-generation-2024-must-be-at-least-256-bits}
 
 features:
+  summary-paths:
+    - /auth/login
   flags:
     clients:
       enabled: ${FEATURE_CLIENTS_ENABLED:true}

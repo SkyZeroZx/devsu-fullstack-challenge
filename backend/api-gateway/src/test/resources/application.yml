@@ -1,0 +1,27 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: api-gateway-test
+  cloud:
+    gateway:
+      routes: []
+  main:
+    web-application-type: reactive
+
+jwt:
+  secret: test-secret-key-for-unit-tests-must-be-at-least-256-bits-long-enough
+
+features:
+  summary-paths:
+    - /auth/login
+  flags:
+    clients:
+      enabled: true
+      description: "Client management endpoints"
+      path-pattern: "/api/clientes/**"
+    transactions:
+      enabled: true
+      description: "Transaction management endpoints"
+      path-pattern: "/api/movimientos/**"
