@@ -9,9 +9,7 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/banking-front",
         "browser": "./src/main.ts",
@@ -23,9 +21,10 @@
             "input": "public"
           }
         ],
-        "styles": [
-          "./src/styles.scss"
-        ]
+        "styles": ["./src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["src", "src/styles"]
+        }
       },
       "configurations": {
         "production": {
@@ -66,6 +65,7 @@
           "buildTarget": "banking-front:build:production"
         },
         "development": {
+          "hmr": false,
           "buildTarget": "banking-front:build:development"
         }
       },
@@ -74,16 +74,12 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": [
-          "./src"
-        ]
+        "lintFilePatterns": ["./src"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectName}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
       "options": {
         "jestConfig": "jest.config.cts",
         "tsConfig": "tsconfig.spec.json"

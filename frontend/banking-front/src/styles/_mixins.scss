@@ -1,0 +1,112 @@
+@use 'sass:list';
+@use 'variables' as *;
+
+/// Generates a BEM element selector: `.block__element`
+/// Usage inside a `.block { }` rule:
+///   @include element('title') { color: red; }
+///   → .block__title { color: red; }
+@mixin element($name) {
+  &__#{$name} {
+    @content;
+  }
+}
+
+/// Generates a BEM modifier selector: `.block--modifier`
+/// Usage inside a `.block { }` rule:
+///   @include modifier('active') { opacity: 1; }
+///   → .block--active { opacity: 1; }
+@mixin modifier($name) {
+  &--#{$name} {
+    @content;
+  }
+}
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  }
+}
+
+@mixin respond-below($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: ($breakpoint-sm - 1)) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (max-width: ($breakpoint-md - 1)) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (max-width: ($breakpoint-lg - 1)) {
+      @content;
+    }
+  }
+}
+
+@mixin text-body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-base;
+  color: $color-text-primary;
+}
+
+@mixin text-heading {
+  font-family: $font-family-base;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-text-primary;
+}
+
+@mixin focus-visible($color: $color-primary, $offset: 2px) {
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: $offset;
+  }
+}
+
+@mixin transition($properties...) {
+  $result: ();
+  @each $prop in $properties {
+    $result: list.append($result, $prop $transition-base, comma);
+  }
+  transition: $result;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,19 +1,24 @@
 import { TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
 import { App } from './app';
- 
+
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [App, RouterModule.forRoot([])],
     }).compileComponents();
   });
 
-  it('should render title', async () => {
+  it('should create the app', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Welcome banking-front',
-    );
+    expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('should contain a router-outlet', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const routerOutlet = fixture.nativeElement.querySelector('router-outlet');
+    expect(routerOutlet).toBeTruthy();
   });
 });

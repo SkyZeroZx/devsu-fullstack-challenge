@@ -8,6 +8,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { globalErrorHandler } from './core/errors';
 import { provideServiceWorker } from '@angular/service-worker';
 import { swRegistrationOptions } from './core/config/service-worker';
+import { provideToast } from './shared/ui/toast/toast.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,5 +17,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     globalErrorHandler,
     provideServiceWorker('ngsw-worker.js', swRegistrationOptions),
+    provideToast({
+      timeout: 5000,
+    }),
   ],
 };

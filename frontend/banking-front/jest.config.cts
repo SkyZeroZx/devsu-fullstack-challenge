@@ -3,6 +3,12 @@ module.exports = {
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: './coverage/banking-front',
+  moduleNameMapper: {
+    '^@app/(.*)$': '<rootDir>/src/app/$1',
+    '^@shared/(.*)$': '<rootDir>/src/app/shared/$1',
+    '^@core/(.*)$': '<rootDir>/src/app/core/$1',
+    '^@env/(.*)$': '<rootDir>/src/environments/$1',
+  },
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
