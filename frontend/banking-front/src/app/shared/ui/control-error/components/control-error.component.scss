@@ -1,0 +1,21 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// ==========================================================================
+// Control Error — BEM
+// ==========================================================================
+
+.control-error {
+  padding-top: $spacing-2;
+  padding-bottom: $spacing-2;
+  font-weight: $font-weight-semibold;
+  color: $color-error;
+
+  @include modifier('hidden') {
+    display: none;
+  }
+
+  @include element('text') {
+    font-size: $font-size-xs;
+  }
+}

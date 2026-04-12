@@ -1,0 +1,70 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// ==========================================================================
+// Toast — BEM
+// ==========================================================================
+
+.toast {
+  position: fixed;
+  z-index: $z-toast;
+  top: $spacing-4;
+  right: $spacing-2;
+  min-width: 380px;
+  max-width: 420px;
+  word-break: break-word;
+  cursor: pointer;
+  background-color: transparent;
+  animation: slideInRight $transition-slow forwards;
+
+  @include focus-visible;
+
+  @include respond-below(sm) {
+    min-width: 300px;
+  }
+
+  @include modifier('closing') {
+    animation: slideOutRight $transition-slow forwards;
+  }
+
+  @include element('body') {
+    position: relative;
+    padding: $spacing-4 $spacing-6;
+    border-radius: $radius-md;
+    font-weight: $font-weight-semibold;
+
+    @include modifier('success') {
+      background-color: $color-success;
+    }
+
+    @include modifier('error') {
+      background-color: $color-error;
+    }
+
+    @include modifier('info') {
+      background-color: $color-info;
+    }
+
+    @include modifier('warn') {
+      background-color: $color-warn;
+    }
+  }
+
+  @include element('content') {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include element('title') {
+    font-size: $font-size-base;
+    font-weight: $font-weight-extrabold;
+    color: $color-text-inverse;
+    margin-bottom: $spacing-1;
+  }
+
+  @include element('text') {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-normal;
+    color: $color-text-inverse;
+  }
+}

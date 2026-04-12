@@ -1,0 +1,14 @@
+<div
+  class="control-error"
+  [class.control-error--hidden]="_hide()"
+  role="alert"
+  aria-live="polite"
+>
+  <p
+    class="control-error__text"
+    id="text-error"
+    data-testid="control-error-text"
+  >
+    {{ _text() }}
+  </p>
+</div>

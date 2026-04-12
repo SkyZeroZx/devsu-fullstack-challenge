@@ -1,0 +1,202 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.modal {
+  position: fixed;
+  background-color: $color-overlay;
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: $z-modal-backdrop;
+  display: inline-block;
+
+  @include modifier('enter') {
+    animation: fadeInDown $transition-base;
+    opacity: 1;
+  }
+
+  @include modifier('leave') {
+    animation: fadeOutUp 0.4s forwards;
+    opacity: 0;
+  }
+
+  @include element('content') {
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    min-height: 90dvh;
+    height: 90dvh;
+    overflow-y: scroll;
+    max-height: 80vh;
+    top: 5%;
+    width: 90%;
+    margin-left: auto;
+    background: $color-white;
+    border-radius: $radius-lg;
+    position: absolute;
+    scrollbar-color: transparent transparent;
+
+    @include respond-to(sm) {
+      width: 50%;
+    }
+
+    @include respond-to(lg) {
+      width: 40%;
+    }
+  }
+
+  @include element('close-btn') {
+    top: -12px;
+    position: absolute;
+    right: $spacing-2;
+    font-size: 2.5rem;
+    background: none;
+    border: none;
+    color: $color-text-primary;
+    cursor: pointer;
+    @include focus-visible;
+  }
+
+  @include element('backdrop') {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+.dialog {
+  overflow-y: auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: grid;
+  position: fixed;
+  z-index: $z-modal;
+  inset: 0;
+  box-sizing: border-box;
+  grid-template-areas:
+    'top-start top top-end'
+    'center-start center center-end'
+    'bottom-start bottom-center bottom-end';
+  grid-template-rows:
+    minmax(min-content, auto) minmax(min-content, auto)
+    minmax(min-content, auto);
+  height: 100%;
+  padding: 0.625em;
+  overflow-x: hidden;
+  background-color: $color-overlay-light;
+
+  @include modifier('enter') {
+    animation: fadeInDown $transition-base;
+    opacity: 1;
+  }
+
+  @include modifier('leave') {
+    animation: fadeOutUp 0.4s forwards;
+    opacity: 0;
+  }
+
+  @include element('content') {
+    display: grid;
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    justify-self: center;
+    position: relative;
+    box-sizing: border-box;
+    grid-template-columns: minmax(0, 100%);
+    width: 32em;
+    max-width: 100%;
+    padding: 0 0 $spacing-5;
+    border: none;
+    border-radius: $radius-sm;
+    background: $color-white;
+    color: $color-text-primary;
+    font-family: inherit;
+    font-size: $font-size-base;
+  }
+}
+
+.bottom-sheet {
+  position: fixed;
+  background-color: $color-overlay;
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: $z-modal-backdrop;
+  display: inline-block;
+
+  @include element('backdrop') {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  @include element('content') {
+    z-index: $z-dropdown;
+    background-color: $color-white;
+    min-height: 30vh;
+    padding: $spacing-4;
+    padding-bottom: $spacing-12;
+    border-top-left-radius: $radius-xl;
+    border-top-right-radius: $radius-xl;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  @include modifier('enter') {
+    .bottom-sheet__content {
+      animation: slideInBottom $transition-base;
+      opacity: 1;
+    }
+  }
+
+  @include modifier('leave') {
+    .bottom-sheet__content {
+      animation: slideOutBottom $transition-slow forwards;
+    }
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+.slideInUp {
+  transition: all 0.4s ease;
+  animation: slideInUp 0.4s;
+  opacity: 1;
+}
+
+@-webkit-keyframes slideInUp {
+  from {
+    transform: scale(1.2, 1.2) translate3d(0, 0, 0);
+
+    visibility: visible;
+  }
+
+  to {
+    transform: scale(1, 1) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: scale(1.2, 1.2) translate3d(0, 0, 0);
+
+    visibility: visible;
+  }
+
+  to {
+    transform: scale(1, 1) translate3d(0, 0, 0);
+  }
+}

@@ -1,0 +1,57 @@
+@if (!setting().isBottomSheet) {
+  <div
+    class="modal"
+    [class.modal--enter]="show()"
+    [class.modal--leave]="!show()"
+    [class.dialog]="setting().isDialog"
+    [class.dialog--enter]="setting().isDialog && show()"
+    [class.dialog--leave]="setting().isDialog && !show()"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="setting().isModal ? 'Modal' : 'Dialog'"
+    data-testid="modal-container"
+  >
+    <div
+      [class.modal__content]="setting().isModal"
+      [class.dialog__content]="setting().isDialog"
+      [style]="style()"
+    >
+      <button
+        type="button"
+        class="modal__close-btn"
+        aria-label="Cerrar"
+        data-testid="modal-close-btn"
+        (click)="close()"
+      >
+        &times;
+      </button>
+      <ng-content select="[appModalBody]" #element />
+    </div>
+    <div
+      class="modal__backdrop"
+      (click)="close()"
+      (keydown.escape)="close()"
+      aria-hidden="true"
+    ></div>
+  </div>
+} @else {
+  <div
+    class="bottom-sheet"
+    [class.bottom-sheet--enter]="show()"
+    [class.bottom-sheet--leave]="!show()"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Bottom sheet"
+    data-testid="bottom-sheet-container"
+  >
+    <div
+      class="bottom-sheet__backdrop"
+      (click)="close()"
+      (keydown.escape)="close()"
+      aria-hidden="true"
+    ></div>
+    <div class="bottom-sheet__content" [style]="style()">
+      <ng-content select="[appBottomSheetBody]" />
+    </div>
+  </div>
+}
