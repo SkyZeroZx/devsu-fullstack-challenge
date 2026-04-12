@@ -1,12 +1,14 @@
 package com.devsu.banking.domain.exception;
 
-public class InsufficientBalanceException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class InsufficientBalanceException extends BankingException {
 
     public InsufficientBalanceException() {
-        super("Saldo no disponible");
+        super("Saldo no disponible", HttpStatus.BAD_REQUEST);
     }
 
     public InsufficientBalanceException(String message) {
-        super(message);
+        super(message, HttpStatus.BAD_REQUEST);
     }
 }
