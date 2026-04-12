@@ -30,7 +30,7 @@ public class TransactionController {
     public ResponseEntity<PagedResponseDTO<TransactionResponseDTO>> listAll(
             @PageableDefault(size = 20, sort = "fecha", direction = Sort.Direction.DESC)
                     Pageable pageable) {
-        return ResponseEntity.ok(PagedResponseDTO.from(transactionService.findAll(pageable)));
+        return ResponseEntity.ok(transactionService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

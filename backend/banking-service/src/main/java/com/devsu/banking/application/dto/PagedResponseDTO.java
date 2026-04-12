@@ -14,7 +14,7 @@ public record PagedResponseDTO<T>(
     public static <T> PagedResponseDTO<T> from(Page<T> pageResult) {
         return new PagedResponseDTO<>(
                 pageResult.getContent(),
-                pageResult.getNumber(),
+                pageResult.getNumber() + 1,
                 pageResult.getSize(),
                 pageResult.getTotalElements(),
                 pageResult.getTotalPages(),

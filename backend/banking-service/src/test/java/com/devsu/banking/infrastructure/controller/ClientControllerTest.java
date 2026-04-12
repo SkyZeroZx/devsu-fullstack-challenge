@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.devsu.banking.application.dto.ClientRequestDTO;
 import com.devsu.banking.application.dto.ClientResponseDTO;
+import com.devsu.banking.application.dto.PagedResponseDTO;
 import com.devsu.banking.application.service.ClientService;
 import com.devsu.banking.domain.exception.ResourceNotFoundException;
 import com.devsu.banking.infrastructure.exception.GlobalExceptionHandler;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -46,7 +46,7 @@ class ClientControllerTest {
                         .build();
 
         when(clientService.findAll(any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(response)));
+                .thenReturn(new PagedResponseDTO<>(List.of(response), 0, 20, 1, 1, true, true));
 
         mockMvc.perform(get("/api/clientes"))
                 .andExpect(status().isOk())

@@ -32,7 +32,7 @@ public class AccountController {
     public ResponseEntity<PagedResponseDTO<AccountResponseDTO>> listAll(
             @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC)
                     Pageable pageable) {
-        return ResponseEntity.ok(PagedResponseDTO.from(accountService.findAll(pageable)));
+        return ResponseEntity.ok(accountService.findAll(pageable));
     }
 
     @GetMapping("/{numeroCuenta}")

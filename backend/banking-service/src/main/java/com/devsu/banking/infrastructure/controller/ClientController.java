@@ -32,7 +32,7 @@ public class ClientController {
     public ResponseEntity<PagedResponseDTO<ClientResponseDTO>> listAll(
             @PageableDefault(size = 20, sort = "nombre", direction = Sort.Direction.ASC)
                     Pageable pageable) {
-        return ResponseEntity.ok(PagedResponseDTO.from(clientService.findAll(pageable)));
+        return ResponseEntity.ok(clientService.findAll(pageable));
     }
 
     @GetMapping("/{clienteId}")

@@ -2,6 +2,7 @@ package com.devsu.banking.application.service;
 
 import com.devsu.banking.application.dto.ClientRequestDTO;
 import com.devsu.banking.application.dto.ClientResponseDTO;
+import com.devsu.banking.application.dto.PagedResponseDTO;
 import com.devsu.banking.application.mapper.ClientMapper;
 import com.devsu.banking.domain.exception.ResourceNotFoundException;
 import com.devsu.banking.domain.model.Client;
@@ -14,7 +15,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +33,9 @@ public class ClientService {
             value = CacheNames.CLIENTS_LIST,
             key = "#pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
     @Transactional(readOnly = true)
-    public Page<ClientResponseDTO> findAll(Pageable pageable) {
-        return clientRepository.findAll(pageable).map(clientMapper::toResponseDTO);
+    public PagedResponseDTO<ClientResponseDTO> findAll(Pageable pageable) {
+        return PagedResponseDTO.from(
+                clientRepository.findAll(pageable).map(clientMapper::toResponseDTO));
     }
 
     @Cacheable(value = CacheNames.CLIENTS, key = "#clienteId")

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.*;
 
 import com.devsu.banking.application.dto.ClientRequestDTO;
 import com.devsu.banking.application.dto.ClientResponseDTO;
+import com.devsu.banking.application.dto.PagedResponseDTO;
 import com.devsu.banking.application.mapper.ClientMapper;
 import com.devsu.banking.domain.exception.ResourceNotFoundException;
 import com.devsu.banking.domain.model.Client;
@@ -22,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -107,10 +107,10 @@ class ClientServiceTest {
         when(clientRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(client)));
         when(clientMapper.toResponseDTO(any(Client.class))).thenReturn(responseDTO);
 
-        Page<ClientResponseDTO> result = clientService.findAll(pageable);
+        PagedResponseDTO<ClientResponseDTO> result = clientService.findAll(pageable);
 
-        assertThat(result.getContent()).hasSize(1);
-        assertThat(result.getContent().get(0).getNombre()).isEqualTo("Jose Lema");
+        assertThat(result.content()).hasSize(1);
+        assertThat(result.content().get(0).getNombre()).isEqualTo("Jose Lema");
         verify(clientRepository).findAll(pageable);
     }
 

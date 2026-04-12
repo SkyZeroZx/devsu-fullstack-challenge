@@ -2,6 +2,7 @@ package com.devsu.banking.application.service;
 
 import com.devsu.banking.application.dto.AccountRequestDTO;
 import com.devsu.banking.application.dto.AccountResponseDTO;
+import com.devsu.banking.application.dto.PagedResponseDTO;
 import com.devsu.banking.application.mapper.AccountMapper;
 import com.devsu.banking.domain.exception.ResourceNotFoundException;
 import com.devsu.banking.domain.model.Account;
@@ -14,7 +15,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +33,9 @@ public class AccountService {
             value = CacheNames.ACCOUNTS_LIST,
             key = "#pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
     @Transactional(readOnly = true)
-    public Page<AccountResponseDTO> findAll(Pageable pageable) {
-        return accountRepository.findAll(pageable).map(accountMapper::toResponseDTO);
+    public PagedResponseDTO<AccountResponseDTO> findAll(Pageable pageable) {
+        return PagedResponseDTO.from(
+                accountRepository.findAll(pageable).map(accountMapper::toResponseDTO));
     }
 
     @Cacheable(value = CacheNames.ACCOUNTS, key = "#numeroCuenta")
