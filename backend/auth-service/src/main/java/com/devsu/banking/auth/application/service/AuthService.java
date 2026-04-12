@@ -5,14 +5,12 @@ import com.devsu.banking.auth.application.dto.AuthResponseDTO;
 import com.devsu.banking.auth.application.dto.TokenValidationResponseDTO;
 import com.devsu.banking.auth.domain.model.AuthUser;
 import com.devsu.banking.auth.domain.model.Role;
+import com.devsu.banking.auth.domain.port.AuthenticationPort;
+import com.devsu.banking.auth.domain.port.PasswordEncoderPort;
+import com.devsu.banking.auth.domain.port.TokenPort;
 import com.devsu.banking.auth.domain.repository.AuthUserRepository;
-import com.devsu.banking.auth.infrastructure.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,21 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final AuthUserRepository authUserRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
-    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoderPort passwordEncoder;
+    private final TokenPort tokenProvider;
+    private final AuthenticationPort authenticationPort;
 
     public AuthResponseDTO login(AuthRequestDTO request) {
         log.info("Login attempt for user: {}", request.getUsername());
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+        String authenticatedUsername =
+                authenticationPort.authenticate(request.getUsername(), request.getPassword());
 
-        AuthUser user = authUserRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found after authentication"));
+        AuthUser user =
+                authUserRepository
+                        .findByUsername(authenticatedUsername)
+                        .orElseThrow(
+                                () -> new RuntimeException("User not found after authentication"));
 
-        String token = jwtProvider.generateToken(user.getUsername(), user.getRole().name());
+        String token = tokenProvider.generateToken(user.getUsername(), user.getRole().name());
 
         log.info("User '{}' authenticated successfully", user.getUsername());
         return AuthResponseDTO.builder()
@@ -54,16 +54,17 @@ public class AuthService {
             throw new IllegalArgumentException("Username already exists: " + request.getUsername());
         }
 
-        AuthUser user = AuthUser.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .enabled(true)
-                .build();
+        AuthUser user =
+                AuthUser.builder()
+                        .username(request.getUsername())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .role(Role.USER)
+                        .enabled(true)
+                        .build();
 
         AuthUser saved = authUserRepository.save(user);
 
-        String token = jwtProvider.generateToken(saved.getUsername(), saved.getRole().name());
+        String token = tokenProvider.generateToken(saved.getUsername(), saved.getRole().name());
 
         log.info("User '{}' registered successfully", saved.getUsername());
         return AuthResponseDTO.builder()
@@ -75,16 +76,14 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public TokenValidationResponseDTO validateToken(String token) {
-        if (jwtProvider.validateToken(token)) {
+        if (tokenProvider.validateToken(token)) {
             return TokenValidationResponseDTO.builder()
                     .valid(true)
-                    .username(jwtProvider.getUsernameFromToken(token))
-                    .role(jwtProvider.getRoleFromToken(token))
+                    .username(tokenProvider.getUsernameFromToken(token))
+                    .role(tokenProvider.getRoleFromToken(token))
                     .build();
         }
 
-        return TokenValidationResponseDTO.builder()
-                .valid(false)
-                .build();
+        return TokenValidationResponseDTO.builder().valid(false).build();
     }
 }
