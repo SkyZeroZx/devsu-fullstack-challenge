@@ -9,7 +9,9 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/banking-front",
         "browser": "./src/main.ts",
@@ -21,7 +23,9 @@
             "input": "public"
           }
         ],
-        "styles": ["./src/styles.scss"]
+        "styles": [
+          "./src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
@@ -37,7 +41,8 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "serviceWorker": "ngsw-config.json"
         },
         "development": {
           "optimization": false,
@@ -63,12 +68,16 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["./src"]
+        "lintFilePatterns": [
+          "./src"
+        ]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectName}"
+      ],
       "options": {
         "jestConfig": "jest.config.cts",
         "tsConfig": "tsconfig.spec.json"
