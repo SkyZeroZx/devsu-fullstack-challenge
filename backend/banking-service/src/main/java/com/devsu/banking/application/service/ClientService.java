@@ -5,6 +5,7 @@ import com.devsu.banking.application.dto.ClientResponseDTO;
 import com.devsu.banking.application.mapper.ClientMapper;
 import com.devsu.banking.domain.exception.ResourceNotFoundException;
 import com.devsu.banking.domain.model.Client;
+import com.devsu.banking.domain.port.PasswordEncoderPort;
 import com.devsu.banking.domain.repository.ClientRepository;
 import com.devsu.banking.infrastructure.config.CacheNames;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClientService {
 
     private final ClientRepository clientRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoderPort passwordEncoder;
     private final ClientMapper clientMapper;
 
     @Cacheable(
             value = CacheNames.CLIENTS_LIST,
-            key   = "#pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
+            key = "#pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
     @Transactional(readOnly = true)
     public Page<ClientResponseDTO> findAll(Pageable pageable) {
         return clientRepository.findAll(pageable).map(clientMapper::toResponseDTO);
@@ -45,9 +45,8 @@ public class ClientService {
     }
 
     @Caching(
-            put   = { @CachePut(value = CacheNames.CLIENTS, key = "#result.clienteId") },
-            evict = { @CacheEvict(value = CacheNames.CLIENTS_LIST, allEntries = true) }
-    )
+            put = {@CachePut(value = CacheNames.CLIENTS, key = "#result.clienteId")},
+            evict = {@CacheEvict(value = CacheNames.CLIENTS_LIST, allEntries = true)})
     public ClientResponseDTO create(ClientRequestDTO request) {
         log.info("Creating client with identification: {}", request.getIdentificacion());
 
@@ -60,9 +59,8 @@ public class ClientService {
     }
 
     @Caching(
-            put   = { @CachePut(value = CacheNames.CLIENTS, key = "#clienteId") },
-            evict = { @CacheEvict(value = CacheNames.CLIENTS_LIST, allEntries = true) }
-    )
+            put = {@CachePut(value = CacheNames.CLIENTS, key = "#clienteId")},
+            evict = {@CacheEvict(value = CacheNames.CLIENTS_LIST, allEntries = true)})
     public ClientResponseDTO update(String clienteId, ClientRequestDTO request) {
         log.info("Updating client: {}", clienteId);
 
@@ -78,9 +76,8 @@ public class ClientService {
     }
 
     @Caching(
-            put   = { @CachePut(value = CacheNames.CLIENTS, key = "#clienteId") },
-            evict = { @CacheEvict(value = CacheNames.CLIENTS_LIST, allEntries = true) }
-    )
+            put = {@CachePut(value = CacheNames.CLIENTS, key = "#clienteId")},
+            evict = {@CacheEvict(value = CacheNames.CLIENTS_LIST, allEntries = true)})
     public ClientResponseDTO partialUpdate(String clienteId, ClientRequestDTO request) {
         log.info("Partially updating client: {}", clienteId);
 
@@ -95,10 +92,11 @@ public class ClientService {
         return clientMapper.toResponseDTO(updated);
     }
 
-    @Caching(evict = {
-            @CacheEvict(value = CacheNames.CLIENTS,      key = "#clienteId"),
-            @CacheEvict(value = CacheNames.CLIENTS_LIST, allEntries = true)
-    })
+    @Caching(
+            evict = {
+                @CacheEvict(value = CacheNames.CLIENTS, key = "#clienteId"),
+                @CacheEvict(value = CacheNames.CLIENTS_LIST, allEntries = true)
+            })
     public void delete(String clienteId) {
         log.info("Deleting client: {}", clienteId);
         Client client = findClientByClienteId(clienteId);
@@ -106,7 +104,8 @@ public class ClientService {
     }
 
     public Client findClientByClienteId(String clienteId) {
-        return clientRepository.findByClienteId(clienteId)
+        return clientRepository
+                .findByClienteId(clienteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Client", "clienteId", clienteId));
     }
 }

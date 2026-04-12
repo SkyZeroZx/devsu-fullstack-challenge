@@ -1,19 +1,17 @@
 package com.devsu.banking.domain.repository;
 
 import com.devsu.banking.domain.model.Client;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-@Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
+public interface ClientRepository {
+
+    Page<Client> findAll(Pageable pageable);
 
     Optional<Client> findByClienteId(String clienteId);
 
-    Optional<Client> findByIdentificacion(String identificacion);
+    Client save(Client client);
 
-    boolean existsByClienteId(String clienteId);
-
-    boolean existsByIdentificacion(String identificacion);
+    void delete(Client client);
 }

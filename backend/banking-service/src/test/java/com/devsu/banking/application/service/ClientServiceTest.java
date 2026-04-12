@@ -1,11 +1,20 @@
 package com.devsu.banking.application.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
 import com.devsu.banking.application.dto.ClientRequestDTO;
 import com.devsu.banking.application.dto.ClientResponseDTO;
 import com.devsu.banking.application.mapper.ClientMapper;
 import com.devsu.banking.domain.exception.ResourceNotFoundException;
 import com.devsu.banking.domain.model.Client;
+import com.devsu.banking.domain.port.PasswordEncoderPort;
 import com.devsu.banking.domain.repository.ClientRepository;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,31 +26,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ClientServiceTest {
 
-    @Mock
-    private ClientRepository clientRepository;
+    @Mock private ClientRepository clientRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private PasswordEncoderPort passwordEncoder;
 
-    @Mock
-    private ClientMapper clientMapper;
+    @Mock private ClientMapper clientMapper;
 
-    @InjectMocks
-    private ClientService clientService;
+    @InjectMocks private ClientService clientService;
 
     private ClientRequestDTO requestDTO;
     private Client client;
@@ -49,40 +44,43 @@ class ClientServiceTest {
 
     @BeforeEach
     void setUp() {
-        requestDTO = ClientRequestDTO.builder()
-                .nombre("Jose Lema")
-                .genero("Masculino")
-                .edad(30)
-                .identificacion("1234567890")
-                .direccion("Otavalo sn y principal")
-                .telefono("098254785")
-                .contrasena("1234")
-                .estado(true)
-                .build();
+        requestDTO =
+                ClientRequestDTO.builder()
+                        .nombre("Jose Lema")
+                        .genero("Masculino")
+                        .edad(30)
+                        .identificacion("1234567890")
+                        .direccion("Otavalo sn y principal")
+                        .telefono("098254785")
+                        .contrasena("1234")
+                        .estado(true)
+                        .build();
 
-        client = Client.builder()
-                .nombre("Jose Lema")
-                .genero("Masculino")
-                .edad(30)
-                .identificacion("1234567890")
-                .direccion("Otavalo sn y principal")
-                .telefono("098254785")
-                .clienteId("ABC12345")
-                .contrasena("$2a$10$encoded")
-                .estado(true)
-                .build();
+        client =
+                Client.builder()
+                        .nombre("Jose Lema")
+                        .genero("Masculino")
+                        .edad(30)
+                        .identificacion("1234567890")
+                        .direccion("Otavalo sn y principal")
+                        .telefono("098254785")
+                        .clienteId("ABC12345")
+                        .contrasena("$2a$10$encoded")
+                        .estado(true)
+                        .build();
         client.setId(1L);
 
-        responseDTO = ClientResponseDTO.builder()
-                .clienteId("ABC12345")
-                .nombre("Jose Lema")
-                .genero("Masculino")
-                .edad(30)
-                .identificacion("1234567890")
-                .direccion("Otavalo sn y principal")
-                .telefono("098254785")
-                .estado(true)
-                .build();
+        responseDTO =
+                ClientResponseDTO.builder()
+                        .clienteId("ABC12345")
+                        .nombre("Jose Lema")
+                        .genero("Masculino")
+                        .edad(30)
+                        .identificacion("1234567890")
+                        .direccion("Otavalo sn y principal")
+                        .telefono("098254785")
+                        .estado(true)
+                        .build();
     }
 
     @Test
@@ -159,16 +157,17 @@ class ClientServiceTest {
         when(clientMapper.toResponseDTO(any(Client.class))).thenReturn(responseDTO);
         doNothing().when(clientMapper).updateEntity(any(Client.class), any(ClientRequestDTO.class));
 
-        ClientRequestDTO updateRequest = ClientRequestDTO.builder()
-                .nombre("Jose Lema Updated")
-                .genero("Masculino")
-                .edad(31)
-                .identificacion("1234567890")
-                .direccion("New address")
-                .telefono("098254785")
-                .contrasena("5678")
-                .estado(true)
-                .build();
+        ClientRequestDTO updateRequest =
+                ClientRequestDTO.builder()
+                        .nombre("Jose Lema Updated")
+                        .genero("Masculino")
+                        .edad(31)
+                        .identificacion("1234567890")
+                        .direccion("New address")
+                        .telefono("098254785")
+                        .contrasena("5678")
+                        .estado(true)
+                        .build();
 
         ClientResponseDTO response = clientService.update("ABC12345", updateRequest);
 

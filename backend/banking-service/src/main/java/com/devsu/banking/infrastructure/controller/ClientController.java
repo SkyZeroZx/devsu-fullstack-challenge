@@ -11,7 +11,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -22,7 +30,8 @@ public class ClientController {
 
     @GetMapping
     public ResponseEntity<PagedResponseDTO<ClientResponseDTO>> listAll(
-            @PageableDefault(size = 20, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 20, sort = "nombre", direction = Sort.Direction.ASC)
+                    Pageable pageable) {
         return ResponseEntity.ok(PagedResponseDTO.from(clientService.findAll(pageable)));
     }
 
@@ -38,14 +47,14 @@ public class ClientController {
     }
 
     @PutMapping("/{clienteId}")
-    public ResponseEntity<ClientResponseDTO> update(@PathVariable String clienteId,
-                                                     @Valid @RequestBody ClientRequestDTO request) {
+    public ResponseEntity<ClientResponseDTO> update(
+            @PathVariable String clienteId, @Valid @RequestBody ClientRequestDTO request) {
         return ResponseEntity.ok(clientService.update(clienteId, request));
     }
 
     @PatchMapping("/{clienteId}")
-    public ResponseEntity<ClientResponseDTO> partialUpdate(@PathVariable String clienteId,
-                                                            @RequestBody ClientRequestDTO request) {
+    public ResponseEntity<ClientResponseDTO> partialUpdate(
+            @PathVariable String clienteId, @RequestBody ClientRequestDTO request) {
         return ResponseEntity.ok(clientService.partialUpdate(clienteId, request));
     }
 

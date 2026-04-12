@@ -1,8 +1,7 @@
 package com.devsu.banking.application.dto;
 
-import org.springframework.data.domain.Page;
-
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 public record PagedResponseDTO<T>(
         List<T> content,
@@ -11,8 +10,7 @@ public record PagedResponseDTO<T>(
         long totalElements,
         int totalPages,
         boolean first,
-        boolean last
-) {
+        boolean last) {
     public static <T> PagedResponseDTO<T> from(Page<T> pageResult) {
         return new PagedResponseDTO<>(
                 pageResult.getContent(),
@@ -21,7 +19,6 @@ public record PagedResponseDTO<T>(
                 pageResult.getTotalElements(),
                 pageResult.getTotalPages(),
                 pageResult.isFirst(),
-                pageResult.isLast()
-        );
+                pageResult.isLast());
     }
 }

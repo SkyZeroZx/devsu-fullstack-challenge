@@ -40,7 +40,9 @@ public interface AccountMapper {
 
     @Named("parseAccountType")
     default AccountType parseAccountType(String type) {
-        if (type == null) return null;
+        if (type == null) {
+            return null;
+        }
         String normalized = type.trim().toUpperCase();
         return switch (normalized) {
             case "AHORRO", "AHORROS" -> AccountType.AHORRO;
