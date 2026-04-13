@@ -63,4 +63,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn --batch-mode --no-transfer-progress org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=skyzerozx_backend-fullstack
+        run: mvn --batch-mode --no-transfer-progress org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=skyzerozx_backend-fullstack -Dsonar.coverage.jacoco.xmlReportPaths=**/target/site/jacoco/jacoco.xml
