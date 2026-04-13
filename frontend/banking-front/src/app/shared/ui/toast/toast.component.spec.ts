@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ToastComponent } from './toast.component';
 import {
   findEl,
+  findEls,
   getText,
   queryByCss,
 } from '../../../spec-helpers/element.spec-helper';
@@ -142,9 +143,7 @@ describe('ToastComponent', () => {
     });
     await fixture.whenStable();
 
-    const titleEls = fixture.nativeElement.querySelectorAll(
-      '[data-testid="toast-title"]',
-    );
+    const titleEls = findEls(fixture, 'toast-title');
     expect(titleEls.length).toBe(0);
   });
 });

@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
 import { PaginatorComponent } from './paginator.component';
-import { findEl } from '../../../spec-helpers/element.spec-helper';
-import { By } from '@angular/platform-browser';
+import { findEl, queryByCss } from '../../../spec-helpers/element.spec-helper';
 
 @Component({
   imports: [PaginatorComponent],
@@ -120,7 +119,7 @@ describe('PaginatorComponent', () => {
   });
 
   it('has role="navigation" on the host element', () => {
-    const nav = fixture.debugElement.query(By.css('app-paginator'));
+    const nav = queryByCss(fixture, 'app-paginator');
     expect(nav.nativeElement.getAttribute('role')).toBe('navigation');
   });
 });

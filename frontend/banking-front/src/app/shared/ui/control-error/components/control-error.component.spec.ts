@@ -46,7 +46,7 @@ describe('ControlErrorComponent', () => {
     await fixture.whenStable();
 
     const errorText = findEl(fixture, 'control-error-text');
-    expect(errorText.nativeElement.textContent).toBe(textError);
+    expect(errorText.nativeElement.textContent?.trim()).toBe(textError);
   });
 
   it('should have role="alert" for accessibility', async () => {

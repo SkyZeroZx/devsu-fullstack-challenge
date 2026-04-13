@@ -1,5 +1,5 @@
 import { Directive, inject, input } from '@angular/core';
-import { AnalyticsService } from '../../../core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 
 @Directive({
   selector: '[appClickTracking]',
@@ -8,13 +8,13 @@ import { AnalyticsService } from '../../../core/services/analytics.service';
   },
 })
 export class ClickTrackingDirective {
-  private readonly analyticService = inject(AnalyticsService);
+  private readonly analytics = inject(AnalyticsAdapter);
   readonly eventName = input.required<string>();
 
   readonly eventData = input<object>();
 
   onTrackingClick() {
-    this.analyticService.trackEvent(
+    this.analytics.trackEvent(
       this.eventName(),
       this.eventData() as Record<string, unknown>,
     );

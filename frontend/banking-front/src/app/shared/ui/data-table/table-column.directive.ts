@@ -24,8 +24,8 @@ export class TableColumnDirective<T = unknown> {
 
   static ngTemplateContextGuard<T>(
     _dir: TableColumnDirective<T>,
-    ctx: unknown,
-  ): ctx is TableColumnContext<T> {
+    _ctx: unknown,
+  ): _ctx is TableColumnContext<T> {
     return true;
   }
 }

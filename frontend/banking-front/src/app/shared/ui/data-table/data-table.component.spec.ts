@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { DataTableComponent } from './data-table.component';
 import { TableColumnDirective } from './table-column.directive';
-import { findEl, findEls } from '../../../spec-helpers/element.spec-helper';
+import {
+  findEl,
+  findEls,
+  queryEl,
+} from '../../../spec-helpers/element.spec-helper';
 
 interface Row {
   id: number;
@@ -77,18 +80,14 @@ describe('DataTableComponent', () => {
 
   it('renders the table when not loading', () => {
     expect(findEl(fixture, 'table').nativeElement).toBeTruthy();
-    expect(
-      fixture.debugElement.query(By.css('[data-testid="skeleton"]')),
-    ).toBeNull();
+    expect(queryEl(fixture, 'skeleton')).toBeNull();
   });
 
   it('renders the skeleton and hides the table while loading', async () => {
     host.loading.set(true);
     await fixture.whenStable();
     expect(findEl(fixture, 'skeleton').nativeElement).toBeTruthy();
-    expect(
-      fixture.debugElement.query(By.css('[data-testid="table"]')),
-    ).toBeNull();
+    expect(queryEl(fixture, 'table')).toBeNull();
   });
 
   it('sets aria-label on the table element', () => {
@@ -98,7 +97,7 @@ describe('DataTableComponent', () => {
   });
 
   it('renders a header column for each TableColumnDirective', () => {
-    const headers = fixture.debugElement.queryAll(By.css('th'));
+    const headers = findEls(fixture, 'column-header');
     expect(headers.length).toBe(2);
     expect(headers[0].nativeElement.textContent.trim()).toBe('ID');
     expect(headers[1].nativeElement.textContent.trim()).toBe('Name');
@@ -125,9 +124,7 @@ describe('DataTableComponent', () => {
   });
 
   it('hides the empty message when rows is not empty', () => {
-    expect(
-      fixture.debugElement.query(By.css('[data-testid="empty-message"]')),
-    ).toBeNull();
+    expect(queryEl(fixture, 'empty-message')).toBeNull();
   });
 
   it('forwards pageChange events from the paginator', async () => {

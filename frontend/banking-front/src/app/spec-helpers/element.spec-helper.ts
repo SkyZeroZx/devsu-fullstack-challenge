@@ -58,6 +58,23 @@ export function findEls<T>(
 }
 
 /**
+ * Queries a single element with the given `data-testid` attribute.
+ * Returns `null` if the element is not found (does NOT throw).
+ *
+ * Use this instead of `findEl` when you need to assert that an element
+ * does **not** exist in the DOM.
+ *
+ * @param fixture Component fixture
+ * @param testId Test id set by `data-testid`
+ */
+export function queryEl<T>(
+  fixture: ComponentFixture<T>,
+  testId: string,
+): DebugElement | null {
+  return fixture.debugElement.query(By.css(testIdSelector(testId)));
+}
+
+/**
  * Gets the text content of an element with the given `data-testid` attribute.
  *
  * @param fixture Component fixture

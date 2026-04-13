@@ -1,0 +1,79 @@
+@if (label()) {
+  <label class="field__label" [attr.for]="fieldId" data-testid="label">
+    {{ label() }}
+  </label>
+}
+<div
+  class="field__combobox"
+  [class.field__combobox--open]="isOpen()"
+  [class.field__combobox--invalid]="invalid()"
+>
+  <button
+    type="button"
+    class="field__trigger"
+    [id]="fieldId"
+    [disabled]="disabled()"
+    data-testid="trigger"
+    [attr.aria-haspopup]="'listbox'"
+    [attr.aria-expanded]="isOpen()"
+    (click)="toggle()"
+    (keydown)="onTriggerKeydown($event)"
+  >
+    <span
+      class="field__trigger-text"
+      [class.field__trigger-placeholder]="!value()"
+    >{{ selectedLabel() }}</span>
+    <svg
+      class="field__chevron"
+      [class.field__chevron--open]="isOpen()"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="field__panel"
+      role="listbox"
+      [attr.aria-label]="label() || 'Opciones'"
+    >
+      <input
+        #searchRef
+        class="field__search"
+        type="text"
+        placeholder="Buscar..."
+        autocomplete="off"
+        data-testid="search"
+        [value]="query()"
+        (input)="onSearch($event)"
+        (keydown)="onSearchKeydown($event)"
+      />
+      <ul class="field__list" appScrollEnd (nearEnd)="nearEnd.emit()">
+        @for (opt of filteredOptions(); track opt.value; let i = $index) {
+          <li
+            class="field__option"
+            [class.field__option--selected]="value() === opt.value"
+            [class.field__option--active]="activeIndex() === i"
+            role="option"
+            tabindex="0"
+            [attr.aria-selected]="value() === opt.value"
+            data-testid="option"
+            (click)="selectOption(opt)"
+            (keydown.enter)="selectOption(opt)"
+            (mouseenter)="activeIndex.set(i)"
+          >
+            {{ opt.label }}
+          </li>
+        }
+        @if (filteredOptions().length === 0) {
+          <li class="field__option field__option--empty" data-testid="no-options">
+            Sin resultados
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>

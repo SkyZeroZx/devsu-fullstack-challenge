@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 import { App } from './app';
+import { queryByCss } from './spec-helpers/element.spec-helper';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -18,7 +19,7 @@ describe('App', () => {
   it('should contain a router-outlet', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const routerOutlet = fixture.nativeElement.querySelector('router-outlet');
-    expect(routerOutlet).toBeTruthy();
+    const routerOutlet = queryByCss(fixture, 'router-outlet');
+    expect(routerOutlet.nativeElement).toBeTruthy();
   });
 });

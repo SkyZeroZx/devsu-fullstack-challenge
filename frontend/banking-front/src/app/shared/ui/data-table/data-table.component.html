@@ -15,7 +15,7 @@
       <thead>
         <tr>
           @for (col of columns(); track col.appTableColumn()) {
-            <th scope="col">{{ col.header() }}</th>
+            <th scope="col" data-testid="column-header">{{ col.header() }}</th>
           }
         </tr>
       </thead>

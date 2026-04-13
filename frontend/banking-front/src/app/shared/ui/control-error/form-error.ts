@@ -5,9 +5,9 @@ export const defaultErrors: ControlErrors<unknown> = {
   required: () => `Este campo es requerido`,
   min: () => `Este campo no cumple el valor minimo`,
   max: () => `Este campo excede el valor maximo`,
-  minlength: ({ requiredLength }: any) =>
+  minlength: ({ requiredLength } :any) =>
     `Se requiere minimo ${requiredLength} caracteres`,
-  maxlength: ({ requiredLength }: any) =>
+  maxlength: ({ requiredLength } :any) =>
     `El maximo de caracteres permitos es ${requiredLength}`,
   pattern: () => `Este campo no cumple con la estructura requerida`,
   email: () => 'Debe ingresar un email valido',

@@ -14,7 +14,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { swRegistrationOptions } from './core/config/service-worker';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { errorInterceptor } from '@core/interceptors/error.interceptor';
-import { provideAnalytics } from '@core/services/analytics.service';
+import { provideAnalytics } from '@core/services/analytics/analytics.adapter';
 import { provideToast } from '@shared/ui/toast/toast.provider';
 
 export const appConfig: ApplicationConfig = {

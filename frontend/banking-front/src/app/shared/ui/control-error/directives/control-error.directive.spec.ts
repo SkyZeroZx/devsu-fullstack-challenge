@@ -1,6 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import {
   FormBuilder,
   FormGroup,
@@ -8,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ControlErrorsDirective } from './control-error.directive';
+import { queryByCss } from '../../../../spec-helpers/element.spec-helper';
 import { ControlErrorModule } from '../control-error.module';
 import { defaultErrors } from '../form-error';
 
@@ -60,22 +59,22 @@ describe('ControlErrorsDirective', () => {
     component.formGroupTest.controls['name'].setValue('');
     await fixture.whenStable();
 
-    const errorTextElement = fixture.debugElement.query(By.css('#text-error'));
+    const errorTextElement = queryByCss(fixture, '#text-error');
     const text = errorTextElement.nativeElement as HTMLElement;
 
     expect(text).toBeDefined();
-    expect(text.innerHTML).toEqual(defaultErrors['required']({}));
+    expect(text.textContent?.trim()).toEqual(defaultErrors['required']({}));
   });
 
   it('should render error when field is below minlength', async () => {
     component.formGroupTest.controls['description'].setValue('12');
     await fixture.whenStable();
 
-    const errorTextElement = fixture.debugElement.query(By.css('#text-error'));
+    const errorTextElement = queryByCss(fixture, '#text-error');
     const text = errorTextElement.nativeElement as HTMLElement;
 
     expect(text).toBeDefined();
-    expect(text.innerHTML).toEqual(
+    expect(text.textContent?.trim()).toEqual(
       defaultErrors['minlength']({ requiredLength: '3' }),
     );
   });
@@ -84,11 +83,11 @@ describe('ControlErrorsDirective', () => {
     component.formGroupTest.controls['other'].setValue('123');
     await fixture.whenStable();
 
-    const errorTextElement = fixture.debugElement.query(By.css('#text-error'));
+    const errorTextElement = queryByCss(fixture, '#text-error');
     const text = errorTextElement.nativeElement as HTMLElement;
 
     expect(text).toBeDefined();
-    expect(text.innerHTML).toEqual(
+    expect(text.textContent?.trim()).toEqual(
       defaultErrors['maxlength']({ requiredLength: '2' }),
     );
   });
