@@ -83,7 +83,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleGeneral(
             Exception ex, HttpServletRequest request) {
         log.error("Unexpected error on {}: {}", request.getRequestURI(), ex.getMessage(), ex);
-        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", request);
+        return buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", request);
     }
 
     private ResponseEntity<ErrorResponseDTO> buildErrorResponse(
@@ -99,5 +100,3 @@ public class GlobalExceptionHandler {
                                 .build());
     }
 }
-
-

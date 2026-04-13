@@ -32,7 +32,8 @@ public class AccountService {
 
     @Cacheable(
             value = CacheNames.ACCOUNTS_LIST,
-            key = "#search + ':' + #pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
+            key =
+                    "#search + ':' + #pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
     @Transactional(readOnly = true)
     public PagedResponseDTO<AccountResponseDTO> findAll(String search, Pageable pageable) {
         String term = StringUtils.hasText(search) ? search : "";
