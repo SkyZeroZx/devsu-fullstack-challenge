@@ -49,7 +49,8 @@ export class ControlErrorsDirective implements OnInit {
           const customText = this.customErrors()[firstKey];
           // Skip error keys that have no registered handler (e.g. composite
           // form validators like `invalidForm` from nested CVA components).
-          const text = customText ?? (getError ? getError(controlErrors[firstKey]) : null);
+          const text =
+            customText ?? (getError ? getError(controlErrors[firstKey]) : null);
           if (text) {
             this.setError(text);
           } else if (this.ref) {

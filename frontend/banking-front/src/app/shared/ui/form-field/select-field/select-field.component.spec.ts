@@ -18,7 +18,11 @@ const OPTIONS: SelectOption[] = [
 @Component({
   imports: [ReactiveFormsModule, SelectFieldComponent],
   template: `
-    <app-select-field [label]="label()" [options]="options()" [formControl]="ctrl" />
+    <app-select-field
+      [label]="label()"
+      [options]="options()"
+      [formControl]="ctrl"
+    />
   `,
 })
 class TestHostComponent {
@@ -53,7 +57,8 @@ describe('SelectFieldComponent', () => {
 
   it('associates label with trigger button via matching for/id', () => {
     const label = findEl(fixture, 'label').nativeElement as HTMLLabelElement;
-    const trigger = findEl(fixture, 'trigger').nativeElement as HTMLButtonElement;
+    const trigger = findEl(fixture, 'trigger')
+      .nativeElement as HTMLButtonElement;
     expect(label.htmlFor).toBe(trigger.id);
     expect(trigger.id).toBeTruthy();
   });
@@ -65,7 +70,8 @@ describe('SelectFieldComponent', () => {
   });
 
   it('shows placeholder text when no value is selected', () => {
-    const trigger = findEl(fixture, 'trigger').nativeElement as HTMLButtonElement;
+    const trigger = findEl(fixture, 'trigger')
+      .nativeElement as HTMLButtonElement;
     expect(trigger.textContent?.trim()).toContain('Seleccione');
   });
 
@@ -98,7 +104,8 @@ describe('SelectFieldComponent', () => {
   it('sets the displayed label when FormControl value changes (writeValue)', async () => {
     host.ctrl.setValue('B');
     await fixture.whenStable();
-    const trigger = findEl(fixture, 'trigger').nativeElement as HTMLButtonElement;
+    const trigger = findEl(fixture, 'trigger')
+      .nativeElement as HTMLButtonElement;
     expect(trigger.textContent?.trim()).toContain('Option B');
   });
 
@@ -156,7 +163,10 @@ describe('SelectFieldComponent', () => {
     findEl(fixture, 'trigger').nativeElement.click();
     await fixture.whenStable();
     const search = findEl(fixture, 'search').nativeElement as HTMLInputElement;
-    const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
+    const event = new KeyboardEvent('keydown', {
+      key: 'Escape',
+      bubbles: true,
+    });
     search.dispatchEvent(event);
     await fixture.whenStable();
     expect(queryEl(fixture, 'search')).toBeNull();

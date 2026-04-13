@@ -1,10 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
 import { ButtonComponent } from './button.component';
-import {
-  findEl,
-  queryEl,
-} from '../../../spec-helpers/element.spec-helper';
+import { findEl, queryEl } from '../../../spec-helpers/element.spec-helper';
 
 @Component({
   imports: [ButtonComponent],

@@ -19,10 +19,7 @@
       <app-input-field type="date" label="Hasta" formControlName="fechaFin" />
     </div>
     <div>
-      <app-client-select
-        formControlName="cliente"
-        placeholder="Todos"
-      />
+      <app-client-select formControlName="cliente" placeholder="Todos" />
     </div>
 
     <div class="filters__actions">
@@ -55,27 +52,57 @@
     [emptyMessage]="emptyMessage()"
     ariaLabel="Resultado del reporte"
   >
-    <ng-template appTableColumn="fecha" header="Fecha" [appTableColumnOf]="displayRows()" let-row>
+    <ng-template
+      appTableColumn="fecha"
+      header="Fecha"
+      [appTableColumnOf]="displayRows()"
+      let-row
+    >
       {{ row.fecha }}
     </ng-template>
 
-    <ng-template appTableColumn="cliente" header="Cliente" [appTableColumnOf]="displayRows()" let-row>
+    <ng-template
+      appTableColumn="cliente"
+      header="Cliente"
+      [appTableColumnOf]="displayRows()"
+      let-row
+    >
       {{ row.cliente }}
     </ng-template>
 
-    <ng-template appTableColumn="numeroCuenta" header="Cuenta" [appTableColumnOf]="displayRows()" let-row>
+    <ng-template
+      appTableColumn="numeroCuenta"
+      header="Cuenta"
+      [appTableColumnOf]="displayRows()"
+      let-row
+    >
       {{ row.numeroCuenta }}
     </ng-template>
 
-    <ng-template appTableColumn="tipo" header="Tipo" [appTableColumnOf]="displayRows()" let-row>
+    <ng-template
+      appTableColumn="tipo"
+      header="Tipo"
+      [appTableColumnOf]="displayRows()"
+      let-row
+    >
       {{ row.tipo }}
     </ng-template>
 
-    <ng-template appTableColumn="saldoInicial" header="Saldo Inicial" [appTableColumnOf]="displayRows()" let-row>
+    <ng-template
+      appTableColumn="saldoInicial"
+      header="Saldo Inicial"
+      [appTableColumnOf]="displayRows()"
+      let-row
+    >
       {{ row.saldoInicial | number: '1.2-2' }}
     </ng-template>
 
-    <ng-template appTableColumn="movimiento" header="Movimiento" [appTableColumnOf]="displayRows()" let-row>
+    <ng-template
+      appTableColumn="movimiento"
+      header="Movimiento"
+      [appTableColumnOf]="displayRows()"
+      let-row
+    >
       <span
         [class.text--credit]="row.movimiento >= 0"
         [class.text--debit]="row.movimiento < 0"
@@ -84,11 +111,21 @@
       </span>
     </ng-template>
 
-    <ng-template appTableColumn="saldoDisponible" header="Saldo Disponible" [appTableColumnOf]="displayRows()" let-row>
+    <ng-template
+      appTableColumn="saldoDisponible"
+      header="Saldo Disponible"
+      [appTableColumnOf]="displayRows()"
+      let-row
+    >
       {{ row.saldoDisponible | number: '1.2-2' }}
     </ng-template>
 
-    <ng-template appTableColumn="estado" header="Estado" [appTableColumnOf]="displayRows()" let-row>
+    <ng-template
+      appTableColumn="estado"
+      header="Estado"
+      [appTableColumnOf]="displayRows()"
+      let-row
+    >
       <span
         class="badge"
         [class.badge--active]="row.estado"

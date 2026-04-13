@@ -22,7 +22,8 @@
     <span
       class="field__trigger-text"
       [class.field__trigger-placeholder]="!value()"
-    >{{ selectedLabel() }}</span>
+      >{{ selectedLabel() }}</span
+    >
     <svg
       class="field__chevron"
       [class.field__chevron--open]="isOpen()"
@@ -30,7 +31,11 @@
       fill="currentColor"
       aria-hidden="true"
     >
-      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+      <path
+        fill-rule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clip-rule="evenodd"
+      />
     </svg>
   </button>
 
@@ -67,7 +72,10 @@
           </li>
         }
         @if (filteredOptions().length === 0) {
-          <li class="field__option field__option--empty" data-testid="no-options">
+          <li
+            class="field__option field__option--empty"
+            data-testid="no-options"
+          >
             Sin resultados
           </li>
         }

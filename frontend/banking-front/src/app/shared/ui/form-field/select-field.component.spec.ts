@@ -17,7 +17,11 @@ const OPTIONS: SelectOption[] = [
 @Component({
   imports: [ReactiveFormsModule, SelectFieldComponent],
   template: `
-    <app-select-field [label]="label()" [options]="options()" [formControl]="ctrl" />
+    <app-select-field
+      [label]="label()"
+      [options]="options()"
+      [formControl]="ctrl"
+    />
   `,
 })
 class TestHostComponent {
@@ -52,7 +56,8 @@ describe('SelectFieldComponent', () => {
 
   it('associates label with trigger button via matching for/id', () => {
     const label = findEl(fixture, 'label').nativeElement as HTMLLabelElement;
-    const trigger = findEl(fixture, 'trigger').nativeElement as HTMLButtonElement;
+    const trigger = findEl(fixture, 'trigger')
+      .nativeElement as HTMLButtonElement;
     expect(label.htmlFor).toBe(trigger.id);
     expect(trigger.id).toBeTruthy();
   });
@@ -66,14 +71,17 @@ describe('SelectFieldComponent', () => {
   });
 
   it('shows placeholder text when no value is selected', () => {
-    const trigger = findEl(fixture, 'trigger').nativeElement as HTMLButtonElement;
+    const trigger = findEl(fixture, 'trigger')
+      .nativeElement as HTMLButtonElement;
     expect(trigger.textContent?.trim()).toContain('Seleccione');
   });
 
   it('opens the panel and shows options on trigger click', async () => {
     findEl(fixture, 'trigger').nativeElement.click();
     await fixture.whenStable();
-    const options = fixture.debugElement.queryAll(By.css('[data-testid="option"]'));
+    const options = fixture.debugElement.queryAll(
+      By.css('[data-testid="option"]'),
+    );
     expect(options.length).toBe(3);
     expect(options[1].nativeElement.textContent.trim()).toBe('Option A');
     expect(options[2].nativeElement.textContent.trim()).toBe('Option B');
@@ -82,7 +90,9 @@ describe('SelectFieldComponent', () => {
   it('selects an option on click and propagates to FormControl', async () => {
     findEl(fixture, 'trigger').nativeElement.click();
     await fixture.whenStable();
-    const options = fixture.debugElement.queryAll(By.css('[data-testid="option"]'));
+    const options = fixture.debugElement.queryAll(
+      By.css('[data-testid="option"]'),
+    );
     options[1].nativeElement.click();
     await fixture.whenStable();
     expect(host.ctrl.value).toBe('A');
@@ -91,15 +101,20 @@ describe('SelectFieldComponent', () => {
   it('closes the panel after selecting an option', async () => {
     findEl(fixture, 'trigger').nativeElement.click();
     await fixture.whenStable();
-    fixture.debugElement.queryAll(By.css('[data-testid="option"]'))[1].nativeElement.click();
+    fixture.debugElement
+      .queryAll(By.css('[data-testid="option"]'))[1]
+      .nativeElement.click();
     await fixture.whenStable();
-    expect(fixture.debugElement.query(By.css('[data-testid="search"]'))).toBeNull();
+    expect(
+      fixture.debugElement.query(By.css('[data-testid="search"]')),
+    ).toBeNull();
   });
 
   it('sets the displayed label when FormControl value changes (writeValue)', async () => {
     host.ctrl.setValue('B');
     await fixture.whenStable();
-    const trigger = findEl(fixture, 'trigger').nativeElement as HTMLButtonElement;
+    const trigger = findEl(fixture, 'trigger')
+      .nativeElement as HTMLButtonElement;
     expect(trigger.textContent?.trim()).toContain('Option B');
   });
 
@@ -110,7 +125,9 @@ describe('SelectFieldComponent', () => {
     search.value = 'Option A';
     dispatchFakeEvent(search, 'input');
     await fixture.whenStable();
-    const options = fixture.debugElement.queryAll(By.css('[data-testid="option"]'));
+    const options = fixture.debugElement.queryAll(
+      By.css('[data-testid="option"]'),
+    );
     expect(options.length).toBe(1);
     expect(options[0].nativeElement.textContent.trim()).toBe('Option A');
   });
@@ -122,7 +139,9 @@ describe('SelectFieldComponent', () => {
     search.value = 'XYZ_NO_MATCH';
     dispatchFakeEvent(search, 'input');
     await fixture.whenStable();
-    expect(fixture.debugElement.query(By.css('[data-testid="no-options"]'))).not.toBeNull();
+    expect(
+      fixture.debugElement.query(By.css('[data-testid="no-options"]')),
+    ).not.toBeNull();
   });
 
   it('marks the FormControl as touched when the panel closes', async () => {
@@ -157,10 +176,15 @@ describe('SelectFieldComponent', () => {
     findEl(fixture, 'trigger').nativeElement.click();
     await fixture.whenStable();
     const search = findEl(fixture, 'search').nativeElement as HTMLInputElement;
-    const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
+    const event = new KeyboardEvent('keydown', {
+      key: 'Escape',
+      bubbles: true,
+    });
     search.dispatchEvent(event);
     await fixture.whenStable();
-    expect(fixture.debugElement.query(By.css('[data-testid="search"]'))).toBeNull();
+    expect(
+      fixture.debugElement.query(By.css('[data-testid="search"]')),
+    ).toBeNull();
   });
 });
 

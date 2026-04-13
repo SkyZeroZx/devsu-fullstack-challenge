@@ -67,7 +67,7 @@ export class AccountEditComponent {
   });
 
   onSubmit(): void {
-     if (!this.formCtrl.valid) {
+    if (!this.formCtrl.valid) {
       this.accountForm()?.markAllAsTouched();
       return;
     }

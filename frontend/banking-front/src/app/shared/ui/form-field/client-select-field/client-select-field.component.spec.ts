@@ -84,7 +84,9 @@ describe('ClientSelectFieldComponent', () => {
     findEl(fixture, 'trigger').nativeElement.click();
     await fixture.whenStable();
 
-    const options = fixture.nativeElement.querySelectorAll<HTMLElement>('[data-testid="option"]');
+    const options = fixture.nativeElement.querySelectorAll<HTMLElement>(
+      '[data-testid="option"]',
+    );
     options[1]?.click();
     await fixture.whenStable();
 

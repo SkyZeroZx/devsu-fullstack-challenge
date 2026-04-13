@@ -13,7 +13,17 @@ import {
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { catchError, debounceTime, distinctUntilChanged, exhaustMap, filter, of, skip, Subject, switchMap } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  exhaustMap,
+  filter,
+  of,
+  skip,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ClientService } from '@core/services/client/client.service';
 import { ClientResponse, PagedResponse } from '@core/interface';
