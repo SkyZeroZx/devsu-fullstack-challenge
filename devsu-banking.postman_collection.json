@@ -2,17 +2,85 @@
   "info": {
     "name": "Devsu Banking Challenge",
     "_postman_id": "devsu-banking-001",
-    "description": "Collection aligned with seed-dev.sql data.\n\nRun order: Login → Listar clientes (captures clienteId) → remaining requests.\n\nSeed data:\n- Admin: admin / admin123\n- Jose Lema (1234567890): cuentas 478758, 225487\n- Marianela Montalvo (0987654321): cuentas 495878, 496825",
+    "description": "Coleccion para probar el API. El request de 'Login' automáticamente settea el token y precarga clientes, cuentas y movimientos en las variables, logrando que el resto de endpoints funcionen dinámicamente con la data disponible sin editarla manualmente.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "var isAuthRequest = pm.info.requestName === 'Login' || pm.info.requestName === 'Register (new user)';",
+          "if (isAuthRequest) return;",
+          "",
+          "var token = pm.collectionVariables.get('token');",
+          "if (!token) {",
+          "    throw new Error(",
+          "        '⛔ No authentication token found. Please run the \"Login\" request first. ' +",
+          "        'The Login script will set the token AND pre-load dynamic IDs automatically.'",
+          "    );",
+          "}"
+        ]
+      }
+    }
+  ],
   "variable": [
-    { "key": "base_url",            "value": "http://localhost:8080", "type": "string" },
-    { "key": "auth_service_url",    "value": "http://localhost:8091", "type": "string" },
-    { "key": "banking_service_url", "value": "http://localhost:8090", "type": "string" },
-    { "key": "token",               "value": "",                     "type": "string" },
-    { "key": "clienteId_jose",      "value": "",                     "type": "string" },
-    { "key": "clienteId_marianela", "value": "",                     "type": "string" },
-    { "key": "last_movimiento_id",  "value": "",                     "type": "string" }
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "auth_service_url",
+      "value": "http://localhost:8091",
+      "type": "string"
+    },
+    {
+      "key": "banking_service_url",
+      "value": "http://localhost:8090",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "clienteId_1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "clienteId_2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cuenta_1_numero",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cuenta_2_numero",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cuenta_3_numero",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cuenta_4_numero",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "last_movimiento_id",
+      "value": "1",
+      "type": "string"
+    }
   ],
   "item": [
     {
@@ -24,19 +92,80 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "// ── 1. Validate login itself ─────────────────────────────────",
+                  "pm.test('Login exitoso (200)', function() { pm.response.to.have.status(200); });",
                   "var json = pm.response.json();",
-                  "if (json.token) { pm.collectionVariables.set('token', json.token); }"
-                ],
-                "type": "text/javascript"
+                  "pm.test('Token recibido', function() { pm.expect(json.token).to.be.a('string').and.not.empty; });",
+                  "if (!json.token) return;",
+                  "",
+                  "pm.collectionVariables.set('token', json.token);",
+                  "",
+                  "// ── 2. Fetch clientes and cuentas to setup dynamic variables ──",
+                  "var baseUrl = pm.collectionVariables.get('base_url');",
+                  "",
+                  "// Fetch Clientes",
+                  "pm.sendRequest({",
+                  "    url: baseUrl + '/api/clientes?page=1&size=10',",
+                  "    method: 'GET',",
+                  "    header: { 'Authorization': 'Bearer ' + json.token }",
+                  "}, function(err, res) {",
+                  "    if (!err && res && res.code === 200) {",
+                  "        var content = (res.json() || {}).content || [];",
+                  "        if (content.length >= 1) pm.collectionVariables.set('clienteId_1', content[0].clienteId);",
+                  "        if (content.length >= 2) pm.collectionVariables.set('clienteId_2', content[1].clienteId);",
+                  "    }",
+                  "});",
+                  "",
+                  "// Fetch Cuentas",
+                  "pm.sendRequest({",
+                  "    url: baseUrl + '/api/cuentas?page=1&size=10',",
+                  "    method: 'GET',",
+                  "    header: { 'Authorization': 'Bearer ' + json.token }",
+                  "}, function(err, res) {",
+                  "    if (!err && res && res.code === 200) {",
+                  "        var content = (res.json() || {}).content || [];",
+                  "        if (content.length >= 1) pm.collectionVariables.set('cuenta_1_numero', content[0].numeroCuenta);",
+                  "        if (content.length >= 2) pm.collectionVariables.set('cuenta_2_numero', content[1].numeroCuenta);",
+                  "        if (content.length >= 3) pm.collectionVariables.set('cuenta_3_numero', content[2].numeroCuenta);",
+                  "        if (content.length >= 4) pm.collectionVariables.set('cuenta_4_numero', content[3].numeroCuenta);",
+                  "    }",
+                  "});",
+                  "",
+                  "// Fetch Movimientos",
+                  "pm.sendRequest({",
+                  "    url: baseUrl + '/api/movimientos?page=1&size=10',",
+                  "    method: 'GET',",
+                  "    header: { 'Authorization': 'Bearer ' + json.token }",
+                  "}, function(err, res) {",
+                  "    if (!err && res && res.code === 200) {",
+                  "        var content = (res.json() || {}).content || [];",
+                  "        if (content.length >= 1) pm.collectionVariables.set('last_movimiento_id', String(content[0].id));",
+                  "    }",
+                  "});"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
             "body": {
               "mode": "raw",
               "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
@@ -47,8 +176,22 @@
           "name": "Register (new user)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": { "raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"] },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
             "body": {
               "mode": "raw",
               "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"test1234\"\n}"
@@ -62,9 +205,19 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/auth/validate?token={{token}}",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "validate"],
-              "query": [{ "key": "token", "value": "{{token}}" }]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "validate"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{token}}"
+                }
+              ]
             }
           }
         }
@@ -74,61 +227,84 @@
       "name": "Clientes",
       "item": [
         {
-          "name": "Listar todos",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "var json = pm.response.json();",
-                  "if (json.content && json.content.length > 0) {",
-                  "    json.content.forEach(function(c) {",
-                  "        if (c.nombre === 'Jose Lema') pm.collectionVariables.set('clienteId_jose', c.clienteId);",
-                  "        if (c.nombre === 'Marianela Montalvo') pm.collectionVariables.set('clienteId_marianela', c.clienteId);",
-                  "    });",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
+          "name": "Listar todos (page 1)",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/clientes?page=0&size=20&sort=nombre,asc",
-              "host": ["{{base_url}}"],
-              "path": ["api", "clientes"],
+              "raw": "{{base_url}}/api/clientes?page=1&size=20&sort=nombre,asc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "20" },
-                { "key": "sort", "value": "nombre,asc" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "nombre,asc"
+                }
               ]
             }
           }
         },
         {
-          "name": "Obtener Jose Lema",
+          "name": "Obtener Cliente_1",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/clientes/{{clienteId_jose}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "clientes", "{{clienteId_jose}}"]
+              "raw": "{{base_url}}/api/clientes/{{clienteId_1}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{clienteId_1}}"
+              ]
             }
           }
         },
         {
-          "name": "Obtener Marianela Montalvo",
+          "name": "Obtener Cliente_2",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/clientes/{{clienteId_marianela}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "clientes", "{{clienteId_marianela}}"]
+              "raw": "{{base_url}}/api/clientes/{{clienteId_2}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{clienteId_2}}"
+              ]
             }
           }
         },
@@ -138,20 +314,35 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "pm.test('Status 201', () => pm.response.to.have.status(201));"
-                ],
-                "type": "text/javascript"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "url": { "raw": "{{base_url}}/api/clientes", "host": ["{{base_url}}"], "path": ["api", "clientes"] },
+            "url": {
+              "raw": "{{base_url}}/api/clientes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ]
+            },
             "body": {
               "mode": "raw",
               "raw": "{\n  \"nombre\": \"Juan Osorio\",\n  \"genero\": \"Masculino\",\n  \"edad\": 28,\n  \"identificacion\": \"1122334455\",\n  \"direccion\": \"13 Junio y Equinoccial\",\n  \"telefono\": \"098874587\",\n  \"contrasena\": \"5678\",\n  \"estado\": true\n}"
@@ -159,36 +350,60 @@
           }
         },
         {
-          "name": "Actualizar Jose Lema (PUT)",
+          "name": "Actualizar Cliente_1 (PUT)",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "url": {
-              "raw": "{{base_url}}/api/clientes/{{clienteId_jose}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "clientes", "{{clienteId_jose}}"]
+              "raw": "{{base_url}}/api/clientes/{{clienteId_1}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{clienteId_1}}"
+              ]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"Masculino\",\n  \"edad\": 36,\n  \"identificacion\": \"1234567890\",\n  \"direccion\": \"Nueva direccion 123\",\n  \"telefono\": \"098254785\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}"
+              "raw": "{\n  \"nombre\": \"Cliente_1\",\n  \"genero\": \"Masculino\",\n  \"edad\": 36,\n  \"identificacion\": \"1234567890\",\n  \"direccion\": \"Nueva Direccion 123\",\n  \"telefono\": \"098254785\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}"
             }
           }
         },
         {
-          "name": "Actualizar parcial Jose Lema (PATCH)",
+          "name": "Actualizar parcial Cliente_1 (PATCH)",
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "url": {
-              "raw": "{{base_url}}/api/clientes/{{clienteId_jose}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "clientes", "{{clienteId_jose}}"]
+              "raw": "{{base_url}}/api/clientes/{{clienteId_1}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{clienteId_1}}"
+              ]
             },
             "body": {
               "mode": "raw",
@@ -197,14 +412,25 @@
           }
         },
         {
-          "name": "Eliminar Marianela Montalvo",
+          "name": "Eliminar Cliente_2",
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/clientes/{{clienteId_marianela}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "clientes", "{{clienteId_marianela}}"]
+              "raw": "{{base_url}}/api/clientes/{{clienteId_2}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{clienteId_2}}"
+              ]
             }
           }
         }
@@ -214,55 +440,107 @@
       "name": "Cuentas",
       "item": [
         {
-          "name": "Listar todas",
+          "name": "Listar todas (page 1)",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/cuentas?page=0&size=20&sort=id,asc",
-              "host": ["{{base_url}}"],
-              "path": ["api", "cuentas"],
+              "raw": "{{base_url}}/api/cuentas?page=1&size=20&sort=id,asc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cuentas"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "20" },
-                { "key": "sort", "value": "id,asc" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "id,asc"
+                }
               ]
             }
           }
         },
         {
-          "name": "Obtener cuenta 478758 (Ahorro Jose)",
+          "name": "Obtener cuenta {{cuenta_1_numero}} (Ahorro Cliente_1)",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/cuentas/478758",
-              "host": ["{{base_url}}"],
-              "path": ["api", "cuentas", "478758"]
+              "raw": "{{base_url}}/api/cuentas/{{cuenta_1_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_1_numero}}"
+              ]
             }
           }
         },
         {
-          "name": "Obtener cuenta 225487 (Corriente Jose)",
+          "name": "Obtener cuenta {{cuenta_2_numero}} (Corriente Cliente_1)",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/cuentas/225487",
-              "host": ["{{base_url}}"],
-              "path": ["api", "cuentas", "225487"]
+              "raw": "{{base_url}}/api/cuentas/{{cuenta_2_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_2_numero}}"
+              ]
             }
           }
         },
         {
-          "name": "Obtener cuenta 496825 (Ahorro Marianela)",
+          "name": "Obtener cuenta {{cuenta_3_numero}} (Ahorro Cliente_2)",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/cuentas/496825",
-              "host": ["{{base_url}}"],
-              "path": ["api", "cuentas", "496825"]
+              "raw": "{{base_url}}/api/cuentas/{{cuenta_3_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_3_numero}}"
+              ]
             }
           }
         },
@@ -272,57 +550,96 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "pm.test('Status 201', () => pm.response.to.have.status(201));"
-                ],
-                "type": "text/javascript"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
-            "url": { "raw": "{{base_url}}/api/cuentas", "host": ["{{base_url}}"], "path": ["api", "cuentas"] },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"585545\",\n  \"tipoCuenta\": \"Corriente\",\n  \"saldoInicial\": 1000,\n  \"estado\": true,\n  \"clienteId\": \"{{clienteId_jose}}\"\n}"
-            }
-          }
-        },
-        {
-          "name": "Actualizar cuenta 478758 (PUT)",
-          "request": {
-            "method": "PUT",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "url": {
-              "raw": "{{base_url}}/api/cuentas/478758",
-              "host": ["{{base_url}}"],
-              "path": ["api", "cuentas", "478758"]
+              "raw": "{{base_url}}/api/cuentas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cuentas"
+              ]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoCuenta\": \"Ahorro\",\n  \"saldoInicial\": 2000,\n  \"estado\": false,\n  \"clienteId\": \"{{clienteId_jose}}\"\n}"
+              "raw": "{\n  \"numeroCuenta\": \"585545\",\n  \"tipoCuenta\": \"Corriente\",\n  \"saldoInicial\": 1000,\n  \"estado\": true,\n  \"clienteId\": \"{{clienteId_1}}\"\n}"
             }
           }
         },
         {
-          "name": "Actualizar parcial cuenta 478758 (PATCH)",
+          "name": "Actualizar cuenta {{cuenta_1_numero}} (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cuentas/{{cuenta_1_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_1_numero}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"{{cuenta_1_numero}}\",\n  \"tipoCuenta\": \"Ahorro\",\n  \"saldoInicial\": 2000,\n  \"estado\": false,\n  \"clienteId\": \"{{clienteId_1}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Actualizar parcial cuenta {{cuenta_1_numero}} (PATCH)",
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "url": {
-              "raw": "{{base_url}}/api/cuentas/478758",
-              "host": ["{{base_url}}"],
-              "path": ["api", "cuentas", "478758"]
+              "raw": "{{base_url}}/api/cuentas/{{cuenta_1_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_1_numero}}"
+              ]
             },
             "body": {
               "mode": "raw",
@@ -331,14 +648,25 @@
           }
         },
         {
-          "name": "Eliminar cuenta 495878 (vacía Marianela)",
+          "name": "Eliminar cuenta {{cuenta_4_numero}} (vacía Cliente_2)",
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/cuentas/495878",
-              "host": ["{{base_url}}"],
-              "path": ["api", "cuentas", "495878"]
+              "raw": "{{base_url}}/api/cuentas/{{cuenta_4_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_4_numero}}"
+              ]
             }
           }
         }
@@ -348,18 +676,37 @@
       "name": "Movimientos",
       "item": [
         {
-          "name": "Listar todos",
+          "name": "Listar todos (page 1)",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/movimientos?page=0&size=20&sort=fecha,desc",
-              "host": ["{{base_url}}"],
-              "path": ["api", "movimientos"],
+              "raw": "{{base_url}}/api/movimientos?page=1&size=20&sort=fecha,desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movimientos"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "20" },
-                { "key": "sort", "value": "fecha,desc" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "fecha,desc"
+                }
               ]
             }
           }
@@ -368,69 +715,125 @@
           "name": "Obtener movimiento por ID",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/movimientos/1",
-              "host": ["{{base_url}}"],
-              "path": ["api", "movimientos", "1"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movimientos",
+                "1"
+              ]
             }
           }
         },
         {
-          "name": "Depositar en cuenta 478758",
+          "name": "Depositar en cuenta {{cuenta_1_numero}}",
           "event": [
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "pm.test('Status 201', () => pm.response.to.have.status(201));",
                   "var json = pm.response.json();",
-                  "if (json.id) pm.collectionVariables.set('last_movimiento_id', json.id);"
-                ],
-                "type": "text/javascript"
+                  "if (json.id) pm.collectionVariables.set('last_movimiento_id', String(json.id));"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "url": { "raw": "{{base_url}}/api/movimientos", "host": ["{{base_url}}"], "path": ["api", "movimientos"] },
+            "url": {
+              "raw": "{{base_url}}/api/movimientos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movimientos"
+              ]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoMovimiento\": \"Deposito\",\n  \"valor\": 500\n}"
+              "raw": "{\n  \"numeroCuenta\": \"{{cuenta_1_numero}}\",\n  \"tipoMovimiento\": \"Deposito\",\n  \"valor\": 500\n}"
             }
           }
         },
         {
-          "name": "Retirar de cuenta 225487",
+          "name": "Retirar de cuenta {{cuenta_2_numero}}",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "url": { "raw": "{{base_url}}/api/movimientos", "host": ["{{base_url}}"], "path": ["api", "movimientos"] },
+            "url": {
+              "raw": "{{base_url}}/api/movimientos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movimientos"
+              ]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"225487\",\n  \"tipoMovimiento\": \"Retiro\",\n  \"valor\": 50\n}"
+              "raw": "{\n  \"numeroCuenta\": \"{{cuenta_2_numero}}\",\n  \"tipoMovimiento\": \"Retiro\",\n  \"valor\": 50\n}"
             }
           }
         },
         {
-          "name": "Depositar en cuenta 496825",
+          "name": "Depositar en cuenta {{cuenta_3_numero}}",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "url": { "raw": "{{base_url}}/api/movimientos", "host": ["{{base_url}}"], "path": ["api", "movimientos"] },
+            "url": {
+              "raw": "{{base_url}}/api/movimientos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movimientos"
+              ]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"496825\",\n  \"tipoMovimiento\": \"Deposito\",\n  \"valor\": 100\n}"
+              "raw": "{\n  \"numeroCuenta\": \"{{cuenta_3_numero}}\",\n  \"tipoMovimiento\": \"Deposito\",\n  \"valor\": 100\n}"
             }
           }
         },
@@ -438,11 +841,22 @@
           "name": "Eliminar movimiento",
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/movimientos/{{last_movimiento_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "movimientos", "{{last_movimiento_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movimientos",
+                "{{last_movimiento_id}}"
+              ]
             }
           }
         }
@@ -452,52 +866,110 @@
       "name": "Reportes",
       "item": [
         {
-          "name": "Reporte JSON - Jose Lema",
+          "name": "Reporte JSON - Cliente_1",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/reportes?cliente={{clienteId_jose}}&fechaInicio=2026-01-01&fechaFin=2026-12-31",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reportes"],
+              "raw": "{{base_url}}/api/reportes?cliente={{clienteId_1}}&fechaInicio=2026-01-01&fechaFin=2026-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reportes"
+              ],
               "query": [
-                { "key": "cliente",     "value": "{{clienteId_jose}}" },
-                { "key": "fechaInicio", "value": "2026-01-01" },
-                { "key": "fechaFin",    "value": "2026-12-31" }
+                {
+                  "key": "cliente",
+                  "value": "{{clienteId_1}}"
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "2026-12-31"
+                }
               ]
             }
           }
         },
         {
-          "name": "Reporte JSON - Marianela Montalvo",
+          "name": "Reporte JSON - Cliente_2",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/reportes?cliente={{clienteId_marianela}}&fechaInicio=2026-01-01&fechaFin=2026-12-31",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reportes"],
+              "raw": "{{base_url}}/api/reportes?cliente={{clienteId_2}}&fechaInicio=2026-01-01&fechaFin=2026-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reportes"
+              ],
               "query": [
-                { "key": "cliente",     "value": "{{clienteId_marianela}}" },
-                { "key": "fechaInicio", "value": "2026-01-01" },
-                { "key": "fechaFin",    "value": "2026-12-31" }
+                {
+                  "key": "cliente",
+                  "value": "{{clienteId_2}}"
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "2026-12-31"
+                }
               ]
             }
           }
         },
         {
-          "name": "Reporte PDF (base64) - Jose Lema",
+          "name": "Reporte PDF (base64) - Cliente_1",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "{{base_url}}/api/reportes/pdf?cliente={{clienteId_jose}}&fechaInicio=2026-01-01&fechaFin=2026-12-31",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reportes", "pdf"],
+              "raw": "{{base_url}}/api/reportes/pdf?cliente={{clienteId_1}}&fechaInicio=2026-01-01&fechaFin=2026-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reportes",
+                "pdf"
+              ],
               "query": [
-                { "key": "cliente",     "value": "{{clienteId_jose}}" },
-                { "key": "fechaInicio", "value": "2026-01-01" },
-                { "key": "fechaFin",    "value": "2026-12-31" }
+                {
+                  "key": "cliente",
+                  "value": "{{clienteId_1}}"
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "2026-12-31"
+                }
               ]
             }
           }
@@ -514,8 +986,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/actuator/health",
-              "host": ["{{base_url}}"],
-              "path": ["actuator", "health"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
             }
           }
         },
@@ -526,8 +1003,13 @@
             "header": [],
             "url": {
               "raw": "{{auth_service_url}}/actuator/health",
-              "host": ["{{auth_service_url}}"],
-              "path": ["actuator", "health"]
+              "host": [
+                "{{auth_service_url}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
             }
           }
         },
@@ -538,8 +1020,13 @@
             "header": [],
             "url": {
               "raw": "{{banking_service_url}}/actuator/health",
-              "host": ["{{banking_service_url}}"],
-              "path": ["actuator", "health"]
+              "host": [
+                "{{banking_service_url}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
             }
           }
         }
