@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: devsu-banking-front
+    container_name: devsu-banking-front
+    restart: unless-stopped
+    ports:
+      - '4200:80'
+    environment:
+      # URL of the API gateway — override this when deploying
+      BACKEND_URL: http://localhost:8080
+    networks:
+      - devsu-net
+
+networks:
+  devsu-net:
+    driver: bridge
