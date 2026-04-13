@@ -5,24 +5,22 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  FormControl,
-  FormGroup,
+  FormBuilder,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { catchError, of } from 'rxjs';
-import { ReportService } from '@core/services/report.service';
-import { ClientService } from '@core/services/client.service';
-import { ReportRow } from '@core/interface';
+import { ReportService } from '@core/services/report/report.service';
+import { FormType, ReportFilterForm, ReportRow } from '@core/interface';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
-import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
-import { InputFieldComponent } from '@shared/ui/form-field/input-field.component';
-import { SelectFieldComponent } from '@shared/ui/form-field/select-field.component';
+import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
+import { ClientSelectFieldComponent } from '@shared/ui/form-field/client-select-field/client-select-field.component';
 import { DecimalPipe } from '@angular/common';
+import { ControlErrorModule } from '@app/shared/ui/control-error/control-error.module';
+import { DataTableComponent } from '@shared/ui/data-table/data-table.component';
+import { TableColumnDirective } from '@shared/ui/data-table/table-column.directive';
 
 @Component({
   selector: 'app-reports',
@@ -31,10 +29,12 @@ import { DecimalPipe } from '@angular/common';
     FormsModule,
     ButtonComponent,
     ClickTrackingDirective,
-    SkeletonComponent,
     InputFieldComponent,
-    SelectFieldComponent,
+    ClientSelectFieldComponent,
     DecimalPipe,
+    ControlErrorModule,
+    DataTableComponent,
+    TableColumnDirective,
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
@@ -42,37 +42,23 @@ import { DecimalPipe } from '@angular/common';
 })
 export class ReportsComponent {
   private readonly reportService = inject(ReportService);
-  private readonly clientService = inject(ClientService);
+  private readonly fb = inject(FormBuilder);
 
   readonly loading = signal(false);
   readonly downloading = signal(false);
   readonly rows = signal<ReportRow[] | null>(null);
 
-  readonly clients = toSignal(
-    this.clientService.getAll({ size: 10 }).pipe(catchError(() => of(null))),
-    { initialValue: null },
+  protected readonly displayRows = computed(() => this.rows() ?? []);
+  protected readonly emptyMessage = computed(() =>
+    this.rows() === null
+      ? 'Seleccione un rango de fechas y presione Buscar'
+      : 'Sin resultados',
   );
 
-  readonly clientOptions = computed(() =>
-    (this.clients()?.content ?? []).map((c) => ({
-      value: c.clienteId,
-      label: c.nombre,
-    })),
-  );
-
-  readonly form = new FormGroup({
-    fechaInicio: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-    fechaFin: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-    cliente: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
+  readonly form: FormType<ReportFilterForm> = this.fb.nonNullable.group({
+    fechaInicio: ['', [Validators.required]],
+    fechaFin: ['', [Validators.required]],
+    cliente: [''],
   });
 
   search(): void {

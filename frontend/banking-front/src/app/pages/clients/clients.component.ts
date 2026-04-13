@@ -17,7 +17,7 @@ import {
   distinctUntilChanged,
 } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { ClientService } from '@core/services/client.service';
+import { ClientService } from '@core/services/client/client.service';
 import { ClientResponse } from '@core/interface';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';

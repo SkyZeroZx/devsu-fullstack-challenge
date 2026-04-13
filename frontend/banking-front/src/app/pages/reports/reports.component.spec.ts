@@ -1,11 +1,11 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { ReportsComponent } from './reports.component';
-import { ReportService } from '@core/services/report.service';
-import { ClientService } from '@core/services/client.service';
+import { ReportService } from '@core/services/report/report.service';
+import { ClientService } from '@core/services/client/client.service';
 import { ReportRow, PagedResponse, ClientResponse } from '@core/interface';
 import { expectContainedText } from '@app/spec-helpers/element.spec-helper';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 
 const mockClients: PagedResponse<ClientResponse> = {
   content: [
@@ -21,7 +21,7 @@ const mockClients: PagedResponse<ClientResponse> = {
     },
   ],
   page: 1,
-  size: 200,
+  size: 20,
   totalElements: 1,
   totalPages: 1,
   first: true,
@@ -49,11 +49,9 @@ describe('ReportsComponent', () => {
     getReport: jest.fn(),
     getReportPdf: jest.fn(),
   };
-  const clientServiceSpy = { getAll: jest.fn() };
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    clientServiceSpy.getAll.mockReturnValue(of(mockClients));
     reportServiceSpy.getReport.mockReturnValue(of(mockRows));
     reportServiceSpy.getReportPdf.mockReturnValue(of({ base64: 'abc123' }));
 
@@ -61,9 +59,12 @@ describe('ReportsComponent', () => {
       imports: [ReportsComponent],
       providers: [
         { provide: ReportService, useValue: reportServiceSpy },
-        { provide: ClientService, useValue: clientServiceSpy },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: ClientService,
+          useValue: { getAll: jest.fn().mockReturnValue(of(mockClients)) },
+        },
+        {
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],
@@ -80,11 +81,6 @@ describe('ReportsComponent', () => {
 
   it('should render the page title', () => {
     expectContainedText(fixture, 'Reportes');
-  });
-
-  it('should load clients for the dropdown on init', () => {
-    expect(clientServiceSpy.getAll).toHaveBeenCalledWith({ size: 200 });
-    expect(component.clients()?.content).toHaveLength(1);
   });
 
   it('should start with rows as null (no search performed yet)', () => {

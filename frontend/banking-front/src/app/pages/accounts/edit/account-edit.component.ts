@@ -13,7 +13,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, catchError, of } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountRequest, AccountResponse } from '@core/interface';
-import { AccountService } from '@core/services/account.service';
+import { AccountService } from '@core/services/account/account.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
@@ -46,11 +46,6 @@ export class AccountEditComponent {
   readonly saving = signal(false);
   readonly formCtrl = new FormControl<AccountResponse | null>(null);
 
-  /**
-   * viewChild is used to call markAllAsTouched() on the nested CVA form.
-   * Injecting NgControl (self) inside the CVA alongside NG_VALIDATORS creates
-   * a circular dependency, so we trigger touched propagation from the host instead.
-   */
   private readonly accountForm = viewChild(AccountFormComponent);
 
   readonly account = toSignal(
@@ -72,9 +67,8 @@ export class AccountEditComponent {
   });
 
   onSubmit(): void {
-    const formCmp = this.accountForm();
-    if (!formCmp?.form.valid) {
-      formCmp?.markAllAsTouched();
+     if (!this.formCtrl.valid) {
+      this.accountForm()?.markAllAsTouched();
       return;
     }
     this.saving.set(true);

@@ -12,17 +12,14 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   forwardRef,
   inject,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
-import { AccountType } from '@core/interface';
-import { ClientService } from '@core/services/client.service';
-import { CheckboxFieldComponent } from '@shared/ui/form-field/checkbox-field.component';
-import { InputFieldComponent } from '@shared/ui/form-field/input-field.component';
-import { SelectFieldComponent } from '@shared/ui/form-field/select-field.component';
+import { AccountRequest, AccountType, FormType } from '@core/interface';
+import { CheckboxFieldComponent } from '@shared/ui/form-field/checkbox-field/checkbox-field.component';
+import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
+import { SelectFieldComponent } from '@shared/ui/form-field/select-field/select-field.component';
+import { ClientSelectFieldComponent } from '@shared/ui/form-field/client-select-field/client-select-field.component';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
 
 @Component({
@@ -34,6 +31,7 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
     InputFieldComponent,
     SelectFieldComponent,
     CheckboxFieldComponent,
+    ClientSelectFieldComponent,
     ControlErrorModule,
   ],
   templateUrl: './account-form.component.html',
@@ -52,27 +50,14 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
   ],
 })
 export class AccountFormComponent implements ControlValueAccessor, Validator {
-  private readonly clientService = inject(ClientService);
   private readonly fb = inject(FormBuilder);
-
-  readonly clients = toSignal(
-    this.clientService.getAll({ size: 10 }).pipe(catchError(() => of(null))),
-    { initialValue: null },
-  );
 
   readonly accountTypeOptions = [
     { value: 'AHORRO' as AccountType, label: 'Ahorro' },
     { value: 'CORRIENTE' as AccountType, label: 'Corriente' },
   ];
 
-  readonly clientOptions = computed(() =>
-    (this.clients()?.content ?? []).map((c) => ({
-      value: c.clienteId,
-      label: c.nombre,
-    })),
-  );
-
-  readonly form = this.fb.nonNullable.group({
+  readonly form: FormType<AccountRequest> = this.fb.nonNullable.group({
     numeroCuenta: ['', Validators.required],
     tipoCuenta: ['' as AccountType, Validators.required],
     saldoInicial: [0, [Validators.required, Validators.min(0)]],
@@ -85,12 +70,6 @@ export class AccountFormComponent implements ControlValueAccessor, Validator {
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   onChangeFn: (val: unknown) => void = () => {};
 
-  /**
-   * Called by the parent edit component via viewChild.
-   * Injecting NgControl (self) alongside NG_VALIDATORS causes a circular
-   * dependency (NgControl → NG_VALIDATORS → this component), so we expose
-   * this method and let the host trigger it directly.
-   */
   markAllAsTouched(): void {
     this.form.markAllAsTouched();
   }

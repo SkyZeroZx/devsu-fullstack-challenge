@@ -5,19 +5,19 @@ import {
   signal,
 } from '@angular/core';
 import {
-  FormControl,
-  FormGroup,
+  FormBuilder,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthApiService } from '@core/services/auth-api.service';
-import { AuthService } from '@core/services/auth.service';
+import { AuthApiService } from '@core/services/auth/auth-api.service';
+import { AuthService } from '@core/services/auth/auth.service';
+import { AuthRequest, FormType } from '@core/interface';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
-import { InputFieldComponent } from '@shared/ui/form-field/input-field.component';
+import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
 
 @Component({
   selector: 'app-login',
@@ -37,19 +37,14 @@ export class LoginComponent {
   private readonly authApi = inject(AuthApiService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-  readonly form = new FormGroup({
-    username: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(3)],
-    }),
-    password: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4)],
-    }),
+  readonly form: FormType<AuthRequest> = this.fb.nonNullable.group({
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.minLength(4)]],
   });
 
   onSubmit(): void {

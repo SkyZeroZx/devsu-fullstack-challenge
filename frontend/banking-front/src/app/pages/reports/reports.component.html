@@ -19,10 +19,8 @@
       <app-input-field type="date" label="Hasta" formControlName="fechaFin" />
     </div>
     <div>
-      <app-select-field
-        label="Cliente"
+      <app-client-select
         formControlName="cliente"
-        [options]="clientOptions()"
         placeholder="Todos"
       />
     </div>
@@ -50,72 +48,54 @@
     </div>
   </form>
 
-  <div class="page__table-wrapper">
-    <table class="table" role="grid" aria-label="Resultado del reporte">
-      <thead>
-        <tr>
-          <th scope="col">Fecha</th>
-          <th scope="col">Cliente</th>
-          <th scope="col">Cuenta</th>
-          <th scope="col">Tipo</th>
-          <th scope="col">Saldo Inicial</th>
-          <th scope="col">Movimiento</th>
-          <th scope="col">Saldo Disponible</th>
-          <th scope="col">Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        @if (loading()) {
-          @for (_ of [1, 2, 3, 4]; track $index) {
-            <tr>
-              <td><app-skeleton width="90px" height="16px" /></td>
-              <td><app-skeleton width="100px" height="16px" /></td>
-              <td><app-skeleton width="100px" height="16px" /></td>
-              <td><app-skeleton width="70px" height="16px" /></td>
-              <td><app-skeleton width="80px" height="16px" /></td>
-              <td><app-skeleton width="80px" height="16px" /></td>
-              <td><app-skeleton width="80px" height="16px" /></td>
-              <td><app-skeleton width="60px" height="16px" /></td>
-            </tr>
-          }
-        } @else if (rows() === null) {
-          <tr>
-            <td colspan="8" class="table__empty">
-              Seleccione un rango de fechas y presione Buscar
-            </td>
-          </tr>
-        } @else if (rows()!.length === 0) {
-          <tr>
-            <td colspan="8" class="table__empty">Sin resultados</td>
-          </tr>
-        } @else {
-          @for (row of rows(); track $index) {
-            <tr>
-              <td>{{ row.fecha }}</td>
-              <td>{{ row.cliente }}</td>
-              <td>{{ row.numeroCuenta }}</td>
-              <td>{{ row.tipo }}</td>
-              <td>{{ row.saldoInicial | number: '1.2-2' }}</td>
-              <td
-                [class.text--credit]="row.movimiento >= 0"
-                [class.text--debit]="row.movimiento < 0"
-              >
-                {{ row.movimiento | number: '1.2-2' }}
-              </td>
-              <td>{{ row.saldoDisponible | number: '1.2-2' }}</td>
-              <td>
-                <span
-                  class="badge"
-                  [class.badge--active]="row.estado"
-                  [class.badge--inactive]="!row.estado"
-                >
-                  {{ row.estado ? 'Activo' : 'Inactivo' }}
-                </span>
-              </td>
-            </tr>
-          }
-        }
-      </tbody>
-    </table>
-  </div>
+  <app-data-table
+    [rows]="displayRows()"
+    [loading]="loading()"
+    [totalElements]="displayRows().length"
+    [emptyMessage]="emptyMessage()"
+    ariaLabel="Resultado del reporte"
+  >
+    <ng-template appTableColumn="fecha" header="Fecha" [appTableColumnOf]="displayRows()" let-row>
+      {{ row.fecha }}
+    </ng-template>
+
+    <ng-template appTableColumn="cliente" header="Cliente" [appTableColumnOf]="displayRows()" let-row>
+      {{ row.cliente }}
+    </ng-template>
+
+    <ng-template appTableColumn="numeroCuenta" header="Cuenta" [appTableColumnOf]="displayRows()" let-row>
+      {{ row.numeroCuenta }}
+    </ng-template>
+
+    <ng-template appTableColumn="tipo" header="Tipo" [appTableColumnOf]="displayRows()" let-row>
+      {{ row.tipo }}
+    </ng-template>
+
+    <ng-template appTableColumn="saldoInicial" header="Saldo Inicial" [appTableColumnOf]="displayRows()" let-row>
+      {{ row.saldoInicial | number: '1.2-2' }}
+    </ng-template>
+
+    <ng-template appTableColumn="movimiento" header="Movimiento" [appTableColumnOf]="displayRows()" let-row>
+      <span
+        [class.text--credit]="row.movimiento >= 0"
+        [class.text--debit]="row.movimiento < 0"
+      >
+        {{ row.movimiento | number: '1.2-2' }}
+      </span>
+    </ng-template>
+
+    <ng-template appTableColumn="saldoDisponible" header="Saldo Disponible" [appTableColumnOf]="displayRows()" let-row>
+      {{ row.saldoDisponible | number: '1.2-2' }}
+    </ng-template>
+
+    <ng-template appTableColumn="estado" header="Estado" [appTableColumnOf]="displayRows()" let-row>
+      <span
+        class="badge"
+        [class.badge--active]="row.estado"
+        [class.badge--inactive]="!row.estado"
+      >
+        {{ row.estado ? 'Activo' : 'Inactivo' }}
+      </span>
+    </ng-template>
+  </app-data-table>
 </section>

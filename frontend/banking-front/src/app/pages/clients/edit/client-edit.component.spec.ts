@@ -8,10 +8,10 @@ import {
 import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { ClientEditComponent } from './client-edit.component';
-import { ClientService } from '@core/services/client.service';
+import { ClientService } from '@core/services/client/client.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { ClientResponse } from '@core/interface';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 
 @Component({ template: '<p>Lista</p>' })
 class FakeListComponent {}
@@ -31,6 +31,7 @@ describe('ClientEditComponent', () => {
   const clientServiceSpy = {
     getById: jest.fn(),
     update: jest.fn(),
+    patch: jest.fn(),
   };
   const toastSpy = { success: jest.fn() };
 
@@ -40,6 +41,7 @@ describe('ClientEditComponent', () => {
     jest.clearAllMocks();
     clientServiceSpy.getById.mockReturnValue(of(mockClient));
     clientServiceSpy.update.mockReturnValue(of(mockClient));
+    clientServiceSpy.patch.mockReturnValue(of(mockClient));
 
     await TestBed.configureTestingModule({
       providers: [
@@ -53,7 +55,7 @@ describe('ClientEditComponent', () => {
         { provide: ClientService, useValue: clientServiceSpy },
         { provide: ToastService, useValue: toastSpy },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],
@@ -106,7 +108,10 @@ describe('ClientEditComponent', () => {
     component.onSubmit();
     await harness.fixture.whenStable();
 
-    expect(clientServiceSpy.update).toHaveBeenCalledWith('99', mockClient);
+    expect(clientServiceSpy.patch).toHaveBeenCalledWith(
+      '99',
+      expect.objectContaining({ nombre: 'María Díaz' }),
+    );
     expect(toastSpy.success).toHaveBeenCalled();
     expect(TestBed.inject(Router).url).toBe('/clientes');
   });
@@ -121,6 +126,6 @@ describe('ClientEditComponent', () => {
     component.onSubmit();
     await harness.fixture.whenStable();
 
-    expect(clientServiceSpy.update).not.toHaveBeenCalled();
+    expect(clientServiceSpy.patch).not.toHaveBeenCalled();
   });
 });

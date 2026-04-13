@@ -2,11 +2,12 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { MovementsComponent } from './movements.component';
-import { MovementService } from '@core/services/movement.service';
+import { MovementService } from '@core/services/movement/movement.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { MovementResponse, PagedResponse } from '@core/interface';
 import { expectContainedText } from '@app/spec-helpers/element.spec-helper';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
+import { flushMacrotask } from '@app/spec-helpers/flush-macrotask';
 
 const mockMovement: MovementResponse = {
   id: 1,
@@ -49,7 +50,7 @@ describe('MovementsComponent', () => {
         { provide: MovementService, useValue: movementServiceSpy },
         { provide: ToastService, useValue: toastSpy },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],
@@ -58,8 +59,7 @@ describe('MovementsComponent', () => {
     fixture = TestBed.createComponent(MovementsComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
-    // debounceTime(0) uses setTimeout — yield the event loop to let it fire
-    await new Promise((r) => setTimeout(r, 0));
+    await flushMacrotask();
     await fixture.whenStable();
   });
 
@@ -90,7 +90,7 @@ describe('MovementsComponent', () => {
   it('should call delete on the service and reload after onDelete', async () => {
     component.onDelete(mockMovement);
     await fixture.whenStable();
-    await new Promise((r) => setTimeout(r, 0));
+    await flushMacrotask();
     await fixture.whenStable();
 
     expect(movementServiceSpy.delete).toHaveBeenCalledWith(1);

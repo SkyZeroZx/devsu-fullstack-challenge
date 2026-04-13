@@ -8,7 +8,7 @@ import {
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MovementRequest } from '@core/interface';
-import { MovementService } from '@core/services/movement.service';
+import { MovementService } from '@core/services/movement/movement.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';

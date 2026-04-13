@@ -18,7 +18,7 @@ import {
 } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { MovementService } from '@core/services/movement.service';
+import { MovementService } from '@core/services/movement/movement.service';
 import { MovementResponse } from '@core/interface';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';

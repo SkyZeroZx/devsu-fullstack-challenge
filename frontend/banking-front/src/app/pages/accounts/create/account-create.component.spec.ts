@@ -2,11 +2,11 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { AccountCreateComponent } from './account-create.component';
-import { AccountService } from '@core/services/account.service';
+import { AccountService } from '@core/services/account/account.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { AccountRequest, AccountResponse } from '@core/interface';
 import { expectContainedText } from '@app/spec-helpers/element.spec-helper';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 
 const mockCreated: AccountResponse = {
   numeroCuenta: '478758',
@@ -34,7 +34,7 @@ describe('AccountCreateComponent', () => {
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: ToastService, useValue: toastSpy },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],

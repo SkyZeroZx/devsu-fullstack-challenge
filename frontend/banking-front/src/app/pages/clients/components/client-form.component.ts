@@ -16,9 +16,9 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CheckboxFieldComponent } from '@shared/ui/form-field/checkbox-field.component';
-import { InputFieldComponent } from '@shared/ui/form-field/input-field.component';
-import { SelectFieldComponent } from '@shared/ui/form-field/select-field.component';
+import { CheckboxFieldComponent } from '@shared/ui/form-field/checkbox-field/checkbox-field.component';
+import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
+import { SelectFieldComponent } from '@shared/ui/form-field/select-field/select-field.component';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
 
 @Component({

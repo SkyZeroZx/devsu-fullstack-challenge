@@ -7,12 +7,12 @@ import {
 import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { AccountEditComponent } from './account-edit.component';
-import { AccountService } from '@core/services/account.service';
-import { ClientService } from '@core/services/client.service';
+import { AccountService } from '@core/services/account/account.service';
+import { ClientService } from '@core/services/client/client.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { AccountResponse } from '@core/interface';
 import { Component } from '@angular/core';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 
 @Component({ template: '<p>Lista</p>' })
 class FakeListComponent {}
@@ -22,6 +22,7 @@ const mockAccount: AccountResponse = {
   tipoCuenta: 'AHORRO',
   saldoInicial: 2000,
   estado: true,
+  clienteId: 'c1',
   cliente: 'José Lema',
 };
 
@@ -65,7 +66,7 @@ describe('AccountEditComponent', () => {
         { provide: ClientService, useValue: clientServiceSpy },
         { provide: ToastService, useValue: toastSpy },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],
@@ -122,10 +123,13 @@ describe('AccountEditComponent', () => {
     component.onSubmit();
     await harness.fixture.whenStable();
 
-    expect(accountServiceSpy.update).toHaveBeenCalledWith(
-      '478758',
-      mockAccount,
-    );
+    expect(accountServiceSpy.update).toHaveBeenCalledWith('478758', {
+      numeroCuenta: '478758',
+      tipoCuenta: 'AHORRO',
+      saldoInicial: 2000,
+      estado: true,
+      clienteId: 'c1',
+    });
     expect(toastSpy.success).toHaveBeenCalled();
     expect(TestBed.inject(Router).url).toBe('/cuentas');
   });
@@ -136,7 +140,7 @@ describe('AccountEditComponent', () => {
       AccountEditComponent,
     );
 
-    component.formCtrl.setValue(null);
+    component.formCtrl.setErrors({ invalidForm: { valid: false } });
     component.onSubmit();
     await harness.fixture.whenStable();
 

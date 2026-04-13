@@ -4,10 +4,10 @@ import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 import { LoginComponent } from './login.component';
-import { AuthApiService } from '@core/services/auth-api.service';
-import { AuthService } from '@core/services/auth.service';
+import { AuthApiService } from '@core/services/auth/auth-api.service';
+import { AuthService } from '@core/services/auth/auth.service';
 import { expectContainedText } from '@app/spec-helpers/element.spec-helper';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 
 @Component({ template: '<p data-testid="home">Home</p>' })
 class FakeHomeComponent {}
@@ -36,7 +36,7 @@ describe('LoginComponent', () => {
         { provide: AuthApiService, useValue: authApiStub },
         { provide: AuthService, useValue: authStub },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],
@@ -58,8 +58,8 @@ describe('LoginComponent', () => {
   it('should render username and password inputs', async () => {
     await harness.navigateByUrl('/login', LoginComponent);
     const nativeEl = harness.routeNativeElement!;
-    expect(nativeEl.querySelector('#username')).toBeTruthy();
-    expect(nativeEl.querySelector('#password')).toBeTruthy();
+    const fields = nativeEl.querySelectorAll('app-input-field');
+    expect(fields.length).toBe(2);
   });
 
   it('should mark form as touched when submitted with empty fields', async () => {

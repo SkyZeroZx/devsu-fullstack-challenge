@@ -13,7 +13,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, catchError, of } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClientResponse } from '@core/interface';
-import { ClientService } from '@core/services/client.service';
+import { ClientService } from '@core/services/client/client.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
@@ -48,11 +48,6 @@ export class ClientEditComponent {
   readonly saving = signal(false);
   readonly formCtrl = new FormControl<ClientResponse | null>(null);
 
-  /**
-   * viewChild is used to call markAllAsTouched() on the nested CVA form.
-   * Injecting NgControl (self) inside the CVA alongside NG_VALIDATORS creates
-   * a circular dependency, so we trigger touched propagation from the host instead.
-   */
   private readonly clientForm = viewChild(ClientFormComponent);
 
   readonly client = toSignal(
@@ -87,14 +82,12 @@ export class ClientEditComponent {
     // The password is disabled in edit mode and excluded from the payload.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { contrasena: _pw, ...payload } = formCmp.form.getRawValue();
-    this.clientService
-      .patch(this.id(), payload)
-      .subscribe({
-        next: () => {
-          this.toast.success({ message: 'Cliente actualizado exitosamente' });
-          this.router.navigate(['/clientes']);
-        },
-        error: () => this.saving.set(false),
-      });
+    this.clientService.patch(this.id(), payload).subscribe({
+      next: () => {
+        this.toast.success({ message: 'Cliente actualizado exitosamente' });
+        this.router.navigate(['/clientes']);
+      },
+      error: () => this.saving.set(false),
+    });
   }
 }

@@ -22,12 +22,7 @@
       />
     </div>
     <div>
-      <app-select-field
-        label="Cliente"
-        formControlName="clienteId"
-        [options]="clientOptions()"
-        placeholder="Seleccione cliente"
-      />
+      <app-client-select formControlName="clienteId" />
     </div>
   </div>
   <app-checkbox-field label="Activa" formControlName="estado" />

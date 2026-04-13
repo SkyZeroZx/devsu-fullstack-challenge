@@ -2,11 +2,12 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { AccountsComponent } from './accounts.component';
-import { AccountService } from '@core/services/account.service';
+import { AccountService } from '@core/services/account/account.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { AccountResponse, PagedResponse } from '@core/interface';
 import { expectContainedText } from '@app/spec-helpers/element.spec-helper';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
+import { flushMacrotask } from '@app/spec-helpers/flush-macrotask';
 
 const mockAccount: AccountResponse = {
   numeroCuenta: '478758',
@@ -48,7 +49,7 @@ describe('AccountsComponent', () => {
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: ToastService, useValue: toastSpy },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],
@@ -57,8 +58,7 @@ describe('AccountsComponent', () => {
     fixture = TestBed.createComponent(AccountsComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
-    // debounceTime(0) uses setTimeout — yield the event loop to let it fire
-    await new Promise((r) => setTimeout(r, 0));
+    await flushMacrotask();
     await fixture.whenStable();
   });
 
@@ -89,7 +89,7 @@ describe('AccountsComponent', () => {
   it('should call delete on the service and reload after onDelete', async () => {
     component.onDelete(mockAccount);
     await fixture.whenStable();
-    await new Promise((r) => setTimeout(r, 0));
+    await flushMacrotask();
     await fixture.whenStable();
 
     expect(accountServiceSpy.delete).toHaveBeenCalledWith('478758');

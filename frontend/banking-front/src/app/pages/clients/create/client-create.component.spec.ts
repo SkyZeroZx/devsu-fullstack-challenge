@@ -2,11 +2,11 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { ClientCreateComponent } from './client-create.component';
-import { ClientService } from '@core/services/client.service';
+import { ClientService } from '@core/services/client/client.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { ClientRequest, ClientResponse } from '@core/interface';
 import { expectContainedText } from '@app/spec-helpers/element.spec-helper';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 
 const mockCreated: ClientResponse = {
   clienteId: '1',
@@ -37,7 +37,7 @@ describe('ClientCreateComponent', () => {
         { provide: ClientService, useValue: clientServiceSpy },
         { provide: ToastService, useValue: toastSpy },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],

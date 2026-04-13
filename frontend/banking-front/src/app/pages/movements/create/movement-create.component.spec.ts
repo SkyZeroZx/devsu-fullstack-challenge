@@ -2,11 +2,11 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { MovementCreateComponent } from './movement-create.component';
-import { MovementService } from '@core/services/movement.service';
+import { MovementService } from '@core/services/movement/movement.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { MovementRequest, MovementResponse } from '@core/interface';
 import { expectContainedText } from '@app/spec-helpers/element.spec-helper';
-import { ANALYTICS_ADAPTER } from '@core/services/analytics.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 
 const mockCreated: MovementResponse = {
   id: 1,
@@ -35,7 +35,7 @@ describe('MovementCreateComponent', () => {
         { provide: MovementService, useValue: movementServiceSpy },
         { provide: ToastService, useValue: toastSpy },
         {
-          provide: ANALYTICS_ADAPTER,
+          provide: AnalyticsAdapter,
           useValue: { trackEvent: jest.fn(), trackPageView: jest.fn() },
         },
       ],

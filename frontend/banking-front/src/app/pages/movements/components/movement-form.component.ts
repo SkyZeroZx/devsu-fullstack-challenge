@@ -19,9 +19,9 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of } from 'rxjs';
 import { MovementType } from '@core/interface';
-import { AccountService } from '@core/services/account.service';
-import { InputFieldComponent } from '@shared/ui/form-field/input-field.component';
-import { SelectFieldComponent } from '@shared/ui/form-field/select-field.component';
+import { AccountService } from '@core/services/account/account.service';
+import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
+import { SelectFieldComponent } from '@shared/ui/form-field/select-field/select-field.component';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
 
 @Component({

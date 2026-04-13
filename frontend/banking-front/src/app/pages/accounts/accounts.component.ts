@@ -18,7 +18,7 @@ import {
 } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
-import { AccountService } from '@core/services/account.service';
+import { AccountService } from '@core/services/account/account.service';
 import { AccountResponse } from '@core/interface';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
