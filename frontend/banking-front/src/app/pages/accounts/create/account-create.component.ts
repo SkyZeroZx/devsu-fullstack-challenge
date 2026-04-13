@@ -47,12 +47,14 @@ export class AccountCreateComponent {
     }
     this.saving.set(true);
 
-    this.accountService.create(this.createAccountForm.getRawValue()!).subscribe({
-      next: () => {
-        this.toast.success({ message: 'Cuenta creada exitosamente' });
-        this.router.navigate(['/cuentas']);
-      },
-      error: () => this.saving.set(false),
-    });
+    this.accountService
+      .create(this.createAccountForm.getRawValue()!)
+      .subscribe({
+        next: () => {
+          this.toast.success({ message: 'Cuenta creada exitosamente' });
+          this.router.navigate(['/cuentas']);
+        },
+        error: () => this.saving.set(false),
+      });
   }
 }

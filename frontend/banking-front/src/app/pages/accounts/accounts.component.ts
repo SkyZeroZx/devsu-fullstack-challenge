@@ -63,7 +63,7 @@ export class AccountsComponent {
     { initialValue: '' },
   );
 
-  readonly page = linkedSignal(() => (this.searchTerm(), 0));
+  readonly page = linkedSignal(() => (this.searchTerm(), 1));
 
   private readonly refreshTick = signal(0);
 
@@ -79,7 +79,7 @@ export class AccountsComponent {
       switchMap(({ page, search }) =>
         this.accountService
           .getAll({
-            page: page + 1,
+            page: page,
             size: this.pageSize,
             search: search || undefined,
           })

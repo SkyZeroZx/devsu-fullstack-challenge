@@ -51,7 +51,7 @@ class TestHostComponent {
     { id: 2, name: 'Bob' },
   ]);
   total = signal(2);
-  page = signal(0);
+  page = signal(1);
   loading = signal(false);
   emittedPage: number | null = null;
 
@@ -132,6 +132,6 @@ describe('DataTableComponent', () => {
     await fixture.whenStable();
     findEl(fixture, 'btn-next').nativeElement.click();
     await fixture.whenStable();
-    expect(host.emittedPage).toBe(1);
+    expect(host.emittedPage).toBe(2);
   });
 });

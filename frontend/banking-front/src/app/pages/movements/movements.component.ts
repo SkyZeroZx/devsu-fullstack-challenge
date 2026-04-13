@@ -64,7 +64,7 @@ export class MovementsComponent {
     { initialValue: '' },
   );
 
-  readonly page = linkedSignal(() => (this.searchTerm(), 0));
+  readonly page = linkedSignal(() => (this.searchTerm(), 1));
 
   private readonly refreshTick = signal(0);
 
@@ -80,7 +80,7 @@ export class MovementsComponent {
       switchMap(({ page, search }) =>
         this.movementService
           .getAll({
-            page: page + 1,
+            page: page,
             size: this.pageSize,
             search: search || undefined,
           })

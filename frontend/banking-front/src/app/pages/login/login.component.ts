@@ -11,7 +11,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthApiService } from '@core/services/auth/auth-api.service';
 import { AuthService } from '@core/services/auth/auth.service';
 import { AuthRequest, FormType } from '@core/interface';
 import { ButtonComponent } from '@shared/ui/button/button.component';
@@ -34,7 +33,6 @@ import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-fie
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  private readonly authApi = inject(AuthApiService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
@@ -56,7 +54,7 @@ export class LoginComponent {
     this.loading.set(true);
     this.error.set(null);
 
-    this.authApi.login(this.form.getRawValue()).subscribe({
+    this.auth.login(this.form.getRawValue()).subscribe({
       next: (res) => {
         this.auth.setToken(res.token);
         this.router.navigate(['/']);

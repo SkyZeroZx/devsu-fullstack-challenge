@@ -20,7 +20,7 @@ import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
 export class DataTableComponent<T = unknown> {
   readonly rows = input<T[]>([]);
   readonly totalElements = input(0);
-  readonly page = model(0);
+  readonly page = model(1);
   readonly size = input(10);
   readonly loading = input(false);
   readonly ariaLabel = input('');

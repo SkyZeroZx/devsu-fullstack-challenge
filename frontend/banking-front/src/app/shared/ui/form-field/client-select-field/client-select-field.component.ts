@@ -40,17 +40,6 @@ interface ClientState {
 
 const INITIAL_STATE: ClientState = { options: [], page: 0, totalPages: 1 };
 
-/**
- * A ControlValueAccessor that wraps `app-select-field` and owns the full
- * client-loading lifecycle: initial fetch, debounced API search, and
- * infinite-scroll pagination.
- *
- * Usage (same as any CVA):
- * ```html
- * <app-client-select formControlName="clienteId" />
- * <app-client-select formControlName="cliente" label="Filtrar cliente" placeholder="Todos" />
- * ```
- */
 @Component({
   selector: 'app-client-select',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -91,14 +80,12 @@ export class ClientSelectFieldComponent implements ControlValueAccessor {
   readonly clientOptions = computed(() => this.clientState().options);
 
   constructor() {
-    // Initial load immediately on construction
     this.fetchClients(1, '')
       .pipe(takeUntilDestroyed())
       .subscribe((paged) => {
         if (paged) this.clientState.set(this.toState(paged));
       });
 
-    // User search → skip initial value, debounce, reset list, fetch page 1
     toObservable(this.searchQuery)
       .pipe(
         skip(1),
@@ -111,7 +98,6 @@ export class ClientSelectFieldComponent implements ControlValueAccessor {
         if (paged) this.clientState.set(this.toState(paged));
       });
 
-    // Scroll end → append next page; exhaustMap prevents concurrent requests
     this.scrollEnd$
       .pipe(
         filter(() => this.clientState().page < this.clientState().totalPages),
@@ -128,7 +114,6 @@ export class ClientSelectFieldComponent implements ControlValueAccessor {
         }));
       });
 
-    // Propagate inner value changes to the parent form control
     this.innerCtrl.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe((v) => this.onChangeFn(v));
@@ -141,8 +126,6 @@ export class ClientSelectFieldComponent implements ControlValueAccessor {
   onScrollEnd(): void {
     this.scrollEnd$.next();
   }
-
-  // ── ControlValueAccessor ──────────────────────────────────────────────────
 
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onChangeFn: (v: string) => void = () => {};
@@ -163,10 +146,12 @@ export class ClientSelectFieldComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    isDisabled ? this.innerCtrl.disable() : this.innerCtrl.enable();
-  }
+    if (isDisabled) {
+      return this.innerCtrl.disable();
+    }
 
-  // ── Private helpers ───────────────────────────────────────────────────────
+    this.innerCtrl.enable();
+  }
 
   private fetchClients(page: number, search: string) {
     return this.clientService

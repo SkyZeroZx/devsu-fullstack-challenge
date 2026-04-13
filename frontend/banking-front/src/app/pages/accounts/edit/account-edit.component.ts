@@ -80,14 +80,12 @@ export class AccountEditComponent {
     const { cliente: _cliente, ...payload } =
       this.editAccountForm.getRawValue() as AccountResponse;
 
-    this.accountService
-      .update(this.id(), payload)
-      .subscribe({
-        next: () => {
-          this.toast.success({ message: 'Cuenta actualizada exitosamente' });
-          this.router.navigate(['/cuentas']);
-        },
-        error: () => this.saving.set(false),
-      });
+    this.accountService.update(this.id(), payload).subscribe({
+      next: () => {
+        this.toast.success({ message: 'Cuenta actualizada exitosamente' });
+        this.router.navigate(['/cuentas']);
+      },
+      error: () => this.saving.set(false),
+    });
   }
 }

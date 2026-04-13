@@ -11,10 +11,10 @@
     <button
       class="paginator__btn"
       type="button"
-      [disabled]="page() === 0"
+      [disabled]="page() === 1"
       [attr.aria-label]="'Primera página'"
       data-testid="btn-first"
-      (click)="goTo(0)"
+      (click)="goTo(1)"
     >
       «
     </button>
@@ -22,7 +22,7 @@
     <button
       class="paginator__btn"
       type="button"
-      [disabled]="page() === 0"
+      [disabled]="page() === 1"
       [attr.aria-label]="'Página anterior'"
       data-testid="btn-prev"
       (click)="goTo(page() - 1)"
@@ -35,13 +35,13 @@
       aria-current="page"
       data-testid="paginator-pages"
     >
-      {{ page() + 1 }} / {{ totalPages() }}
+      {{ page() }} / {{ totalPages() }}
     </span>
 
     <button
       class="paginator__btn"
       type="button"
-      [disabled]="page() >= totalPages() - 1"
+      [disabled]="page() >= totalPages()"
       [attr.aria-label]="'Siguiente página'"
       data-testid="btn-next"
       (click)="goTo(page() + 1)"
@@ -52,10 +52,10 @@
     <button
       class="paginator__btn"
       type="button"
-      [disabled]="page() >= totalPages() - 1"
+      [disabled]="page() >= totalPages()"
       [attr.aria-label]="'Última página'"
       data-testid="btn-last"
-      (click)="goTo(totalPages() - 1)"
+      (click)="goTo(totalPages())"
     >
       »
     </button>

@@ -2,13 +2,15 @@ export interface ReportParams {
   cliente?: string;
   fechaInicio: string;
   fechaFin: string;
+  page?: number;
+  size?: number;
 }
 
-/** Shape used for the report filter form (cliente is always present as a string). */
 export interface ReportFilterForm {
   fechaInicio: string;
   fechaFin: string;
   cliente: string;
+  todosClientes: boolean;
 }
 
 export interface ReportRow {

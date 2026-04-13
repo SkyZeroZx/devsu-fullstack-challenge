@@ -10,7 +10,9 @@
   <form [hidden]="!account()" (ngSubmit)="onSubmit()">
     <app-account-form [formControl]="editAccountForm" />
     <div class="page__actions">
-      <a btn variant="secondary" routerLink="/cuentas"><app-icon name="close" /> Cancelar</a>
+      <a btn variant="secondary" routerLink="/cuentas"
+        ><app-icon name="close" /> Cancelar</a
+      >
       <button
         btn
         variant="primary"

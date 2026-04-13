@@ -94,7 +94,9 @@ describe('ClientEditComponent', () => {
 
     const component = harness.routeDebugElement!
       .componentInstance as ClientEditComponent;
-    expect(component.editClientForm.value).toMatchObject({ nombre: 'María Díaz' });
+    expect(component.editClientForm.value).toMatchObject({
+      nombre: 'María Díaz',
+    });
   });
 
   it('should call update service and navigate back on valid submit', async () => {

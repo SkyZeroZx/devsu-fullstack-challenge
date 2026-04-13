@@ -18,8 +18,17 @@
     <div>
       <app-input-field type="date" label="Hasta" formControlName="fechaFin" />
     </div>
-    <div>
+    <div class="filters__client-row">
       <app-client-select formControlName="cliente" placeholder="Todos" />
+
+      <label class="filters__todos">
+        <input
+          type="checkbox"
+          formControlName="todosClientes"
+          aria-label="Consultar todos los clientes"
+        />
+        Todos los clientes
+      </label>
     </div>
 
     <div class="filters__actions">
@@ -40,7 +49,8 @@
         [disabled]="downloading() || rows() === null"
         (click)="downloadPdf()"
       >
-        <app-icon name="picture_as_pdf" /> {{ downloading() ? 'Descargando...' : 'PDF' }}
+        <app-icon name="picture_as_pdf" />
+        {{ downloading() ? 'Descargando...' : 'Descargar PDF' }}
       </button>
     </div>
   </form>
@@ -48,7 +58,9 @@
   <app-data-table
     [rows]="displayRows()"
     [loading]="loading()"
-    [totalElements]="displayRows().length"
+    [totalElements]="totalElements()"
+    [(page)]="page"
+    [size]="pageSize"
     [emptyMessage]="emptyMessage()"
     ariaLabel="Resultado del reporte"
   >

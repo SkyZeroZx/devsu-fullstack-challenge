@@ -23,11 +23,11 @@ export class PaginatorComponent {
   );
 
   protected readonly from = computed(() =>
-    this.totalElements() === 0 ? 0 : this.page() * this.size() + 1,
+    this.totalElements() === 0 ? 0 : (this.page() - 1) * this.size() + 1,
   );
 
   protected readonly to = computed(() =>
-    Math.min((this.page() + 1) * this.size(), this.totalElements()),
+    Math.min(this.page() * this.size(), this.totalElements()),
   );
 
   protected goTo(page: number): void {

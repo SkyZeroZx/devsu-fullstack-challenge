@@ -61,8 +61,8 @@ export class ClientsComponent {
     { initialValue: '' },
   );
 
-  // Resets to 0 whenever the search term changes (declared after searchTerm)
-  readonly page = linkedSignal(() => (this.searchTerm(), 0));
+  // Resets to 1 whenever the search term changes (declared after searchTerm)
+  readonly page = linkedSignal(() => (this.searchTerm(), 1));
 
   private readonly refreshTick = signal(0);
 
@@ -78,7 +78,7 @@ export class ClientsComponent {
       switchMap(({ page, search }) =>
         this.clientService
           .getAll({
-            page: page + 1,
+            page: page,
             size: this.pageSize,
             search: search || undefined,
           })

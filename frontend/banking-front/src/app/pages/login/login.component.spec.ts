@@ -4,7 +4,6 @@ import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 import { LoginComponent } from './login.component';
-import { AuthApiService } from '@core/services/auth/auth-api.service';
 import { AuthService } from '@core/services/auth/auth.service';
 import { expectContainedText } from '@app/spec-helpers/element.spec-helper';
 import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
@@ -13,19 +12,18 @@ import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 class FakeHomeComponent {}
 
 describe('LoginComponent', () => {
-  let authApiStub: { login: jest.Mock };
-  let authStub: { setToken: jest.Mock };
+  let authStub: { setToken: jest.Mock; login: jest.Mock };
   let harness: RouterTestingHarness;
 
   beforeEach(async () => {
-    authApiStub = {
+    authStub = {
+      setToken: jest.fn(),
       login: jest
         .fn()
         .mockReturnValue(
           of({ token: 'test-token', username: 'admin', role: 'ADMIN' }),
         ),
     };
-    authStub = { setToken: jest.fn() };
 
     await TestBed.configureTestingModule({
       providers: [
@@ -33,7 +31,6 @@ describe('LoginComponent', () => {
           { path: '', component: FakeHomeComponent },
           { path: 'login', component: LoginComponent },
         ]),
-        { provide: AuthApiService, useValue: authApiStub },
         { provide: AuthService, useValue: authStub },
         {
           provide: AnalyticsAdapter,
@@ -69,17 +66,17 @@ describe('LoginComponent', () => {
     await harness.fixture.whenStable();
 
     expect(component.form.touched).toBe(true);
-    expect(authApiStub.login).not.toHaveBeenCalled();
+    expect(authStub.login).not.toHaveBeenCalled();
   });
 
-  it('should call authApi.login with form values on valid submit', async () => {
+  it('should call auth.login with form values on valid submit', async () => {
     const component = await harness.navigateByUrl('/login', LoginComponent);
 
     component.form.setValue({ username: 'admin', password: 'secret' });
     component.onSubmit();
     await harness.fixture.whenStable();
 
-    expect(authApiStub.login).toHaveBeenCalledWith({
+    expect(authStub.login).toHaveBeenCalledWith({
       username: 'admin',
       password: 'secret',
     });
@@ -97,9 +94,7 @@ describe('LoginComponent', () => {
   });
 
   it('should show an error message when login fails', async () => {
-    authApiStub.login.mockReturnValue(
-      throwError(() => new Error('Unauthorized')),
-    );
+    authStub.login.mockReturnValue(throwError(() => new Error('Unauthorized')));
     const component = await harness.navigateByUrl('/login', LoginComponent);
 
     component.form.setValue({ username: 'wrong', password: 'wrong' });
