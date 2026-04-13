@@ -26,6 +26,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -42,11 +43,12 @@ public class TransactionService {
 
     @Cacheable(
             value = CacheNames.TRANSACTIONS_LIST,
-            key = "#pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
+            key = "#search + ':' + #pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
     @Transactional(readOnly = true)
-    public PagedResponseDTO<TransactionResponseDTO> findAll(Pageable pageable) {
+    public PagedResponseDTO<TransactionResponseDTO> findAll(String search, Pageable pageable) {
+        String term = StringUtils.hasText(search) ? search : "";
         return PagedResponseDTO.from(
-                transactionRepository.findAll(pageable).map(transactionMapper::toResponseDTO));
+                transactionRepository.search(term, pageable).map(transactionMapper::toResponseDTO));
     }
 
     @Cacheable(value = CacheNames.TRANSACTIONS, key = "#id")

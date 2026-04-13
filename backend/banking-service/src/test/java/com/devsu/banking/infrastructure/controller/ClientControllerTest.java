@@ -45,7 +45,7 @@ class ClientControllerTest {
                         .estado(true)
                         .build();
 
-        when(clientService.findAll(any(Pageable.class)))
+        when(clientService.findAll(any(), any(Pageable.class)))
                 .thenReturn(new PagedResponseDTO<>(List.of(response), 0, 20, 1, 1, true, true));
 
         mockMvc.perform(get("/api/clientes"))

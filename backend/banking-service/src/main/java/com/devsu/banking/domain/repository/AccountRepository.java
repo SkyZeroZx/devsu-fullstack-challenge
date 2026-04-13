@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface AccountRepository {
 
-    Page<Account> findAll(Pageable pageable);
+    Page<Account> search(String search, Pageable pageable);
 
     Optional<Account> findByNumeroCuenta(String numeroCuenta);
 

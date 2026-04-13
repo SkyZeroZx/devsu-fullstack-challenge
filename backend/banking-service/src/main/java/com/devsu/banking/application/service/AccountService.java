@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -31,11 +32,12 @@ public class AccountService {
 
     @Cacheable(
             value = CacheNames.ACCOUNTS_LIST,
-            key = "#pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
+            key = "#search + ':' + #pageable.pageNumber + ':' + #pageable.pageSize + ':' + #pageable.sort")
     @Transactional(readOnly = true)
-    public PagedResponseDTO<AccountResponseDTO> findAll(Pageable pageable) {
+    public PagedResponseDTO<AccountResponseDTO> findAll(String search, Pageable pageable) {
+        String term = StringUtils.hasText(search) ? search : "";
         return PagedResponseDTO.from(
-                accountRepository.findAll(pageable).map(accountMapper::toResponseDTO));
+                accountRepository.search(term, pageable).map(accountMapper::toResponseDTO));
     }
 
     @Cacheable(value = CacheNames.ACCOUNTS, key = "#numeroCuenta")

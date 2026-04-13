@@ -104,14 +104,14 @@ class ClientServiceTest {
     @DisplayName("Should return all clients")
     void findAll_returnsList() {
         Pageable pageable = PageRequest.of(0, 20);
-        when(clientRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(client)));
+        when(clientRepository.search("", pageable)).thenReturn(new PageImpl<>(List.of(client)));
         when(clientMapper.toResponseDTO(any(Client.class))).thenReturn(responseDTO);
 
-        PagedResponseDTO<ClientResponseDTO> result = clientService.findAll(pageable);
+        PagedResponseDTO<ClientResponseDTO> result = clientService.findAll(null, pageable);
 
         assertThat(result.content()).hasSize(1);
         assertThat(result.content().get(0).getNombre()).isEqualTo("Jose Lema");
-        verify(clientRepository).findAll(pageable);
+        verify(clientRepository).search("", pageable);
     }
 
     @Test

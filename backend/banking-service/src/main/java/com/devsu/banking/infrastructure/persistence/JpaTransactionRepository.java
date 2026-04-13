@@ -5,6 +5,8 @@ import com.devsu.banking.domain.repository.TransactionRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,4 +36,11 @@ public interface JpaTransactionRepository
             @Param("clientId") Long clientId,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
+
+    @Override
+    @Query(
+            "SELECT t FROM Transaction t JOIN t.cuenta c "
+                    + "WHERE LOWER(c.numeroCuenta) LIKE LOWER(CONCAT('%', :search, '%')) "
+                    + "OR LOWER(CAST(t.tipoMovimiento AS string)) LIKE LOWER(CONCAT('%', :search, '%'))")
+    Page<Transaction> search(@Param("search") String search, Pageable pageable);
 }

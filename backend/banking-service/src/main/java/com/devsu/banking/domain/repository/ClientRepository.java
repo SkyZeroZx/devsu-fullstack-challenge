@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ClientRepository {
 
-    Page<Client> findAll(Pageable pageable);
+    Page<Client> search(String search, Pageable pageable);
 
     Optional<Client> findByClienteId(String clienteId);
 

@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface TransactionRepository {
 
-    Page<Transaction> findAll(Pageable pageable);
+    Page<Transaction> search(String search, Pageable pageable);
 
     Optional<Transaction> findById(Long id);
 

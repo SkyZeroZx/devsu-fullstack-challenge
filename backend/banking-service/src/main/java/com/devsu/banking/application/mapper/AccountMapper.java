@@ -16,6 +16,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface AccountMapper {
 
     @Mapping(target = "tipoCuenta", source = "tipoCuenta", qualifiedByName = "formatAccountType")
+    @Mapping(target = "clienteId", source = "cliente.clienteId")
     @Mapping(target = "cliente", source = "cliente.nombre")
     AccountResponseDTO toResponseDTO(Account account);
 
@@ -53,9 +54,6 @@ public interface AccountMapper {
 
     @Named("formatAccountType")
     default String formatAccountType(AccountType type) {
-        return switch (type) {
-            case AHORRO -> "Ahorros";
-            case CORRIENTE -> "Corriente";
-        };
+        return type.name();
     }
 }

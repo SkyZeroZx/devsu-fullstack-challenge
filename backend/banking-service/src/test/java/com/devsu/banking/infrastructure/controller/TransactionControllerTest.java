@@ -123,7 +123,7 @@ class TransactionControllerTest {
                         .numeroCuenta("478758")
                         .build();
 
-        when(transactionService.findAll(any(Pageable.class)))
+        when(transactionService.findAll(any(), any(Pageable.class)))
                 .thenReturn(new PagedResponseDTO<>(List.of(response), 0, 20, 1, 1, true, true));
 
         mockMvc.perform(get("/api/movimientos"))

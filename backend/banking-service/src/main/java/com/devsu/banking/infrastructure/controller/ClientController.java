@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,9 +31,10 @@ public class ClientController {
 
     @GetMapping
     public ResponseEntity<PagedResponseDTO<ClientResponseDTO>> listAll(
+            @RequestParam(required = false) String search,
             @PageableDefault(size = 20, sort = "nombre", direction = Sort.Direction.ASC)
                     Pageable pageable) {
-        return ResponseEntity.ok(clientService.findAll(pageable));
+        return ResponseEntity.ok(clientService.findAll(search, pageable));
     }
 
     @GetMapping("/{clienteId}")
