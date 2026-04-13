@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '@core/services/auth.service';
-import { AnalyticsService } from '@core/services/analytics.service';
+import { AuthService } from '@core/services/auth/auth.service';
+import { AnalyticsAdapter } from '@core/services/analytics/analytics.adapter';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 
 @Component({
@@ -14,7 +14,7 @@ import { ButtonComponent } from '@shared/ui/button/button.component';
 export class HeaderComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly analytics = inject(AnalyticsService);
+  private readonly analytics = inject(AnalyticsAdapter);
 
   readonly user = this.auth.user;
 

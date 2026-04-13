@@ -4,6 +4,13 @@ export interface ReportParams {
   fechaFin: string;
 }
 
+/** Shape used for the report filter form (cliente is always present as a string). */
+export interface ReportFilterForm {
+  fechaInicio: string;
+  fechaFin: string;
+  cliente: string;
+}
+
 export interface ReportRow {
   fecha: string;
   cliente: string;

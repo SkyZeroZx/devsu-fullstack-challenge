@@ -3,7 +3,7 @@ import { Component, signal } from '@angular/core';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { authGuard, publicGuard } from './auth.guard';
-import { AuthService } from '@core/services/auth.service';
+import { AuthService } from '@core/services/auth/auth.service';
 
 @Component({ template: '<p>Dashboard</p>' })
 class FakeDashboardComponent {}

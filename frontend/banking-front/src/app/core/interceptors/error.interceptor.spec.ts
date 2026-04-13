@@ -10,7 +10,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { errorInterceptor } from './error.interceptor';
-import { AuthService } from '@core/services/auth.service';
+import { AuthService } from '@core/services/auth/auth.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
@@ -69,7 +69,7 @@ describe('errorInterceptor', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
     expect(toastSpy.warn).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: expect.stringContaining('Sesión expirada'),
+        message: expect.stringContaining('No autorizado'),
       }),
     );
   });

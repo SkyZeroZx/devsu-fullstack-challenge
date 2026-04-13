@@ -13,6 +13,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       rejection = (error as { [key: string]: unknown })?.['rejection']; // get the error object
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const url = this.router.url;
 
     console.error(GlobalErrorHandler.name, { error, rejection });
