@@ -75,14 +75,20 @@ export class AccountsComponent {
       debounceTime(0),
       switchMap(({ page, search }) =>
         this.accountService
-          .getAll({ page: page + 1, size: this.pageSize, search: search || undefined })
+          .getAll({
+            page: page + 1,
+            size: this.pageSize,
+            search: search || undefined,
+          })
           .pipe(catchError(() => of(null))),
       ),
     ),
     { initialValue: undefined },
   );
 
-  readonly filteredRows = computed((): AccountResponse[] => this.data()?.content ?? []);
+  readonly filteredRows = computed(
+    (): AccountResponse[] => this.data()?.content ?? [],
+  );
 
   readonly totalElements = computed(() => this.data()?.totalElements ?? 0);
 

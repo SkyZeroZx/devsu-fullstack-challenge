@@ -47,7 +47,9 @@ export class InputFieldComponent implements ControlValueAccessor, OnInit {
   private readonly inputRef =
     viewChild<ElementRef<HTMLInputElement>>('inputRef');
 
+  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onChangeFn: (v: unknown) => void = () => {};
+  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onTouchedFn: () => void = () => {};
 
   constructor() {

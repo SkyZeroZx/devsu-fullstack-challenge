@@ -34,7 +34,9 @@ export class CheckboxFieldComponent implements ControlValueAccessor {
   protected readonly value = signal(false);
   protected readonly disabled = signal(false);
 
+  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onChangeFn: (v: boolean) => void = () => {};
+  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onTouchedFn: () => void = () => {};
 
   writeValue(val: unknown): void {

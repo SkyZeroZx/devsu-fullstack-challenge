@@ -1,5 +1,4 @@
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   NG_VALIDATORS,
@@ -82,10 +81,14 @@ export class MovementFormComponent implements ControlValueAccessor, Validator {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    isDisabled ? this.form.disable() : this.form.enable();
+    if (isDisabled) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
   }
 
-  validate(_control: AbstractControl): ValidationErrors | null {
+  validate(): ValidationErrors | null {
     return this.form.valid ? null : { invalidForm: { valid: false } };
   }
 

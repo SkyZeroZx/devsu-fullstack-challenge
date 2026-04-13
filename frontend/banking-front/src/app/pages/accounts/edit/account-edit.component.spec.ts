@@ -31,19 +31,17 @@ describe('AccountEditComponent', () => {
     update: jest.fn(),
   };
   const clientServiceSpy = {
-    getAll: jest
-      .fn()
-      .mockReturnValue(
-        of({
-          content: [],
-          page: 1,
-          size: 200,
-          totalElements: 0,
-          totalPages: 0,
-          first: true,
-          last: true,
-        }),
-      ),
+    getAll: jest.fn().mockReturnValue(
+      of({
+        content: [],
+        page: 1,
+        size: 200,
+        totalElements: 0,
+        totalPages: 0,
+        first: true,
+        last: true,
+      }),
+    ),
   };
   const toastSpy = { success: jest.fn() };
 

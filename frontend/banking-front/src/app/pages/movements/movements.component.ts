@@ -76,14 +76,20 @@ export class MovementsComponent {
       debounceTime(0),
       switchMap(({ page, search }) =>
         this.movementService
-          .getAll({ page: page + 1, size: this.pageSize, search: search || undefined })
+          .getAll({
+            page: page + 1,
+            size: this.pageSize,
+            search: search || undefined,
+          })
           .pipe(catchError(() => of(null))),
       ),
     ),
     { initialValue: undefined },
   );
 
-  readonly filteredRows = computed((): MovementResponse[] => this.data()?.content ?? []);
+  readonly filteredRows = computed(
+    (): MovementResponse[] => this.data()?.content ?? [],
+  );
 
   readonly totalElements = computed(() => this.data()?.totalElements ?? 0);
 

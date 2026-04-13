@@ -1,5 +1,4 @@
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   NG_VALIDATORS,
@@ -46,8 +45,13 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
     },
   ],
 })
-export class ClientFormComponent implements ControlValueAccessor, Validator, OnInit {
-  private readonly ngControl = inject(NgControl, { optional: true, self: true });
+export class ClientFormComponent
+  implements ControlValueAccessor, Validator, OnInit
+{
+  private readonly ngControl = inject(NgControl, {
+    optional: true,
+    self: true,
+  });
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
 
@@ -68,7 +72,9 @@ export class ClientFormComponent implements ControlValueAccessor, Validator, OnI
     estado: [true],
   });
 
+  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   onTouchedFn: () => void = () => {};
+  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onChangeFn: (val: unknown) => void = () => {};
 
   ngOnInit(): void {
@@ -100,11 +106,14 @@ export class ClientFormComponent implements ControlValueAccessor, Validator, OnI
   }
 
   setDisabledState(isDisabled: boolean): void {
-    isDisabled ? this.form.disable() : this.form.enable();
+    if (isDisabled) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
   }
 
   validate(): ValidationErrors | null {
     return this.form.valid ? null : { invalidForm: { valid: false } };
   }
-
 }

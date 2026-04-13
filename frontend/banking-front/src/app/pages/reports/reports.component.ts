@@ -90,7 +90,7 @@ export class ReportsComponent {
   downloadPdf(): void {
     if (this.form.invalid) return;
     this.downloading.set(true);
- 
+
     const { fechaInicio, fechaFin, cliente } = this.form.getRawValue();
     this.reportService
       .getReportPdf({ fechaInicio, fechaFin, cliente: cliente || undefined })

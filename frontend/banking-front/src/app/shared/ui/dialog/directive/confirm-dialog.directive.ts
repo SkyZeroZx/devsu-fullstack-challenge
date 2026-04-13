@@ -20,6 +20,7 @@ export class ConfirmDialogDirective {
 
   readonly confirm = output<void>();
 
+  // eslint-disable-next-line @angular-eslint/no-output-native
   readonly cancel = output<void>();
 
   private existDialog = false;

@@ -13,6 +13,7 @@ import { errorInterceptor } from './error.interceptor';
 import { AuthService } from '@core/services/auth.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 
+/* eslint-disable @typescript-eslint/no-empty-function */
 describe('errorInterceptor', () => {
   let http: HttpClient;
   let httpTesting: HttpTestingController;

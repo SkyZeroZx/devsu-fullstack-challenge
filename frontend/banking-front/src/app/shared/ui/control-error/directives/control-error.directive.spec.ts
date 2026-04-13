@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
@@ -27,8 +27,8 @@ import { defaultErrors } from '../form-error';
   imports: [FormsModule, ReactiveFormsModule, ControlErrorModule],
 })
 class TestComponentControlError implements OnInit {
+  private fb = inject(FormBuilder);
   formGroupTest!: FormGroup;
-  constructor(private fb: FormBuilder) {}
   ngOnInit(): void {
     this.formGroupTest = this.fb.group({
       name: this.fb.control('', Validators.required),
