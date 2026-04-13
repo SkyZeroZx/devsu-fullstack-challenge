@@ -16,6 +16,15 @@ En la raíz del proyecto encontrarás el archivo `devsu-banking.postman_collecti
 
 De esta forma, puedes probar cualquier endpoint de **Clientes**, **Cuentas**, **Movimientos** o **Reportes** sin tener que copiar y pegar IDs manualmente, sin importar qué datos generó el seed de desarrollo.
 
+> [!IMPORTANT]
+> No se utilizaron APIs experimentales de Angular, como:
+>
+> - [`resource`](https://next.angular.dev/api/core/resource)
+> - [`httpResource`](https://next.angular.dev/api/common/http/httpResource)
+> - [Signal Forms](https://next.angular.dev/guide/forms/signals)
+>
+> Esto se debe a que, en el estado actual de Angular, estas funcionalidades aún son **experimentales** y no se consideran adecuadas para un entorno de producción.
+
 ## Tecnologías
 
 | Capa          | Tecnología                                 |
