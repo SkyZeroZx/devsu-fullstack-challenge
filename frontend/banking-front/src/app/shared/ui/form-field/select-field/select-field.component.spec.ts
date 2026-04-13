@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SelectFieldComponent, SelectOption } from './select-field.component';
 import {
@@ -170,5 +171,34 @@ describe('SelectFieldComponent', () => {
     search.dispatchEvent(event);
     await fixture.whenStable();
     expect(queryEl(fixture, 'search')).toBeNull();
+  });
+
+  it('emits searchChange with empty string when the panel opens', async () => {
+    const select = fixture.debugElement.query(
+      By.directive(SelectFieldComponent),
+    ).componentInstance as SelectFieldComponent;
+    const emitted: string[] = [];
+    select.searchChange.subscribe((v: string) => emitted.push(v));
+
+    findEl(fixture, 'trigger').nativeElement.click();
+    await fixture.whenStable();
+
+    expect(emitted).toContain('');
+  });
+
+  it('resets the search input to blank when the panel is reopened after a search', async () => {
+    findEl(fixture, 'trigger').nativeElement.click();
+    await fixture.whenStable();
+    const search = findEl(fixture, 'search').nativeElement as HTMLInputElement;
+    search.value = 'Option A';
+    dispatchFakeEvent(search, 'input');
+    await fixture.whenStable();
+    findEl(fixture, 'trigger').nativeElement.click();
+    await fixture.whenStable();
+    findEl(fixture, 'trigger').nativeElement.click();
+    await fixture.whenStable();
+    expect(
+      (findEl(fixture, 'search').nativeElement as HTMLInputElement).value,
+    ).toBe('');
   });
 });

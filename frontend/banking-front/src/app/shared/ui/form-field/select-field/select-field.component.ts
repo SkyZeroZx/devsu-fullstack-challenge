@@ -11,7 +11,6 @@ import {
   OnInit,
   output,
   signal,
-  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -64,9 +63,6 @@ export class SelectFieldComponent implements ControlValueAccessor, OnInit {
   protected readonly query = signal('');
   protected readonly activeIndex = signal(-1);
 
-  private readonly searchRef =
-    viewChild<ElementRef<HTMLInputElement>>('searchRef');
-
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onChangeFn: (v: unknown) => void = () => {};
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
@@ -118,7 +114,15 @@ export class SelectFieldComponent implements ControlValueAccessor, OnInit {
     this.activeIndex.set(-1);
     afterNextRender(
       () => {
-        this.searchRef()?.nativeElement.focus();
+        // @ts-expect-error Accessing directly the DOM to focus the input, since using ViewChild causes timing issues
+        // Also this is woraround valid previous used in angular.dev before to migrate to signal forms
+        // Migrate to signal forms we signal form pass to stable instead of experimental
+        const input = this.elRef.nativeElement.querySelector<HTMLInputElement>(
+          '[data-testid="search"]',
+        );
+
+        input?.focus();
+        this.searchChange.emit('');
       },
       { injector: this.injector },
     );

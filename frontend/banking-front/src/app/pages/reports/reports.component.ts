@@ -1,10 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   inject,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
   FormsModule,
@@ -43,6 +45,7 @@ import { TableColumnDirective } from '@shared/ui/data-table/table-column.directi
 export class ReportsComponent {
   private readonly reportService = inject(ReportService);
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly loading = signal(false);
   readonly downloading = signal(false);
@@ -71,6 +74,7 @@ export class ReportsComponent {
     const { fechaInicio, fechaFin, cliente } = this.form.getRawValue();
     this.reportService
       .getReport({ fechaInicio, fechaFin, cliente: cliente || undefined })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
           this.rows.set(data);
@@ -90,6 +94,7 @@ export class ReportsComponent {
     const { fechaInicio, fechaFin, cliente } = this.form.getRawValue();
     this.reportService
       .getReportPdf({ fechaInicio, fechaFin, cliente: cliente || undefined })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           const link = document.createElement('a');
