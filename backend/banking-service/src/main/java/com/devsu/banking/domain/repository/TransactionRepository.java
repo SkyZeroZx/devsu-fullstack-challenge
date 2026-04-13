@@ -17,6 +17,9 @@ public interface TransactionRepository {
     List<Transaction> findByCuentaIdAndFechaBetween(
             Long cuentaId, LocalDateTime start, LocalDateTime end);
 
+    Page<Transaction> findPagedReport(
+            String clienteId, LocalDateTime start, LocalDateTime end, Pageable pageable);
+
     BigDecimal sumAmountByAccountId(Long accountId);
 
     BigDecimal sumDailyWithdrawalsByClientId(Long clientId, LocalDateTime start, LocalDateTime end);

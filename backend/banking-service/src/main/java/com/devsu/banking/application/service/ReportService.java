@@ -1,10 +1,9 @@
 package com.devsu.banking.application.service;
 
+import com.devsu.banking.application.dto.PagedResponseDTO;
 import com.devsu.banking.application.dto.ReportResponseDTO;
 import com.devsu.banking.domain.model.Account;
-import com.devsu.banking.domain.model.Client;
 import com.devsu.banking.domain.model.Transaction;
-import com.devsu.banking.domain.repository.AccountRepository;
 import com.devsu.banking.domain.repository.TransactionRepository;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
@@ -21,11 +20,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,20 +35,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy");
 
-    private final ClientService clientService;
-    private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
 
-    public List<ReportResponseDTO> generateJsonReport(
-            String clienteId, LocalDate startDate, LocalDate endDate) {
+    public PagedResponseDTO<ReportResponseDTO> generateJsonReport(
+            String clienteId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         log.info(
                 "Generating JSON report for client: {}, from: {} to: {}",
                 clienteId,
                 startDate,
                 endDate);
 
-        Client client = clientService.findClientByClienteId(clienteId);
-        return buildReport(client, startDate, endDate);
+        LocalDateTime start = startDate.atStartOfDay();
+        LocalDateTime end = endDate.atTime(LocalTime.MAX);
+
+        return PagedResponseDTO.from(
+                transactionRepository
+                        .findPagedReport(clienteId, start, end, pageable)
+                        .map(this::toReportDTO));
     }
 
     public String generatePdfReportBase64(
@@ -60,52 +62,43 @@ public class ReportService {
                 startDate,
                 endDate);
 
-        Client client = clientService.findClientByClienteId(clienteId);
-        List<ReportResponseDTO> reportData = buildReport(client, startDate, endDate);
-
-        return generatePdf(reportData, client.getNombre(), startDate, endDate);
-    }
-
-    private List<ReportResponseDTO> buildReport(
-            Client client, LocalDate startDate, LocalDate endDate) {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = endDate.atTime(LocalTime.MAX);
 
-        List<Account> accounts = accountRepository.findByClienteId(client.getId());
-        List<ReportResponseDTO> report = new ArrayList<>();
+        List<ReportResponseDTO> data =
+                transactionRepository
+                        .findPagedReport(clienteId, start, end, Pageable.unpaged())
+                        .map(this::toReportDTO)
+                        .getContent();
 
-        accounts.forEach(
-                account -> {
-                    List<Transaction> transactions =
-                            transactionRepository.findByCuentaIdAndFechaBetween(
-                                    account.getId(), start, end);
+        String clientLabel =
+                clienteId != null
+                        ? data.stream()
+                                .findFirst()
+                                .map(ReportResponseDTO::getCliente)
+                                .orElse(clienteId)
+                        : "Todos los clientes";
 
-                    transactions.forEach(
-                            transaction ->
-                                    report.add(
-                                            ReportResponseDTO.builder()
-                                                    .fecha(
-                                                            transaction
-                                                                    .getFecha()
-                                                                    .format(DATE_FORMATTER))
-                                                    .cliente(client.getNombre())
-                                                    .numeroCuenta(account.getNumeroCuenta())
-                                                    .tipo(
-                                                            formatAccountType(
-                                                                    account.getTipoCuenta().name()))
-                                                    .saldoInicial(account.getSaldoInicial())
-                                                    .estado(account.getEstado())
-                                                    .movimiento(transaction.getValor())
-                                                    .saldoDisponible(transaction.getSaldo())
-                                                    .build()));
-                });
+        return generatePdf(data, clientLabel, startDate, endDate);
+    }
 
-        return report;
+    private ReportResponseDTO toReportDTO(Transaction transaction) {
+        Account account = transaction.getCuenta();
+        return ReportResponseDTO.builder()
+                .fecha(transaction.getFecha().format(DATE_FORMATTER))
+                .cliente(account.getCliente().getNombre())
+                .numeroCuenta(account.getNumeroCuenta())
+                .tipo(formatAccountType(account.getTipoCuenta().name()))
+                .saldoInicial(account.getSaldoInicial())
+                .estado(account.getEstado())
+                .movimiento(transaction.getValor())
+                .saldoDisponible(transaction.getSaldo())
+                .build();
     }
 
     private String generatePdf(
             List<ReportResponseDTO> data,
-            String clientName,
+            String clientLabel,
             LocalDate startDate,
             LocalDate endDate) {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -123,7 +116,7 @@ public class ReportService {
 
             document.add(
                     new Paragraph(
-                            String.format("Cliente: %s", clientName),
+                            String.format("Cliente: %s", clientLabel),
                             new Font(Font.HELVETICA, 11, Font.NORMAL)));
             document.add(
                     new Paragraph(

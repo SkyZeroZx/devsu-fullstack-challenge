@@ -43,4 +43,22 @@ public interface JpaTransactionRepository
                     + "WHERE LOWER(c.numeroCuenta) LIKE LOWER(CONCAT('%', :search, '%')) "
                     + "OR LOWER(CAST(t.tipoMovimiento AS string)) LIKE LOWER(CONCAT('%', :search, '%'))")
     Page<Transaction> search(@Param("search") String search, Pageable pageable);
+
+    @Override
+    @Query(
+            value =
+                    "SELECT t FROM Transaction t "
+                            + "JOIN FETCH t.cuenta a JOIN FETCH a.cliente c "
+                            + "WHERE t.fecha BETWEEN :start AND :end "
+                            + "AND (:clienteId IS NULL OR c.clienteId = :clienteId)",
+            countQuery =
+                    "SELECT COUNT(t) FROM Transaction t "
+                            + "JOIN t.cuenta a JOIN a.cliente c "
+                            + "WHERE t.fecha BETWEEN :start AND :end "
+                            + "AND (:clienteId IS NULL OR c.clienteId = :clienteId)")
+    Page<Transaction> findPagedReport(
+            @Param("clienteId") String clienteId,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            Pageable pageable);
 }

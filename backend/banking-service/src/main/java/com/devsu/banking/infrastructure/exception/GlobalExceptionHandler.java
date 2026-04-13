@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -77,6 +78,14 @@ public class GlobalExceptionHandler {
 
         log.warn("Data integrity violation on {}: {}", request.getRequestURI(), rootMsg);
         return buildErrorResponse(HttpStatus.CONFLICT, message, request);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponseDTO> handleMissingParam(
+            MissingServletRequestParameterException ex, HttpServletRequest request) {
+        String message = String.format("Required parameter '%s' is missing", ex.getParameterName());
+        log.warn("Missing request parameter on {}: {}", request.getRequestURI(), message);
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, message, request);
     }
 
     @ExceptionHandler(Exception.class)
