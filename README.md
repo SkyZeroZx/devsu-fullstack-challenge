@@ -21,7 +21,7 @@ De esta forma, puedes probar cualquier endpoint de **Clientes**, **Cuentas**, **
 >
 > - [`resource`](https://next.angular.dev/api/core/resource)
 > - [`httpResource`](https://next.angular.dev/api/common/http/httpResource)
-> - [Signal Forms](https://next.angular.dev/guide/forms/signals)
+> - [Signal Forms](https://next.angular.dev/guide/forms/signals/overview)
 >
 > Esto se debe a que, en el estado actual de Angular, estas funcionalidades aún son **experimentales** y no se consideran adecuadas para un entorno de producción.
 
