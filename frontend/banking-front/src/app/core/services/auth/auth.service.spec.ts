@@ -16,21 +16,21 @@ describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(() => {
-    localStorage.clear();
+    sessionStorage.clear();
     TestBed.configureTestingModule({});
     service = TestBed.inject(AuthService);
   });
 
-  afterEach(() => localStorage.clear());
+  afterEach(() => sessionStorage.clear());
 
   it('is created', () => {
     expect(service).toBeTruthy();
   });
 
   describe('setToken', () => {
-    it('stores the token in localStorage', () => {
+    it('stores the token in sessionStorage', () => {
       service.setToken(VALID_TOKEN);
-      expect(localStorage.getItem('auth_token')).toBe(VALID_TOKEN);
+      expect(sessionStorage.getItem('auth_token')).toBe(VALID_TOKEN);
     });
 
     it('updates token() signal', () => {
@@ -40,10 +40,10 @@ describe('AuthService', () => {
   });
 
   describe('logout', () => {
-    it('clears localStorage on logout', () => {
+    it('clears sessionStorage on logout', () => {
       service.setToken(VALID_TOKEN);
       service.logout();
-      expect(localStorage.getItem('auth_token')).toBeNull();
+      expect(sessionStorage.getItem('auth_token')).toBeNull();
     });
 
     it('sets token() signal to null', () => {
