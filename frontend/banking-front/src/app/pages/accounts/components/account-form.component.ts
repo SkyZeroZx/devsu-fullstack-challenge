@@ -1,10 +1,10 @@
 import {
   ControlValueAccessor,
   FormBuilder,
+  FormsModule,
   NG_VALIDATORS,
-  NgControl,
+  NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
-  TouchedChangeEvent,
   ValidationErrors,
   Validator,
   Validators,
@@ -12,13 +12,11 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
-  OnInit,
   forwardRef,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, filter, of } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, of } from 'rxjs';
 import { AccountType } from '@core/interface';
 import { ClientService } from '@core/services/client.service';
 import { CheckboxFieldComponent } from '@shared/ui/form-field/checkbox-field.component';
@@ -31,6 +29,7 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     InputFieldComponent,
     SelectFieldComponent,
     CheckboxFieldComponent,
@@ -40,26 +39,20 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
   styleUrl: './account-form.component.scss',
   providers: [
     {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AccountFormComponent),
+      multi: true,
+    },
+    {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => AccountFormComponent),
       multi: true,
     },
   ],
 })
-export class AccountFormComponent
-  implements ControlValueAccessor, Validator, OnInit
-{
-  private readonly ngControl = inject(NgControl, {
-    optional: true,
-    self: true,
-  });
-  private readonly destroyRef = inject(DestroyRef);
+export class AccountFormComponent implements ControlValueAccessor, Validator {
   private readonly clientService = inject(ClientService);
   private readonly fb = inject(FormBuilder);
-
-  constructor() {
-    if (this.ngControl) this.ngControl.valueAccessor = this;
-  }
 
   readonly clients = toSignal(
     this.clientService.getAll({ size: 10 }).pipe(catchError(() => of(null))),
@@ -79,16 +72,14 @@ export class AccountFormComponent
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   onChangeFn: (val: unknown) => void = () => {};
 
-  ngOnInit(): void {
-    this.ngControl?.control?.events
-      .pipe(
-        filter(
-          (e): e is TouchedChangeEvent =>
-            e instanceof TouchedChangeEvent && e.touched,
-        ),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe(() => this.form.markAllAsTouched());
+  /**
+   * Called by the parent edit component via viewChild.
+   * Injecting NgControl (self) alongside NG_VALIDATORS causes a circular
+   * dependency (NgControl → NG_VALIDATORS → this component), so we expose
+   * this method and let the host trigger it directly.
+   */
+  markAllAsTouched(): void {
+    this.form.markAllAsTouched();
   }
 
   writeValue(val: Record<string, unknown> | null): void {
@@ -109,7 +100,11 @@ export class AccountFormComponent
   }
 
   setDisabledState(isDisabled: boolean): void {
-    return isDisabled ? this.form.disable() : this.form.enable();
+    if (isDisabled) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
   }
 
   validate(): ValidationErrors | null {

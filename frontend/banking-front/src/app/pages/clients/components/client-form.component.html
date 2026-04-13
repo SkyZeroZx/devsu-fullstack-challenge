@@ -1,32 +1,46 @@
 <ng-container [formGroup]="form" (focusout)="onTouchedFn()">
   <div class="form__row">
-    <app-input-field label="Nombre" formControlName="nombre" />
-    <app-input-field label="Identificación" formControlName="identificacion" />
+    <div>
+      <app-input-field label="Nombre" formControlName="nombre" />
+    </div>
+    <div>
+      <app-input-field label="Identificación" formControlName="identificacion" />
+    </div>
   </div>
   <div class="form__row">
-    <app-select-field label="Género" formControlName="genero">
-      <option value="" disabled>Seleccione</option>
-      <option value="MASCULINO">Masculino</option>
-      <option value="FEMENINO">Femenino</option>
-      <option value="OTRO">Otro</option>
-    </app-select-field>
-    <app-input-field
-      label="Edad"
-      type="number"
-      formControlName="edad"
-      min="1"
-    />
+    <div>
+      <app-select-field label="Género" formControlName="genero">
+        <option value="" disabled>Seleccione</option>
+        <option value="MASCULINO">Masculino</option>
+        <option value="FEMENINO">Femenino</option>
+        <option value="OTRO">Otro</option>
+      </app-select-field>
+    </div>
+    <div>
+      <app-input-field
+        label="Edad"
+        type="number"
+        formControlName="edad"
+        min="1"
+      />
+    </div>
   </div>
   <div class="form__row">
-    <app-input-field label="Dirección" formControlName="direccion" />
-    <app-input-field label="Teléfono" formControlName="telefono" />
+    <div>
+      <app-input-field label="Dirección" formControlName="direccion" />
+    </div>
+    <div>
+      <app-input-field label="Teléfono" formControlName="telefono" />
+    </div>
   </div>
   @if (showPassword()) {
-    <app-input-field
-      label="Contraseña"
-      type="password"
-      formControlName="contrasena"
-    />
+    <div>
+      <app-input-field
+        label="Contraseña"
+        type="password"
+        formControlName="contrasena"
+      />
+    </div>
   }
   <app-checkbox-field label="Activo" formControlName="estado" />
 </ng-container>

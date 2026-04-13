@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   startWith,
   switchMap,
@@ -31,6 +31,7 @@ import { TableColumnDirective } from '@shared/ui/data-table/table-column.directi
   selector: 'app-accounts',
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     ButtonComponent,
     ConfirmDialogDirective,
     RouterLink,

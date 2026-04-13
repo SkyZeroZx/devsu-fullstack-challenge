@@ -40,7 +40,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         authService.logout();
         router.navigate(['/login']);
         toast.warn({
-          message: 'Sesión expirada. Por favor ingrese nuevamente.',
+          message: 'No autorizado',
         });
       } else if (error.status >= 500) {
         toast.error({ message: 'Error del servidor. Intente más tarde.' });

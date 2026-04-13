@@ -5,7 +5,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AccountRequest } from '@core/interface';
 import { AccountService } from '@core/services/account.service';
@@ -19,6 +19,7 @@ import { AccountFormComponent } from '../components/account-form.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     AccountFormComponent,
     RouterLink,
     ButtonComponent,
@@ -44,7 +45,7 @@ export class AccountCreateComponent {
     }
     this.saving.set(true);
 
-    this.accountService.create(this.formCtrl.value!).subscribe({
+    this.accountService.create(this.formCtrl.getRawValue()!).subscribe({
       next: () => {
         this.toast.success({ message: 'Cuenta creada exitosamente' });
         this.router.navigate(['/cuentas']);

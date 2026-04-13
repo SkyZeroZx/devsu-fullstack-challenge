@@ -51,33 +51,4 @@
     flex-direction: column;
     gap: $spacing-4;
   }
-
-  &__field {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-1;
-  }
-
-  &__label {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: $color-text-primary;
-  }
-
-  &__input {
-    padding: $spacing-2 $spacing-3;
-    border: 1px solid $color-border;
-    border-radius: $radius-md;
-    font-size: $font-size-base;
-    outline: none;
-
-    &:focus {
-      border-color: $color-primary;
-      box-shadow: 0 0 0 2px rgba($color-primary, 0.15);
-    }
-
-    &::placeholder {
-      color: $color-text-disabled;
-    }
-  }
 }

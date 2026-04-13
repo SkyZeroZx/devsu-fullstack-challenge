@@ -1,25 +1,35 @@
 <ng-container [formGroup]="form" (focusout)="onTouchedFn()">
   <div class="form__row">
-    <app-input-field label="Nro. Cuenta" formControlName="numeroCuenta" />
-    <app-select-field label="Tipo" formControlName="tipoCuenta">
-      <option value="AHORRO">Ahorro</option>
-      <option value="CORRIENTE">Corriente</option>
-    </app-select-field>
+    <div>
+      <app-input-field label="Nro. Cuenta" formControlName="numeroCuenta" />
+    </div>
+    <div>
+      <app-select-field label="Tipo" formControlName="tipoCuenta">
+        <option value="AHORRO">Ahorro</option>
+        <option value="CORRIENTE">Corriente</option>
+      </app-select-field>
+    </div>
   </div>
   <div class="form__row">
-    <app-input-field
-      label="Saldo Inicial"
-      type="number"
-      formControlName="saldoInicial"
-      min="0"
-      step="0.01"
-    />
-    <app-select-field label="Cliente" formControlName="clienteId">
-      <option value="" disabled>Seleccione</option>
-      @for (c of clients()?.content ?? []; track c.clienteId) {
-        <option [value]="c.clienteId">{{ c.nombre }}</option>
-      }
-    </app-select-field>
+    <div>
+      <app-input-field
+        label="Saldo Inicial"
+        type="number"
+        formControlName="saldoInicial"
+        min="0"
+        step="0.01"
+      />
+    </div>
+    <div>
+      <app-select-field label="Cliente" formControlName="clienteId">
+        <option value="" disabled>Seleccione</option>
+        @for (c of clients()?.content ?? []; track c.clienteId) {
+          <option [value]="c.clienteId">{{ c.nombre }}</option>
+        }
+      </app-select-field>
+    </div>
   </div>
-  <app-checkbox-field label="Activa" formControlName="estado" />
+  <div>
+    <app-checkbox-field label="Activa" formControlName="estado" />
+  </div>
 </ng-container>

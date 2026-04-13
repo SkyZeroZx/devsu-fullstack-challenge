@@ -8,6 +8,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -26,6 +27,7 @@ import { DecimalPipe } from '@angular/common';
   selector: 'app-reports',
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     ButtonComponent,
     ClickTrackingDirective,
     SkeletonComponent,

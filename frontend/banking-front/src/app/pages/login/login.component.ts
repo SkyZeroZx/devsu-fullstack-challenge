@@ -7,6 +7,7 @@ import {
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -16,14 +17,17 @@ import { AuthService } from '@core/services/auth.service';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
+import { InputFieldComponent } from '@shared/ui/form-field/input-field.component';
 
 @Component({
   selector: 'app-login',
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     ButtonComponent,
     ClickTrackingDirective,
     ControlErrorModule,
+    InputFieldComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

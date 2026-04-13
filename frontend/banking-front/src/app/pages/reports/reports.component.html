@@ -8,14 +8,24 @@
     role="search"
     aria-label="Filtros de reporte"
   >
-    <app-input-field type="date" label="Desde" formControlName="fechaInicio" />
-    <app-input-field type="date" label="Hasta" formControlName="fechaFin" />
-    <app-select-field label="Cliente" formControlName="cliente">
-      <option value="">Todos</option>
-      @for (c of clients()?.content ?? []; track c.clienteId) {
-        <option [value]="c.clienteId">{{ c.nombre }}</option>
-      }
-    </app-select-field>
+    <div>
+      <app-input-field
+        type="date"
+        label="Desde"
+        formControlName="fechaInicio"
+      />
+    </div>
+    <div>
+      <app-input-field type="date" label="Hasta" formControlName="fechaFin" />
+    </div>
+    <div>
+      <app-select-field label="Cliente" formControlName="cliente">
+        <option value="">Todos</option>
+        @for (c of clients()?.content ?? []; track c.clienteId) {
+          <option [value]="c.clienteId">{{ c.nombre }}</option>
+        }
+      </app-select-field>
+    </div>
 
     <div class="filters__actions">
       <button

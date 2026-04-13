@@ -1,6 +1,7 @@
 import {
   ControlValueAccessor,
   FormBuilder,
+  FormsModule,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
@@ -27,6 +28,7 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     InputFieldComponent,
     SelectFieldComponent,
     ControlErrorModule,

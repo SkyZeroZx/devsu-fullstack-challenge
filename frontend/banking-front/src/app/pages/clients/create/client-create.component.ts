@@ -5,7 +5,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ClientRequest } from '@core/interface';
 import { ClientService } from '@core/services/client.service';
@@ -19,6 +19,7 @@ import { ClientFormComponent } from '../components/client-form.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     ClientFormComponent,
     RouterLink,
     ButtonComponent,
@@ -44,7 +45,7 @@ export class ClientCreateComponent {
     }
     this.saving.set(true);
 
-    this.clientService.create(this.formCtrl.value!).subscribe({
+    this.clientService.create(this.formCtrl.getRawValue()!).subscribe({
       next: () => {
         this.toast.success({ message: 'Cliente creado exitosamente' });
         this.router.navigate(['/clientes']);
