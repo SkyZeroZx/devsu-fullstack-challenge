@@ -1,1 +1,15 @@
-<p>side-bar works!</p>
+<nav class="sidebar" role="navigation" aria-label="Menú principal">
+  <ul class="sidebar__list">
+    @for (link of links; track link.path) {
+      <li class="sidebar__item">
+        <a
+          class="sidebar__link"
+          [routerLink]="link.path"
+          routerLinkActive="sidebar__link--active"
+        >
+          {{ link.label }}
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

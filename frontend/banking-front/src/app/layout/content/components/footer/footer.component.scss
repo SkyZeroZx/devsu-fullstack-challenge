@@ -1,0 +1,14 @@
+@use 'variables' as *;
+
+.footer {
+  padding: $spacing-4 $spacing-6;
+  border-top: 1px solid $color-border;
+  background-color: $color-white;
+  text-align: center;
+
+  &__text {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+}

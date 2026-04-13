@@ -1,1 +1,18 @@
-<p>header works!</p>
+<header class="header" role="banner">
+  <a class="header__logo" routerLink="/">BANCO</a>
+
+  <div class="header__actions">
+    @if (user(); as u) {
+      <span class="header__user">{{ u.sub }}</span>
+    }
+    <button
+      btn
+      variant="secondary"
+      size="sm"
+      (click)="logout()"
+      aria-label="Cerrar sesión"
+    >
+      Salir
+    </button>
+  </div>
+</header>

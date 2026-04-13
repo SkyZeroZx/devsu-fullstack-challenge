@@ -1,0 +1,28 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  &__body {
+    display: flex;
+    flex: 1;
+
+    @include respond-below(md) {
+      flex-direction: column;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    padding: $spacing-6;
+    background-color: $color-surface;
+    overflow-y: auto;
+
+    @include respond-below(md) {
+      padding: $spacing-4;
+    }
+  }
+}

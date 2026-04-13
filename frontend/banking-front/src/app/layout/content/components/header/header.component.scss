@@ -1,0 +1,29 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.header {
+  @include flex-between;
+  height: 56px;
+  padding: 0 $spacing-6;
+  background-color: $color-white;
+  border-bottom: 1px solid $color-border;
+
+  @include element('logo') {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-decoration: none;
+    @include focus-visible;
+  }
+
+  @include element('actions') {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+  }
+
+  @include element('user') {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+}
