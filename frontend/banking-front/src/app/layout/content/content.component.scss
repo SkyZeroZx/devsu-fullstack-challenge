@@ -6,7 +6,7 @@
   flex-direction: column;
   min-height: 100vh;
 
-  &__body {
+  @include element('body') {
     display: flex;
     flex: 1;
 
@@ -15,7 +15,7 @@
     }
   }
 
-  &__main {
+  @include element('main') {
     flex: 1;
     padding: $spacing-6;
     background-color: $color-surface;

@@ -7,7 +7,7 @@
 }
 
 .field {
-  &__label {
+  @include element('label') {
     display: block;
     margin-bottom: $spacing-1;
     font-size: $font-size-sm;
@@ -15,11 +15,21 @@
     color: $color-text-primary;
   }
 
-  &__combobox {
+  @include element('combobox') {
     position: relative;
+
+    @include modifier('invalid') {
+      .field__trigger {
+        border-color: $color-error;
+
+        &:focus {
+          box-shadow: 0 0 0 2px rgba($color-error, 0.15);
+        }
+      }
+    }
   }
 
-  &__trigger {
+  @include element('trigger') {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -48,15 +58,7 @@
     }
   }
 
-  &__combobox--invalid .field__trigger {
-    border-color: $color-error;
-
-    &:focus {
-      box-shadow: 0 0 0 2px rgba($color-error, 0.15);
-    }
-  }
-
-  &__trigger-text {
+  @include element('trigger-text') {
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -64,23 +66,23 @@
     color: $color-text-primary;
   }
 
-  &__trigger-placeholder {
+  @include element('trigger-placeholder') {
     color: $color-text-disabled;
   }
 
-  &__chevron {
+  @include element('chevron') {
     width: 1rem;
     height: 1rem;
     flex-shrink: 0;
     color: $color-text-secondary;
     transition: transform 0.15s ease;
 
-    &--open {
+    @include modifier('open') {
       transform: rotate(180deg);
     }
   }
 
-  &__panel {
+  @include element('panel') {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
@@ -93,7 +95,7 @@
     overflow: hidden;
   }
 
-  &__search {
+  @include element('search') {
     display: block;
     width: 100%;
     padding: $spacing-2 $spacing-3;
@@ -110,7 +112,7 @@
     }
   }
 
-  &__list {
+  @include element('list') {
     list-style: none;
     padding: $spacing-1 0;
     margin: 0;
@@ -118,23 +120,26 @@
     overflow-y: auto;
   }
 
-  &__option {
+  @include element('option') {
     padding: $spacing-2 $spacing-3;
     font-size: $font-size-sm;
     cursor: pointer;
     @include transition(background-color);
 
-    &:hover,
-    &--active {
+    &:hover {
       background-color: $color-surface;
     }
 
-    &--selected {
+    @include modifier('active') {
+      background-color: $color-surface;
+    }
+
+    @include modifier('selected') {
       color: $color-primary;
       font-weight: $font-weight-medium;
     }
 
-    &--empty {
+    @include modifier('empty') {
       color: $color-text-disabled;
       cursor: default;
       font-style: italic;

@@ -13,6 +13,7 @@ import { ToastService } from '@shared/ui/toast/toast.service';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
 import { AccountFormComponent } from '../components/account-form.component';
+import { IconComponent } from '@shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-account-create',
@@ -24,6 +25,7 @@ import { AccountFormComponent } from '../components/account-form.component';
     RouterLink,
     ButtonComponent,
     ClickTrackingDirective,
+    IconComponent,
   ],
   templateUrl: './account-create.component.html',
   styleUrl: './account-create.component.scss',
@@ -36,16 +38,16 @@ export class AccountCreateComponent {
   private readonly router = inject(Router);
 
   readonly saving = signal(false);
-  readonly formCtrl = new FormControl<AccountRequest | null>(null);
+  readonly createAccountForm = new FormControl<AccountRequest | null>(null);
 
   onSubmit(): void {
-    if (this.formCtrl.invalid) {
+    if (this.createAccountForm.invalid) {
       this.accountForm()?.markAllAsTouched();
       return;
     }
     this.saving.set(true);
 
-    this.accountService.create(this.formCtrl.getRawValue()!).subscribe({
+    this.accountService.create(this.createAccountForm.getRawValue()!).subscribe({
       next: () => {
         this.toast.success({ message: 'Cuenta creada exitosamente' });
         this.router.navigate(['/cuentas']);

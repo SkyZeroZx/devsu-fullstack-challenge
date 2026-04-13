@@ -4,8 +4,14 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
+    "e2e": "nx e2e e2e",
+    "e2e:watch": "nx e2e e2e --watch",
     "build": "nx build",
-    "test": "nx test"
+    "format": "prettier --write \"./src/**/*.{ts,json,html,scss}\"",
+    "lint-format": "npm run format &&  npm run lint --fix",
+    "lint": "nx lint",
+    "test": "nx test",
+    "test:coverage": "nx test --coverage"
   },
   "private": true,
   "dependencies": {

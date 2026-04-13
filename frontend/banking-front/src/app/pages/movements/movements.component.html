@@ -2,13 +2,13 @@
   <h1 class="page__title">Movimientos</h1>
 
   <div class="page__toolbar">
-    <input
+    <input  type="search"
       class="page__search"
       [formControl]="search"
       placeholder="Buscar por cuenta o tipo"
       aria-label="Buscar movimientos"
     />
-    <a btn variant="primary" routerLink="nuevo">+ Nuevo</a>
+    <a btn variant="primary" routerLink="nuevo"><app-icon name="add" /> Nuevo</a>
   </div>
 
   <app-data-table
@@ -101,7 +101,7 @@
           [cancelButtonText]="'Cancelar'"
           (confirm)="onDelete(row)"
         >
-          Eliminar
+          <app-icon name="delete" />
         </button>
       </div>
     </ng-template>

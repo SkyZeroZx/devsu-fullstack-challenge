@@ -23,6 +23,7 @@ import { DecimalPipe } from '@angular/common';
 import { ControlErrorModule } from '@app/shared/ui/control-error/control-error.module';
 import { DataTableComponent } from '@shared/ui/data-table/data-table.component';
 import { TableColumnDirective } from '@shared/ui/data-table/table-column.directive';
+import { IconComponent } from '@shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-reports',
@@ -37,6 +38,7 @@ import { TableColumnDirective } from '@shared/ui/data-table/table-column.directi
     ControlErrorModule,
     DataTableComponent,
     TableColumnDirective,
+    IconComponent,
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',

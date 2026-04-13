@@ -7,7 +7,7 @@
   gap: $spacing-4;
   max-width: 640px;
 
-  &__row {
+  @include element('row') {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: $spacing-4;

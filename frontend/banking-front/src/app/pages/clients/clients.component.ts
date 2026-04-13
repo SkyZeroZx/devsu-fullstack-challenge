@@ -25,6 +25,7 @@ import { ConfirmDialogDirective } from '@shared/ui/dialog/directive/confirm-dial
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { DataTableComponent } from '@shared/ui/data-table/data-table.component';
 import { TableColumnDirective } from '@shared/ui/data-table/table-column.directive';
+import { IconComponent } from '@shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-clients',
@@ -37,6 +38,7 @@ import { TableColumnDirective } from '@shared/ui/data-table/table-column.directi
     DataTableComponent,
     TableColumnDirective,
     ClickTrackingDirective,
+    IconComponent,
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',

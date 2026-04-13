@@ -37,6 +37,7 @@ export class InputFieldComponent implements ControlValueAccessor, OnInit {
   readonly placeholder = input('');
   readonly step = input<string | undefined>(undefined);
   readonly min = input<string | undefined>(undefined);
+  readonly readonly = input(false);
 
   readonly fieldId = `input-field-${++nextInputId}`;
 

@@ -8,7 +8,7 @@
   min-height: 100vh;
   background-color: $color-surface;
 
-  &__card {
+  @include element('card') {
     width: 100%;
     max-width: 400px;
     padding: $spacing-8;
@@ -22,7 +22,7 @@
     }
   }
 
-  &__title {
+  @include element('title') {
     text-align: center;
     font-size: $font-size-3xl;
     font-weight: $font-weight-bold;
@@ -30,13 +30,13 @@
     margin-bottom: $spacing-1;
   }
 
-  &__subtitle {
+  @include element('subtitle') {
     text-align: center;
     color: $color-text-secondary;
     margin-bottom: $spacing-6;
   }
 
-  &__error {
+  @include element('error') {
     padding: $spacing-2 $spacing-3;
     margin-bottom: $spacing-4;
     background-color: rgba($color-error, 0.08);
@@ -46,7 +46,7 @@
     text-align: center;
   }
 
-  &__form {
+  @include element('form') {
     display: flex;
     flex-direction: column;
     gap: $spacing-4;

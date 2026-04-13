@@ -19,6 +19,7 @@ import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
 import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
 import { AccountFormComponent } from '../components/account-form.component';
+import { IconComponent } from '@shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-account-edit',
@@ -31,6 +32,7 @@ import { AccountFormComponent } from '../components/account-form.component';
     RouterLink,
     ButtonComponent,
     ClickTrackingDirective,
+    IconComponent,
   ],
   templateUrl: './account-edit.component.html',
   styleUrl: './account-edit.component.scss',
@@ -44,7 +46,7 @@ export class AccountEditComponent {
   readonly id = input.required<string>();
 
   readonly saving = signal(false);
-  readonly formCtrl = new FormControl<AccountResponse | null>(null);
+  readonly editAccountForm = new FormControl<AccountResponse | null>(null);
 
   private readonly accountForm = viewChild(AccountFormComponent);
 
@@ -61,20 +63,25 @@ export class AccountEditComponent {
     ),
   );
 
-  private readonly _initForm = effect(() => {
-    const data = this.account();
-    if (data) untracked(() => this.formCtrl.setValue(data));
-  });
+  constructor() {
+    effect(() => {
+      const data = this.account();
+      if (data) untracked(() => this.editAccountForm.setValue(data));
+    });
+  }
 
   onSubmit(): void {
-    if (!this.formCtrl.valid) {
+    if (!this.editAccountForm.valid) {
       this.accountForm()?.markAllAsTouched();
       return;
     }
     this.saving.set(true);
 
+    const { cliente: _cliente, ...payload } =
+      this.editAccountForm.getRawValue() as AccountResponse;
+
     this.accountService
-      .update(this.id(), this.formCtrl.value as unknown as AccountRequest)
+      .update(this.id(), payload)
       .subscribe({
         next: () => {
           this.toast.success({ message: 'Cuenta actualizada exitosamente' });

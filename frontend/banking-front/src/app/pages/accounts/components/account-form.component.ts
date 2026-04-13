@@ -14,6 +14,7 @@ import {
   Component,
   forwardRef,
   inject,
+  signal,
 } from '@angular/core';
 import { AccountRequest, AccountType, FormType } from '@core/interface';
 import { CheckboxFieldComponent } from '@shared/ui/form-field/checkbox-field/checkbox-field.component';
@@ -65,6 +66,9 @@ export class AccountFormComponent implements ControlValueAccessor, Validator {
     clienteId: ['', Validators.required],
   });
 
+  readonly isEditMode = signal(false);
+  readonly clientName = signal('');
+
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   onTouchedFn: () => void = () => {};
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
@@ -79,6 +83,8 @@ export class AccountFormComponent implements ControlValueAccessor, Validator {
       this.form.patchValue(val, { emitEvent: false });
       this.form.controls.numeroCuenta.disable({ emitEvent: false });
       this.form.controls.clienteId.disable({ emitEvent: false });
+      this.isEditMode.set(true);
+      this.clientName.set((val['cliente'] as string) ?? '');
     }
   }
 

@@ -12,6 +12,7 @@
   [disabled]="disabled()"
   [attr.step]="step()"
   [attr.min]="min()"
+  [attr.readonly]="readonly() ? '' : null"
   [attr.aria-invalid]="invalid() || null"
   (input)="onInputChange($event)"
   (blur)="markTouched()"

@@ -68,7 +68,7 @@ describe('AccountCreateComponent', () => {
       estado: true,
       clienteId: '1',
     };
-    component.formCtrl.setValue(request as never);
+    component.createAccountForm.setValue(request as never);
 
     component.onSubmit();
     await fixture.whenStable();
@@ -83,7 +83,7 @@ describe('AccountCreateComponent', () => {
         sub.error(new Error('server error')),
       ),
     );
-    component.formCtrl.setValue({ numeroCuenta: '1' } as never);
+    component.createAccountForm.setValue({ numeroCuenta: '1' } as never);
 
     component.onSubmit();
     await fixture.whenStable();

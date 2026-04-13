@@ -11,10 +11,11 @@ import {
 import { ConfirmDialogOptions } from '../../interfaces';
 import { DialogService } from '../../services/dialog.service';
 import { ButtonComponent } from '../../../button/button.component';
+import { IconComponent } from '@shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [ButtonComponent],
+  imports: [ButtonComponent, IconComponent],
   templateUrl: './confirm-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./confirm-dialog.component.scss'],

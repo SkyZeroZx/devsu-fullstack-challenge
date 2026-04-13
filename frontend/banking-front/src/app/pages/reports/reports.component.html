@@ -31,7 +31,7 @@
         [eventName]="'report_search'"
         [loading]="loading()"
       >
-        Buscar
+        <app-icon name="search" /> Buscar
       </button>
       <button
         btn
@@ -40,7 +40,7 @@
         [disabled]="downloading() || rows() === null"
         (click)="downloadPdf()"
       >
-        {{ downloading() ? 'Descargando...' : 'Descargar PDF' }}
+        <app-icon name="picture_as_pdf" /> {{ downloading() ? 'Descargando...' : 'PDF' }}
       </button>
     </div>
   </form>

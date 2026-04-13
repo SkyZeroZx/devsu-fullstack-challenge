@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ControlErrorComponent } from './control-error.component';
 import {
+  expectContainedText,
   findEl,
   queryByCss,
 } from '../../../../spec-helpers/element.spec-helper';
@@ -46,7 +47,7 @@ describe('ControlErrorComponent', () => {
     await fixture.whenStable();
 
     const errorText = findEl(fixture, 'control-error-text');
-    expect(errorText.nativeElement.textContent?.trim()).toBe(textError);
+    expectContainedText(errorText, textError);
   });
 
   it('should have role="alert" for accessibility', async () => {

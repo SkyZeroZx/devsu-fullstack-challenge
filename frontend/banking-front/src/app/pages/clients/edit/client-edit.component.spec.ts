@@ -94,7 +94,7 @@ describe('ClientEditComponent', () => {
 
     const component = harness.routeDebugElement!
       .componentInstance as ClientEditComponent;
-    expect(component.formCtrl.value).toMatchObject({ nombre: 'María Díaz' });
+    expect(component.editClientForm.value).toMatchObject({ nombre: 'María Díaz' });
   });
 
   it('should call update service and navigate back on valid submit', async () => {
@@ -104,7 +104,7 @@ describe('ClientEditComponent', () => {
     );
     await harness.fixture.whenStable();
 
-    component.formCtrl.setValue(mockClient as never);
+    component.editClientForm.setValue(mockClient as never);
     component.onSubmit();
     await harness.fixture.whenStable();
 
@@ -122,7 +122,7 @@ describe('ClientEditComponent', () => {
       ClientEditComponent,
     );
 
-    component.formCtrl.setValue(null);
+    component.editClientForm.setValue(null);
     component.onSubmit();
     await harness.fixture.whenStable();
 

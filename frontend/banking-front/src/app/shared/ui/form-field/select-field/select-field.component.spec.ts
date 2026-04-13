@@ -174,9 +174,9 @@ describe('SelectFieldComponent', () => {
   });
 
   it('emits searchChange with empty string when the panel opens', async () => {
-    const select = fixture.debugElement.query(
+    const select: SelectFieldComponent = fixture.debugElement.query(
       By.directive(SelectFieldComponent),
-    ).componentInstance as SelectFieldComponent;
+    ).componentInstance;
     const emitted: string[] = [];
     select.searchChange.subscribe((v: string) => emitted.push(v));
 

@@ -3,12 +3,15 @@
 
   <div class="page__toolbar">
     <input
+      type="search"
       class="page__search"
       [formControl]="search"
       placeholder="Buscar por cuenta o cliente"
       aria-label="Buscar cuentas"
     />
-    <a btn variant="primary" routerLink="nuevo">+ Nueva</a>
+    <a btn variant="primary" routerLink="nuevo"
+      ><app-icon name="add" /> Nueva</a
+    >
   </div>
 
   <app-data-table
@@ -83,8 +86,8 @@
           variant="primary"
           size="sm"
           [routerLink]="[row.numeroCuenta, 'editar']"
-          >Editar</a
-        >
+          ><app-icon name="edit" />
+        </a>
         <button
           btn
           variant="danger"
@@ -101,7 +104,7 @@
           [cancelButtonText]="'Cancelar'"
           (confirm)="onDelete(row)"
         >
-          Eliminar
+          <app-icon name="delete" />
         </button>
       </div>
     </ng-template>

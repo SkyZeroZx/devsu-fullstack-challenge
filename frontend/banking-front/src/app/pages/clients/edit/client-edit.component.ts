@@ -20,6 +20,7 @@ import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-
 import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
 import { ClientFormComponent } from '../components/client-form.component';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
+import { IconComponent } from '@shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-client-edit',
@@ -33,6 +34,7 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
     ButtonComponent,
     ClickTrackingDirective,
     ControlErrorModule,
+    IconComponent,
   ],
   templateUrl: './client-edit.component.html',
   styleUrl: './client-edit.component.scss',
@@ -46,7 +48,7 @@ export class ClientEditComponent {
   readonly id = input.required<string>();
 
   readonly saving = signal(false);
-  readonly formCtrl = new FormControl<ClientResponse | null>(null);
+  readonly editClientForm = new FormControl<ClientResponse | null>(null);
 
   private readonly clientForm = viewChild(ClientFormComponent);
 
@@ -66,28 +68,26 @@ export class ClientEditComponent {
   constructor() {
     effect(() => {
       const data = this.client();
-      if (data) untracked(() => this.formCtrl.setValue(data));
+      if (data) untracked(() => this.editClientForm.setValue(data));
     });
   }
 
   onSubmit(): void {
     const formCmp = this.clientForm();
-    if (!formCmp?.form.valid) {
+    if (!this.editClientForm.valid) {
       formCmp?.markAllAsTouched();
       return;
     }
     this.saving.set(true);
 
-    // Use PATCH so the backend doesn't require the password field.
-    // The password is disabled in edit mode and excluded from the payload.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { contrasena: _pw, ...payload } = formCmp.form.getRawValue();
-    this.clientService.patch(this.id(), payload).subscribe({
-      next: () => {
-        this.toast.success({ message: 'Cliente actualizado exitosamente' });
-        this.router.navigate(['/clientes']);
-      },
-      error: () => this.saving.set(false),
-    });
+    this.clientService
+      .patch(this.id(), this.editClientForm.getRawValue()!)
+      .subscribe({
+        next: () => {
+          this.toast.success({ message: 'Cliente actualizado exitosamente' });
+          this.router.navigate(['/clientes']);
+        },
+        error: () => this.saving.set(false),
+      });
   }
 }

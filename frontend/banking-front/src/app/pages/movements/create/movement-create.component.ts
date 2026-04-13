@@ -13,6 +13,7 @@ import { ToastService } from '@shared/ui/toast/toast.service';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
 import { MovementFormComponent } from '../components/movement-form.component';
+import { IconComponent } from '@shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-movement-create',
@@ -24,6 +25,7 @@ import { MovementFormComponent } from '../components/movement-form.component';
     RouterLink,
     ButtonComponent,
     ClickTrackingDirective,
+    IconComponent,
   ],
   templateUrl: './movement-create.component.html',
   styleUrl: './movement-create.component.scss',

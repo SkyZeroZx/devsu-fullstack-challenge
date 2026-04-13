@@ -16,7 +16,7 @@
     padding: $spacing-2 0;
   }
 
-  &__list {
+  @include element('list') {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -29,11 +29,11 @@
     }
   }
 
-  &__item {
+  @include element('item') {
     margin: 0;
   }
 
-  &__link {
+  @include element('link') {
     display: block;
     padding: $spacing-2 $spacing-6;
     font-size: $font-size-sm;
@@ -46,7 +46,7 @@
       background-color: $color-surface;
     }
 
-    &--active {
+    @include modifier('active') {
       color: $color-primary;
       border-left-color: $color-primary;
       background-color: $color-surface;
@@ -59,7 +59,7 @@
       padding: $spacing-2 $spacing-3;
       white-space: nowrap;
 
-      &--active {
+      @include modifier('active') {
         border-bottom-color: $color-primary;
         border-left-color: transparent;
       }

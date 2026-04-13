@@ -107,7 +107,7 @@ describe('AccountEditComponent', () => {
 
     const component = harness.routeDebugElement!
       .componentInstance as AccountEditComponent;
-    expect(component.formCtrl.value).toMatchObject({
+    expect(component.editAccountForm.value).toMatchObject({
       numeroCuenta: '478758',
     });
   });
@@ -119,7 +119,7 @@ describe('AccountEditComponent', () => {
     );
     await harness.fixture.whenStable();
 
-    component.formCtrl.setValue(mockAccount as never);
+    component.editAccountForm.setValue(mockAccount as never);
     component.onSubmit();
     await harness.fixture.whenStable();
 
@@ -140,7 +140,7 @@ describe('AccountEditComponent', () => {
       AccountEditComponent,
     );
 
-    component.formCtrl.setErrors({ invalidForm: { valid: false } });
+    component.editAccountForm.setErrors({ invalidForm: { valid: false } });
     component.onSubmit();
     await harness.fixture.whenStable();
 

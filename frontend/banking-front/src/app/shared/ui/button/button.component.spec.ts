@@ -44,13 +44,11 @@ describe('ButtonComponent', () => {
   });
 
   it('should render projected text content', async () => {
-    await fixture.whenStable();
     const btn = findEl(fixture, 'test-btn');
     expect(btn.nativeElement.textContent).toContain('Click me');
   });
 
   it('should apply default BEM classes (primary + lg)', async () => {
-    await fixture.whenStable();
     const btn = findEl(fixture, 'test-btn');
     const el = btn.nativeElement as HTMLElement;
     expect(el.classList.contains('btn')).toBe(true);

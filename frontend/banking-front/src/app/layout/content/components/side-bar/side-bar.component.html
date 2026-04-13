@@ -7,6 +7,7 @@
           [routerLink]="link.path"
           routerLinkActive="sidebar__link--active"
         >
+          <app-icon [name]="link.icon" />
           {{ link.label }}
         </a>
       </li>

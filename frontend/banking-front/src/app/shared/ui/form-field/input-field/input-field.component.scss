@@ -6,7 +6,7 @@
 }
 
 .field {
-  &__label {
+  @include element('label') {
     display: block;
     margin-bottom: $spacing-1;
     font-size: $font-size-sm;
@@ -14,7 +14,7 @@
     color: $color-text-primary;
   }
 
-  &__input {
+  @include element('input') {
     display: block;
     width: 100%;
     padding: $spacing-2 $spacing-3;

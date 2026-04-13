@@ -22,7 +22,16 @@
       />
     </div>
     <div>
-      <app-client-select formControlName="clienteId" />
+      @if (isEditMode()) {
+        <app-input-field
+          label="Cliente"
+          [ngModel]="clientName()"
+          [ngModelOptions]="{ standalone: true }"
+          [readonly]="true"
+        />
+      } @else {
+        <app-client-select formControlName="clienteId" />
+      }
     </div>
   </div>
   <app-checkbox-field label="Activa" formControlName="estado" />

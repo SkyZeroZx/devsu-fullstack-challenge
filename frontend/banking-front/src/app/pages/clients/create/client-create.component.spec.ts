@@ -74,7 +74,7 @@ describe('ClientCreateComponent', () => {
       contrasena: 'secret',
       estado: true,
     };
-    component.formCtrl.setValue(request as never);
+    component.createClientForm.setValue(request as never);
 
     component.onSubmit();
     await fixture.whenStable();

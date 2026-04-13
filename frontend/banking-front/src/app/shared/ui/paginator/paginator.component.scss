@@ -19,19 +19,19 @@
     gap: $spacing-3;
   }
 
-  &__controls {
+  @include element('controls') {
     display: flex;
     align-items: center;
     gap: $spacing-1;
   }
 
-  &__pages {
+  @include element('pages') {
     padding: 0 $spacing-3;
     font-weight: $font-weight-medium;
     color: $color-text-primary;
   }
 
-  &__btn {
+  @include element('btn') {
     display: inline-flex;
     align-items: center;
     justify-content: center;

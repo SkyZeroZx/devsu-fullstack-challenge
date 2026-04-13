@@ -39,7 +39,7 @@
     flex-direction: column;
     align-items: stretch;
 
-    &__actions {
+    @include element('actions') {
       margin-left: 0;
     }
   }
