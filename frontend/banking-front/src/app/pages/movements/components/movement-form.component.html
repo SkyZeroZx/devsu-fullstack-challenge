@@ -1,0 +1,27 @@
+<ng-container [formGroup]="form" (focusout)="onTouchedFn()">
+  <app-select-field label="Cuenta" formControlName="numeroCuenta">
+    <option value="" disabled>Seleccione cuenta</option>
+    @for (acc of accounts()?.content ?? []; track acc.numeroCuenta) {
+      <option [value]="acc.numeroCuenta">
+        {{ acc.numeroCuenta }} — {{ acc.cliente }}
+      </option>
+    }
+  </app-select-field>
+
+  <div class="form__row">
+    <app-select-field
+      label="Tipo de Movimiento"
+      formControlName="tipoMovimiento"
+    >
+      <option value="CREDITO">Crédito</option>
+      <option value="DEBITO">Débito</option>
+    </app-select-field>
+    <app-input-field
+      label="Valor"
+      type="number"
+      formControlName="valor"
+      min="0.01"
+      step="0.01"
+    />
+  </div>
+</ng-container>

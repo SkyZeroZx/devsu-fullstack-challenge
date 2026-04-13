@@ -1,0 +1,64 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.page {
+  @include element('title') {
+    @include text-heading;
+    font-size: $font-size-2xl;
+    margin-bottom: $spacing-4;
+  }
+
+  @include element('toolbar') {
+    @include flex-between;
+    gap: $spacing-3;
+    margin-bottom: $spacing-4;
+
+    @include respond-below(sm) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  @include element('search') {
+    padding: $spacing-2 $spacing-3;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    min-width: 260px;
+    outline: none;
+    @include transition(border-color);
+    @include focus-visible;
+
+    &:focus {
+      border-color: $color-primary;
+    }
+
+    @include respond-below(sm) {
+      min-width: 0;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  gap: $spacing-2;
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: $spacing-0 $spacing-2;
+  border-radius: $radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+
+  @include modifier('active') {
+    background-color: rgba($color-success, 0.12);
+    color: $color-success;
+  }
+
+  @include modifier('inactive') {
+    background-color: rgba($color-error, 0.12);
+    color: $color-error;
+  }
+}

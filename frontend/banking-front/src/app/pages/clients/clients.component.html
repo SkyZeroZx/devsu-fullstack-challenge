@@ -1,0 +1,125 @@
+<section class="page">
+  <h1 class="page__title">Clientes</h1>
+
+  <div class="page__toolbar">
+    <input
+      class="page__search"
+      [formControl]="search"
+      placeholder="Buscar por nombre o identificación"
+      aria-label="Buscar clientes"
+    />
+    <a btn variant="primary" routerLink="nuevo">+ Nuevo</a>
+  </div>
+
+  <app-data-table
+    [rows]="filteredRows()"
+    [totalElements]="totalElements()"
+    [(page)]="page"
+    [size]="pageSize"
+    [loading]="data() === undefined"
+    ariaLabel="Listado de clientes"
+    emptyMessage="No se encontraron clientes"
+  >
+    <ng-template
+      appTableColumn="nombre"
+      header="Nombre"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.nombre }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="identificacion"
+      header="Identificación"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.identificacion }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="genero"
+      header="Género"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.genero }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="edad"
+      header="Edad"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.edad }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="direccion"
+      header="Dirección"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.direccion }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="telefono"
+      header="Teléfono"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.telefono }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="estado"
+      header="Estado"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      <span
+        class="badge"
+        [class.badge--active]="row.estado"
+        [class.badge--inactive]="!row.estado"
+      >
+        {{ row.estado ? 'Activo' : 'Inactivo' }}
+      </span>
+    </ng-template>
+
+    <ng-template
+      appTableColumn="acciones"
+      header="Acciones"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      <div class="actions">
+        <a
+          btn
+          variant="primary"
+          size="sm"
+          [routerLink]="[row.clienteId, 'editar']"
+          >Editar</a
+        >
+        <button
+          btn
+          variant="danger"
+          size="sm"
+          appConfirmDialog
+          appClickTracking
+          [eventName]="'client_delete'"
+          [eventData]="{ clienteId: row.clienteId }"
+          [title]="'Eliminar cliente'"
+          [message]="'¿Está seguro de eliminar a ' + row.nombre + '?'"
+          [confirmButtonText]="'Eliminar'"
+          [cancelButtonText]="'Cancelar'"
+          (confirm)="onDelete(row)"
+        >
+          Eliminar
+        </button>
+      </div>
+    </ng-template>
+  </app-data-table>
+</section>

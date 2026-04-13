@@ -1,0 +1,32 @@
+<ng-container [formGroup]="form" (focusout)="onTouchedFn()">
+  <div class="form__row">
+    <app-input-field label="Nombre" formControlName="nombre" />
+    <app-input-field label="Identificación" formControlName="identificacion" />
+  </div>
+  <div class="form__row">
+    <app-select-field label="Género" formControlName="genero">
+      <option value="" disabled>Seleccione</option>
+      <option value="MASCULINO">Masculino</option>
+      <option value="FEMENINO">Femenino</option>
+      <option value="OTRO">Otro</option>
+    </app-select-field>
+    <app-input-field
+      label="Edad"
+      type="number"
+      formControlName="edad"
+      min="1"
+    />
+  </div>
+  <div class="form__row">
+    <app-input-field label="Dirección" formControlName="direccion" />
+    <app-input-field label="Teléfono" formControlName="telefono" />
+  </div>
+  @if (showPassword()) {
+    <app-input-field
+      label="Contraseña"
+      type="password"
+      formControlName="contrasena"
+    />
+  }
+  <app-checkbox-field label="Activo" formControlName="estado" />
+</ng-container>

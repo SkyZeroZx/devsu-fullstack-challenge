@@ -1,0 +1,229 @@
+<div class="demo">
+  <header class="demo__header">
+    <h1 class="demo__title">UI Components Demo</h1>
+    <p class="demo__subtitle">
+      Biblioteca de componentes reutilizables del proyecto Banking App
+    </p>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- BUTTONS                                                             -->
+  <!-- ================================================================== -->
+  <section class="demo__section">
+    <h2 class="demo__section-title">Buttons</h2>
+
+    <!-- Variants -->
+    <div class="demo__group">
+      <h3 class="demo__group-title">Variants</h3>
+      <div class="demo__row">
+        <button btn variant="primary">Primary</button>
+        <button btn variant="secondary">Secondary</button>
+        <button btn variant="warn">Warn</button>
+        <button btn variant="danger">Danger</button>
+        <button btn variant="success">Success</button>
+      </div>
+    </div>
+
+    <!-- Sizes -->
+    <div class="demo__group">
+      <h3 class="demo__group-title">Sizes</h3>
+      <div class="demo__row demo__row--align-end">
+        <button btn size="sm">Small</button>
+        <button btn size="lg">Large</button>
+        <button btn size="xl">X-Large</button>
+        <button btn size="2xl">2X-Large</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="demo__group">
+      <h3 class="demo__group-title">Loading State</h3>
+      <div class="demo__row">
+        <button btn variant="primary" [loading]="true">Guardando...</button>
+        <button btn variant="danger" [loading]="true">Eliminando...</button>
+        <button btn variant="success" [loading]="true">Procesando...</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- TOAST NOTIFICATIONS                                                 -->
+  <!-- ================================================================== -->
+  <section class="demo__section">
+    <h2 class="demo__section-title">Toast Notifications</h2>
+    <div class="demo__group">
+      <p class="demo__description">
+        Haz clic en cada botón para mostrar un toast de notificación.
+      </p>
+      <div class="demo__row">
+        <button btn variant="success" (click)="showSuccessToast()">
+          Success Toast
+        </button>
+        <button btn variant="primary" (click)="showInfoToast()">
+          Info Toast
+        </button>
+        <button btn variant="warn" (click)="showWarnToast()">Warn Toast</button>
+        <button btn variant="danger" (click)="showErrorToast()">
+          Error Toast
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- CONFIRM DIALOG                                                      -->
+  <!-- ================================================================== -->
+  <section class="demo__section">
+    <h2 class="demo__section-title">Confirm Dialog</h2>
+    <div class="demo__group">
+      <p class="demo__description">
+        Abre un diálogo de confirmación y muestra el resultado.
+      </p>
+      <div class="demo__row">
+        <button btn variant="primary" (click)="showConfirmDialog()">
+          Abrir Confirm Dialog
+        </button>
+        <span class="demo__result">Resultado: {{ dialogResult() }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- MODAL                                                               -->
+  <!-- ================================================================== -->
+  <section class="demo__section">
+    <h2 class="demo__section-title">Modal</h2>
+    <div class="demo__group">
+      <p class="demo__description">Abre un modal en diferentes modos.</p>
+      <div class="demo__row">
+        <button btn variant="primary" (click)="openModal()">Modal</button>
+        <button btn variant="secondary" (click)="openDialog()">Dialog</button>
+        <button btn variant="warn" (click)="openBottomSheet()">
+          Bottom Sheet
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- DESIGN TOKENS                                                       -->
+  <!-- ================================================================== -->
+  <section class="demo__section">
+    <h2 class="demo__section-title">Design Tokens</h2>
+
+    <!-- Colors -->
+    <div class="demo__group">
+      <h3 class="demo__group-title">Brand Colors</h3>
+      <div class="demo__swatches">
+        <div class="demo__swatch demo__swatch--primary">
+          <span class="demo__swatch-label">Primary<br />#003b7a</span>
+        </div>
+        <div class="demo__swatch demo__swatch--primary-dark">
+          <span class="demo__swatch-label">Primary Dark<br />#002a5c</span>
+        </div>
+        <div class="demo__swatch demo__swatch--primary-light">
+          <span class="demo__swatch-label">Primary Light<br />#1a5fa8</span>
+        </div>
+        <div class="demo__swatch demo__swatch--accent">
+          <span class="demo__swatch-label demo__swatch-label--dark"
+            >Accent<br />#f5c518</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback Colors -->
+    <div class="demo__group">
+      <h3 class="demo__group-title">Feedback Colors</h3>
+      <div class="demo__swatches">
+        <div class="demo__swatch demo__swatch--success">
+          <span class="demo__swatch-label">Success<br />#4caf50</span>
+        </div>
+        <div class="demo__swatch demo__swatch--error">
+          <span class="demo__swatch-label">Error<br />#e24f45</span>
+        </div>
+        <div class="demo__swatch demo__swatch--warn">
+          <span class="demo__swatch-label">Warn<br />#f8b248</span>
+        </div>
+        <div class="demo__swatch demo__swatch--info">
+          <span class="demo__swatch-label">Info<br />#2196f3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typography -->
+    <div class="demo__group">
+      <h3 class="demo__group-title">Typography Scale</h3>
+      <div class="demo__type-scale">
+        <p class="demo__type demo__type--xs">0.75rem (12px) — Extra Small</p>
+        <p class="demo__type demo__type--sm">0.875rem (14px) — Small</p>
+        <p class="demo__type demo__type--base">1rem (16px) — Base</p>
+        <p class="demo__type demo__type--lg">1.125rem (18px) — Large</p>
+        <p class="demo__type demo__type--xl">1.25rem (20px) — Extra Large</p>
+        <p class="demo__type demo__type--2xl">1.5rem (24px) — 2X Large</p>
+        <p class="demo__type demo__type--3xl">2rem (32px) — 3X Large</p>
+      </div>
+    </div>
+
+    <!-- Spacing -->
+    <div class="demo__group">
+      <h3 class="demo__group-title">Spacing Scale</h3>
+      <div class="demo__spacing-scale">
+        <div class="demo__spacing-row">
+          <span class="demo__spacing-label">4px</span>
+          <div class="demo__spacing-bar" style="width: 4px"></div>
+        </div>
+        <div class="demo__spacing-row">
+          <span class="demo__spacing-label">8px</span>
+          <div class="demo__spacing-bar" style="width: 8px"></div>
+        </div>
+        <div class="demo__spacing-row">
+          <span class="demo__spacing-label">12px</span>
+          <div class="demo__spacing-bar" style="width: 12px"></div>
+        </div>
+        <div class="demo__spacing-row">
+          <span class="demo__spacing-label">16px</span>
+          <div class="demo__spacing-bar" style="width: 16px"></div>
+        </div>
+        <div class="demo__spacing-row">
+          <span class="demo__spacing-label">24px</span>
+          <div class="demo__spacing-bar" style="width: 24px"></div>
+        </div>
+        <div class="demo__spacing-row">
+          <span class="demo__spacing-label">32px</span>
+          <div class="demo__spacing-bar" style="width: 32px"></div>
+        </div>
+        <div class="demo__spacing-row">
+          <span class="demo__spacing-label">48px</span>
+          <div class="demo__spacing-bar" style="width: 48px"></div>
+        </div>
+        <div class="demo__spacing-row">
+          <span class="demo__spacing-label">64px</span>
+          <div class="demo__spacing-bar" style="width: 64px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Border Radius -->
+    <div class="demo__group">
+      <h3 class="demo__group-title">Border Radius</h3>
+      <div class="demo__row">
+        <div class="demo__radius-box demo__radius-box--sm">
+          <span>4px</span>
+        </div>
+        <div class="demo__radius-box demo__radius-box--md">
+          <span>6px</span>
+        </div>
+        <div class="demo__radius-box demo__radius-box--lg">
+          <span>10px</span>
+        </div>
+        <div class="demo__radius-box demo__radius-box--xl">
+          <span>1rem</span>
+        </div>
+        <div class="demo__radius-box demo__radius-box--full">
+          <span>full</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,111 @@
+<section class="page">
+  <h1 class="page__title">Reportes</h1>
+
+  <form
+    class="filters"
+    [formGroup]="form"
+    (ngSubmit)="search()"
+    role="search"
+    aria-label="Filtros de reporte"
+  >
+    <app-input-field type="date" label="Desde" formControlName="fechaInicio" />
+    <app-input-field type="date" label="Hasta" formControlName="fechaFin" />
+    <app-select-field label="Cliente" formControlName="cliente">
+      <option value="">Todos</option>
+      @for (c of clients()?.content ?? []; track c.clienteId) {
+        <option [value]="c.clienteId">{{ c.nombre }}</option>
+      }
+    </app-select-field>
+
+    <div class="filters__actions">
+      <button
+        btn
+        variant="primary"
+        type="submit"
+        appClickTracking
+        [eventName]="'report_search'"
+        [loading]="loading()"
+      >
+        Buscar
+      </button>
+      <button
+        btn
+        variant="secondary"
+        type="button"
+        [disabled]="downloading() || rows() === null"
+        (click)="downloadPdf()"
+      >
+        {{ downloading() ? 'Descargando...' : 'Descargar PDF' }}
+      </button>
+    </div>
+  </form>
+
+  <div class="page__table-wrapper">
+    <table class="table" role="grid" aria-label="Resultado del reporte">
+      <thead>
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Cuenta</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Saldo Inicial</th>
+          <th scope="col">Movimiento</th>
+          <th scope="col">Saldo Disponible</th>
+          <th scope="col">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading()) {
+          @for (_ of [1, 2, 3, 4]; track $index) {
+            <tr>
+              <td><app-skeleton width="90px" height="16px" /></td>
+              <td><app-skeleton width="100px" height="16px" /></td>
+              <td><app-skeleton width="100px" height="16px" /></td>
+              <td><app-skeleton width="70px" height="16px" /></td>
+              <td><app-skeleton width="80px" height="16px" /></td>
+              <td><app-skeleton width="80px" height="16px" /></td>
+              <td><app-skeleton width="80px" height="16px" /></td>
+              <td><app-skeleton width="60px" height="16px" /></td>
+            </tr>
+          }
+        } @else if (rows() === null) {
+          <tr>
+            <td colspan="8" class="table__empty">
+              Seleccione un rango de fechas y presione Buscar
+            </td>
+          </tr>
+        } @else if (rows()!.length === 0) {
+          <tr>
+            <td colspan="8" class="table__empty">Sin resultados</td>
+          </tr>
+        } @else {
+          @for (row of rows(); track $index) {
+            <tr>
+              <td>{{ row.fecha }}</td>
+              <td>{{ row.cliente }}</td>
+              <td>{{ row.numeroCuenta }}</td>
+              <td>{{ row.tipo }}</td>
+              <td>{{ row.saldoInicial | number: '1.2-2' }}</td>
+              <td
+                [class.text--credit]="row.movimiento >= 0"
+                [class.text--debit]="row.movimiento < 0"
+              >
+                {{ row.movimiento | number: '1.2-2' }}
+              </td>
+              <td>{{ row.saldoDisponible | number: '1.2-2' }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [class.badge--active]="row.estado"
+                  [class.badge--inactive]="!row.estado"
+                >
+                  {{ row.estado ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

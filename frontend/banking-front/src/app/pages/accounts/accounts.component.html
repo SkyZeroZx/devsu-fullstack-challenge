@@ -1,0 +1,109 @@
+<section class="page">
+  <h1 class="page__title">Cuentas</h1>
+
+  <div class="page__toolbar">
+    <input
+      class="page__search"
+      [formControl]="search"
+      placeholder="Buscar por cuenta o cliente"
+      aria-label="Buscar cuentas"
+    />
+    <a btn variant="primary" routerLink="nuevo">+ Nueva</a>
+  </div>
+
+  <app-data-table
+    [rows]="filteredRows()"
+    [totalElements]="totalElements()"
+    [(page)]="page"
+    [size]="pageSize"
+    [loading]="data() === undefined"
+    ariaLabel="Listado de cuentas"
+    emptyMessage="No se encontraron cuentas"
+  >
+    <ng-template
+      appTableColumn="numeroCuenta"
+      header="Nro. Cuenta"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.numeroCuenta }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="tipoCuenta"
+      header="Tipo"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.tipoCuenta }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="saldoInicial"
+      header="Saldo Inicial"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.saldoInicial | number: '1.2-2' }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="estado"
+      header="Estado"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      <span
+        class="badge"
+        [class.badge--active]="row.estado"
+        [class.badge--inactive]="!row.estado"
+      >
+        {{ row.estado ? 'Activo' : 'Inactivo' }}
+      </span>
+    </ng-template>
+
+    <ng-template
+      appTableColumn="cliente"
+      header="Cliente"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.cliente }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="acciones"
+      header="Acciones"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      <div class="actions">
+        <a
+          btn
+          variant="primary"
+          size="sm"
+          [routerLink]="[row.numeroCuenta, 'editar']"
+          >Editar</a
+        >
+        <button
+          btn
+          variant="danger"
+          size="sm"
+          appConfirmDialog
+          appClickTracking
+          [eventName]="'account_delete'"
+          [eventData]="{ numeroCuenta: row.numeroCuenta }"
+          [title]="'Eliminar cuenta'"
+          [message]="
+            '¿Está seguro de eliminar la cuenta ' + row.numeroCuenta + '?'
+          "
+          [confirmButtonText]="'Eliminar'"
+          [cancelButtonText]="'Cancelar'"
+          (confirm)="onDelete(row)"
+        >
+          Eliminar
+        </button>
+      </div>
+    </ng-template>
+  </app-data-table>
+</section>

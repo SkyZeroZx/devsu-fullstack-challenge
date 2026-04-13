@@ -1,0 +1,109 @@
+<section class="page">
+  <h1 class="page__title">Movimientos</h1>
+
+  <div class="page__toolbar">
+    <input
+      class="page__search"
+      [formControl]="search"
+      placeholder="Buscar por cuenta o tipo"
+      aria-label="Buscar movimientos"
+    />
+    <a btn variant="primary" routerLink="nuevo">+ Nuevo</a>
+  </div>
+
+  <app-data-table
+    [rows]="filteredRows()"
+    [totalElements]="totalElements()"
+    [(page)]="page"
+    [size]="pageSize"
+    [loading]="data() === undefined"
+    ariaLabel="Listado de movimientos"
+    emptyMessage="Sin movimientos"
+  >
+    <ng-template
+      appTableColumn="id"
+      header="ID"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.id }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="fecha"
+      header="Fecha"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.fecha | date: 'dd/MM/yyyy HH:mm' }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="numeroCuenta"
+      header="Cuenta"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.numeroCuenta }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="tipoMovimiento"
+      header="Tipo"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      <span
+        class="badge"
+        [class.badge--credit]="row.tipoMovimiento === 'Crédito'"
+        [class.badge--debit]="row.tipoMovimiento === 'Débito'"
+      >
+        {{ row.tipoMovimiento }}
+      </span>
+    </ng-template>
+
+    <ng-template
+      appTableColumn="valor"
+      header="Valor"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.valor | number: '1.2-2' }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="saldo"
+      header="Saldo"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      {{ row.saldo | number: '1.2-2' }}
+    </ng-template>
+
+    <ng-template
+      appTableColumn="acciones"
+      header="Acciones"
+      [appTableColumnOf]="filteredRows()"
+      let-row
+    >
+      <div class="actions">
+        <button
+          btn
+          variant="danger"
+          size="sm"
+          appConfirmDialog
+          appClickTracking
+          [eventName]="'movement_delete'"
+          [eventData]="{ id: row.id }"
+          [title]="'Eliminar movimiento'"
+          [message]="'¿Está seguro de eliminar el movimiento #' + row.id + '?'"
+          [confirmButtonText]="'Eliminar'"
+          [cancelButtonText]="'Cancelar'"
+          (confirm)="onDelete(row)"
+        >
+          Eliminar
+        </button>
+      </div>
+    </ng-template>
+  </app-data-table>
+</section>

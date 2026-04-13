@@ -1,0 +1,17 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.page {
+  @include element('title') {
+    @include text-heading;
+    font-size: $font-size-2xl;
+    margin-bottom: $spacing-6;
+  }
+
+  @include element('actions') {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-3;
+    margin-top: $spacing-6;
+  }
+}

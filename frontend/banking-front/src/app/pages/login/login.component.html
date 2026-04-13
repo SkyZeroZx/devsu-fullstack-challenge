@@ -1,0 +1,47 @@
+<div class="login">
+  <div class="login__card">
+    <h1 class="login__title">BANCO</h1>
+    <p class="login__subtitle">Iniciar sesión</p>
+
+    @if (error(); as err) {
+      <p class="login__error" role="alert">{{ err }}</p>
+    }
+
+    <form class="login__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="login__field">
+        <label class="login__label" for="username">Usuario</label>
+        <input
+          class="login__input"
+          id="username"
+          formControlName="username"
+          autocomplete="username"
+          placeholder="Ingrese su usuario"
+        />
+      </div>
+
+      <div class="login__field">
+        <label class="login__label" for="password">Contraseña</label>
+        <input
+          class="login__input"
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          placeholder="Ingrese su contraseña"
+        />
+      </div>
+
+      <button
+        btn
+        variant="primary"
+        size="xl"
+        type="submit"
+        appClickTracking
+        [eventName]="'login_attempt'"
+        [loading]="loading()"
+      >
+        Ingresar
+      </button>
+    </form>
+  </div>
+</div>

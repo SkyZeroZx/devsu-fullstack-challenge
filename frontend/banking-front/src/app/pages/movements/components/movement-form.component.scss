@@ -1,0 +1,19 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  max-width: 480px;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4;
+
+    @include respond-below(sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+}

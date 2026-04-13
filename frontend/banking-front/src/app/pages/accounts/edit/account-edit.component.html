@@ -1,0 +1,23 @@
+<section class="page">
+  <h1 class="page__title">Editar Cuenta</h1>
+  @if (account()) {
+    <form (ngSubmit)="onSubmit()">
+      <app-account-form [formControl]="formCtrl" />
+      <div class="page__actions">
+        <a btn variant="secondary" routerLink="/cuentas">Cancelar</a>
+        <button
+          btn
+          variant="primary"
+          type="submit"
+          appClickTracking
+          [eventName]="'account_update'"
+          [loading]="saving()"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  } @else {
+    <app-skeleton width="100%" height="300px" borderRadius="10px" />
+  }
+</section>
