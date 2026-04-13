@@ -28,15 +28,15 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: frontend/banking-front/package-lock.json
 
       - name: Install dependencies
-        working-directory: frontend
+        working-directory: frontend/banking-front
         run: npm ci
 
       # ── Adjust the test command to match your Angular test/coverage config ──
       - name: Run tests with coverage
-        working-directory: frontend
+        working-directory: frontend/banking-front
         run: npm run test -- --coverage --watchAll=false
 
       - name: Analyze with SonarCloud
