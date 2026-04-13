@@ -34,6 +34,14 @@ jobs:
         working-directory: frontend/banking-front
         run: npm ci
 
+      - name: Check code formatting
+        working-directory: frontend/banking-front
+        run: npm run format:check
+
+      - name: Code Linting
+        working-directory: frontend/banking-front
+        run: npm run lint
+
       # ── Adjust the test command to match your Angular test/coverage config ──
       - name: Run tests with coverage
         working-directory: frontend/banking-front

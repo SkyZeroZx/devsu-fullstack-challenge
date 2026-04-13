@@ -8,6 +8,7 @@
     "e2e:watch": "nx e2e e2e --watch",
     "build": "nx build",
     "format": "prettier --write \"./src/**/*.{ts,json,html,scss}\"",
+    "format:check": "prettier --check \"./src/**/*.{ts,json,html,scss}\"",
     "lint-format": "npm run format &&  npm run lint --fix",
     "lint": "nx lint",
     "test": "nx test",
