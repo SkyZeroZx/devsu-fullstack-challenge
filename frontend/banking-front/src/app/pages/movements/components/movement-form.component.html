@@ -1,13 +1,11 @@
 <ng-container [formGroup]="form" (focusout)="onTouchedFn()">
   <div>
-    <app-select-field label="Cuenta" formControlName="numeroCuenta">
-      <option value="" disabled>Seleccione cuenta</option>
-      @for (acc of accounts()?.content ?? []; track acc.numeroCuenta) {
-        <option [value]="acc.numeroCuenta">
-          {{ acc.numeroCuenta }} — {{ acc.cliente }}
-        </option>
-      }
-    </app-select-field>
+    <app-select-field
+      label="Cuenta"
+      formControlName="numeroCuenta"
+      [options]="accountOptions()"
+      placeholder="Seleccione cuenta"
+    />
   </div>
 
   <div class="form__row">
@@ -15,10 +13,8 @@
       <app-select-field
         label="Tipo de Movimiento"
         formControlName="tipoMovimiento"
-      >
-        <option value="CREDITO">Crédito</option>
-        <option value="DEBITO">Débito</option>
-      </app-select-field>
+        [options]="movementTypeOptions"
+      />
     </div>
     <div>
       <app-input-field

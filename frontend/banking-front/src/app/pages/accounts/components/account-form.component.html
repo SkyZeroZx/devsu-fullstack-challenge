@@ -4,10 +4,11 @@
       <app-input-field label="Nro. Cuenta" formControlName="numeroCuenta" />
     </div>
     <div>
-      <app-select-field label="Tipo" formControlName="tipoCuenta">
-        <option value="AHORRO">Ahorro</option>
-        <option value="CORRIENTE">Corriente</option>
-      </app-select-field>
+      <app-select-field
+        label="Tipo"
+        formControlName="tipoCuenta"
+        [options]="accountTypeOptions"
+      />
     </div>
   </div>
   <div class="form__row">
@@ -21,15 +22,13 @@
       />
     </div>
     <div>
-      <app-select-field label="Cliente" formControlName="clienteId">
-        <option value="" disabled>Seleccione</option>
-        @for (c of clients()?.content ?? []; track c.clienteId) {
-          <option [value]="c.clienteId">{{ c.nombre }}</option>
-        }
-      </app-select-field>
+      <app-select-field
+        label="Cliente"
+        formControlName="clienteId"
+        [options]="clientOptions()"
+        placeholder="Seleccione cliente"
+      />
     </div>
   </div>
-  <div>
-    <app-checkbox-field label="Activa" formControlName="estado" />
-  </div>
+  <app-checkbox-field label="Activa" formControlName="estado" />
 </ng-container>

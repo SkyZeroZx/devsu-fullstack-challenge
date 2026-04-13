@@ -1,10 +1,10 @@
 <label
-  class="field__checkbox"
+  class="field__switch"
   [attr.for]="fieldId"
   data-testid="checkbox-label"
 >
   <input
-    class="field__checkbox-input"
+    class="field__switch-input"
     type="checkbox"
     data-testid="checkbox"
     [id]="fieldId"
@@ -13,5 +13,8 @@
     (change)="onCheckboxChange($event)"
     (blur)="markTouched()"
   />
-  {{ label() }}
+  <span class="field__switch-track" aria-hidden="true">
+    <span class="field__switch-thumb"></span>
+  </span>
+  <span class="field__switch-label">{{ label() }}</span>
 </label>

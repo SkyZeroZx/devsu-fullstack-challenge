@@ -50,6 +50,12 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
 export class ClientFormComponent implements ControlValueAccessor, Validator {
   private readonly fb = inject(FormBuilder);
 
+  readonly genderOptions = [
+    { value: 'MASCULINO', label: 'Masculino' },
+    { value: 'FEMENINO', label: 'Femenino' },
+    { value: 'OTRO', label: 'Otro' },
+  ];
+
   readonly showPassword = signal(true);
 
   readonly form = this.fb.nonNullable.group({

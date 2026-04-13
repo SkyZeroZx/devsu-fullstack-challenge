@@ -12,6 +12,7 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   forwardRef,
   inject,
 } from '@angular/core';
@@ -55,6 +56,18 @@ export class MovementFormComponent implements ControlValueAccessor, Validator {
   readonly accounts = toSignal(
     this.accountService.getAll({ size: 10 }).pipe(catchError(() => of(null))),
     { initialValue: null },
+  );
+
+  readonly movementTypeOptions = [
+    { value: 'CREDITO' as MovementType, label: 'Crédito' },
+    { value: 'DEBITO' as MovementType, label: 'Débito' },
+  ];
+
+  readonly accountOptions = computed(() =>
+    (this.accounts()?.content ?? []).map((a) => ({
+      value: a.numeroCuenta,
+      label: `${a.numeroCuenta} — ${a.cliente}`,
+    })),
   );
 
   readonly form = this.fb.nonNullable.group({

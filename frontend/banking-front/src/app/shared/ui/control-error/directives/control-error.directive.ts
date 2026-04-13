@@ -46,9 +46,15 @@ export class ControlErrorsDirective implements OnInit {
         if (controlErrors) {
           const firstKey = Object.keys(controlErrors)[0];
           const getError = this.errors[firstKey];
-          const text =
-            this.customErrors()[firstKey] || getError(controlErrors[firstKey]);
-          this.setError(text);
+          const customText = this.customErrors()[firstKey];
+          // Skip error keys that have no registered handler (e.g. composite
+          // form validators like `invalidForm` from nested CVA components).
+          const text = customText ?? (getError ? getError(controlErrors[firstKey]) : null);
+          if (text) {
+            this.setError(text);
+          } else if (this.ref) {
+            this.setError(null);
+          }
         } else if (this.ref) {
           this.setError(null);
         }

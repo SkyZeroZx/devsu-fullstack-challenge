@@ -12,6 +12,7 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   forwardRef,
   inject,
 } from '@angular/core';
@@ -57,6 +58,18 @@ export class AccountFormComponent implements ControlValueAccessor, Validator {
   readonly clients = toSignal(
     this.clientService.getAll({ size: 10 }).pipe(catchError(() => of(null))),
     { initialValue: null },
+  );
+
+  readonly accountTypeOptions = [
+    { value: 'AHORRO' as AccountType, label: 'Ahorro' },
+    { value: 'CORRIENTE' as AccountType, label: 'Corriente' },
+  ];
+
+  readonly clientOptions = computed(() =>
+    (this.clients()?.content ?? []).map((c) => ({
+      value: c.clienteId,
+      label: c.nombre,
+    })),
   );
 
   readonly form = this.fb.nonNullable.group({

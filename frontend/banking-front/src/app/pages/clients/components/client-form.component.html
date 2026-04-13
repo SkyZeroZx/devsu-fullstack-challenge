@@ -9,12 +9,12 @@
   </div>
   <div class="form__row">
     <div>
-      <app-select-field label="Género" formControlName="genero">
-        <option value="" disabled>Seleccione</option>
-        <option value="MASCULINO">Masculino</option>
-        <option value="FEMENINO">Femenino</option>
-        <option value="OTRO">Otro</option>
-      </app-select-field>
+      <app-select-field
+        label="Género"
+        formControlName="genero"
+        [options]="genderOptions"
+        placeholder="Seleccione"
+      />
     </div>
     <div>
       <app-input-field

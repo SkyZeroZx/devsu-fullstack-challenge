@@ -1,23 +1,26 @@
 <section class="page">
   <h1 class="page__title">Editar Cuenta</h1>
-  @if (account()) {
-    <form (ngSubmit)="onSubmit()">
-      <app-account-form [formControl]="formCtrl" />
-      <div class="page__actions">
-        <a btn variant="secondary" routerLink="/cuentas">Cancelar</a>
-        <button
-          btn
-          variant="primary"
-          type="submit"
-          appClickTracking
-          [eventName]="'account_update'"
-          [loading]="saving()"
-        >
-          Guardar
-        </button>
-      </div>
-    </form>
-  } @else {
+  <!--
+    The form is always mounted (not inside @if) so the CVA writeValue fires
+    correctly when account data arrives. [hidden] handles the form visibility.
+  -->
+  @if (!account()) {
     <app-skeleton width="100%" height="300px" borderRadius="10px" />
   }
+  <form [hidden]="!account()" (ngSubmit)="onSubmit()">
+    <app-account-form [formControl]="formCtrl" />
+    <div class="page__actions">
+      <a btn variant="secondary" routerLink="/cuentas">Cancelar</a>
+      <button
+        btn
+        variant="primary"
+        type="submit"
+        appClickTracking
+        [eventName]="'account_update'"
+        [loading]="saving()"
+      >
+        Guardar
+      </button>
+    </div>
+  </form>
 </section>

@@ -19,12 +19,12 @@
       <app-input-field type="date" label="Hasta" formControlName="fechaFin" />
     </div>
     <div>
-      <app-select-field label="Cliente" formControlName="cliente">
-        <option value="">Todos</option>
-        @for (c of clients()?.content ?? []; track c.clienteId) {
-          <option [value]="c.clienteId">{{ c.nombre }}</option>
-        }
-      </app-select-field>
+      <app-select-field
+        label="Cliente"
+        formControlName="cliente"
+        [options]="clientOptions()"
+        placeholder="Todos"
+      />
     </div>
 
     <div class="filters__actions">

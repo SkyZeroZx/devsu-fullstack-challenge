@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -50,6 +51,13 @@ export class ReportsComponent {
   readonly clients = toSignal(
     this.clientService.getAll({ size: 10 }).pipe(catchError(() => of(null))),
     { initialValue: null },
+  );
+
+  readonly clientOptions = computed(() =>
+    (this.clients()?.content ?? []).map((c) => ({
+      value: c.clienteId,
+      label: c.nombre,
+    })),
   );
 
   readonly form = new FormGroup({

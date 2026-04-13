@@ -72,8 +72,9 @@ export class AccountEditComponent {
   });
 
   onSubmit(): void {
-    if (this.formCtrl.invalid) {
-      this.accountForm()?.markAllAsTouched();
+    const formCmp = this.accountForm();
+    if (!formCmp?.form.valid) {
+      formCmp?.markAllAsTouched();
       return;
     }
     this.saving.set(true);

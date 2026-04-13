@@ -12,7 +12,7 @@ import { Router, RouterLink } from '@angular/router';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, catchError, of } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClientRequest, ClientResponse } from '@core/interface';
+import { ClientResponse } from '@core/interface';
 import { ClientService } from '@core/services/client.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { ButtonComponent } from '@shared/ui/button/button.component';
@@ -76,14 +76,19 @@ export class ClientEditComponent {
   }
 
   onSubmit(): void {
-    if (this.formCtrl.invalid) {
-      this.clientForm()?.markAllAsTouched();
+    const formCmp = this.clientForm();
+    if (!formCmp?.form.valid) {
+      formCmp?.markAllAsTouched();
       return;
     }
     this.saving.set(true);
 
+    // Use PATCH so the backend doesn't require the password field.
+    // The password is disabled in edit mode and excluded from the payload.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { contrasena: _pw, ...payload } = formCmp.form.getRawValue();
     this.clientService
-      .update(this.id(), this.formCtrl.value as unknown as ClientRequest)
+      .patch(this.id(), payload)
       .subscribe({
         next: () => {
           this.toast.success({ message: 'Cliente actualizado exitosamente' });
