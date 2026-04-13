@@ -1,0 +1,59 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+:host {
+  display: block;
+}
+
+.paginator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-3 $spacing-4;
+  border-top: 1px solid $color-border-light;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  @include respond-below(sm) {
+    flex-direction: column;
+    gap: $spacing-3;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+  }
+
+  &__pages {
+    padding: 0 $spacing-3;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    background: $color-white;
+    font-size: $font-size-base;
+    color: $color-text-primary;
+    cursor: pointer;
+    @include transition(background, border-color);
+    @include focus-visible;
+
+    &:hover:not(:disabled) {
+      background: $color-surface;
+      border-color: $color-primary;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}

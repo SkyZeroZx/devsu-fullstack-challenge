@@ -14,9 +14,9 @@ export class ClickTrackingDirective {
   readonly eventData = input<object>();
 
   onTrackingClick() {
-    this.analyticService.trackEvent({
-      eventName: this.eventName(),
-      ...this.eventData(),
-    });
+    this.analyticService.trackEvent(
+      this.eventName(),
+      this.eventData() as Record<string, unknown>,
+    );
   }
 }

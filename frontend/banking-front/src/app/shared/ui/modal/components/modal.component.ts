@@ -16,6 +16,7 @@ import { ModalService } from '../services/modal.service';
 
 @Component({
   selector: 'app-modal',
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],

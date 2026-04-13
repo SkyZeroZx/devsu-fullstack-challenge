@@ -2,6 +2,10 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+// ==========================================================================
+// Button — BEM
+// ==========================================================================
+
 .btn {
   display: inline-flex;
   flex-wrap: nowrap;
@@ -31,6 +35,10 @@
     cursor: not-allowed;
   }
 
+  // --------------------------------------------------------------------------
+  // Size modifiers
+  // --------------------------------------------------------------------------
+
   @include modifier('sm') {
     padding: $spacing-1 $spacing-3;
     font-size: $font-size-sm;
@@ -50,6 +58,10 @@
     padding: $spacing-4 $spacing-4;
     font-size: $font-size-2xl;
   }
+
+  // --------------------------------------------------------------------------
+  // Variant modifiers
+  // --------------------------------------------------------------------------
 
   @include modifier('primary') {
     background-color: $color-accent;
@@ -87,6 +99,10 @@
       background-color: color.adjust($color-success, $lightness: -5%);
     }
   }
+
+  // --------------------------------------------------------------------------
+  // Spinner element
+  // --------------------------------------------------------------------------
 
   @include element('spinner') {
     width: 1.25rem;

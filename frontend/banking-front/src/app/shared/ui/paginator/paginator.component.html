@@ -1,0 +1,63 @@
+<div class="paginator">
+  <span class="paginator__info" aria-live="polite" data-testid="paginator-info">
+    @if (totalElements() === 0) {
+      Sin resultados
+    } @else {
+      {{ from() }} - {{ to() }} de {{ totalElements() }}
+    }
+  </span>
+
+  <div class="paginator__controls">
+    <button
+      class="paginator__btn"
+      type="button"
+      [disabled]="page() === 0"
+      [attr.aria-label]="'Primera página'"
+      data-testid="btn-first"
+      (click)="goTo(0)"
+    >
+      «
+    </button>
+
+    <button
+      class="paginator__btn"
+      type="button"
+      [disabled]="page() === 0"
+      [attr.aria-label]="'Página anterior'"
+      data-testid="btn-prev"
+      (click)="goTo(page() - 1)"
+    >
+      ‹
+    </button>
+
+    <span
+      class="paginator__pages"
+      aria-current="page"
+      data-testid="paginator-pages"
+    >
+      {{ page() + 1 }} / {{ totalPages() }}
+    </span>
+
+    <button
+      class="paginator__btn"
+      type="button"
+      [disabled]="page() >= totalPages() - 1"
+      [attr.aria-label]="'Siguiente página'"
+      data-testid="btn-next"
+      (click)="goTo(page() + 1)"
+    >
+      ›
+    </button>
+
+    <button
+      class="paginator__btn"
+      type="button"
+      [disabled]="page() >= totalPages() - 1"
+      [attr.aria-label]="'Última página'"
+      data-testid="btn-last"
+      (click)="goTo(totalPages() - 1)"
+    >
+      »
+    </button>
+  </div>
+</div>

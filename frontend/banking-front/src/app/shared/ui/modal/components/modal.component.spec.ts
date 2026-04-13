@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ModalComponent } from './modal.component';
 import { ModalService } from '../services/modal.service';
-import { findEl } from '../../../../spec-helpers/element.spec-helper';
+import {
+  findEl,
+  queryByCss,
+} from '../../../../spec-helpers/element.spec-helper';
 
 describe('ModalComponent', () => {
   let component: ModalComponent;

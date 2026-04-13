@@ -1,0 +1,17 @@
+@if (label()) {
+  <label class="field__label" [attr.for]="fieldId" data-testid="label">{{
+    label()
+  }}</label>
+}
+<select
+  class="field__input"
+  data-testid="select"
+  [id]="fieldId"
+  [disabled]="disabled()"
+  [attr.aria-invalid]="invalid() || null"
+  (change)="onSelectChange($event)"
+  (blur)="markTouched()"
+  #selectRef
+>
+  <ng-content />
+</select>

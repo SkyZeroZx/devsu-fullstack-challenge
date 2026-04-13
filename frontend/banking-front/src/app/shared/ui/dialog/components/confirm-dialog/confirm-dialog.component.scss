@@ -1,6 +1,10 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+// ==========================================================================
+// Confirm Dialog — BEM
+// ==========================================================================
+
 .confirm-dialog {
   @include element('overlay') {
     position: fixed;
@@ -25,9 +29,10 @@
       'top-start top top-end'
       'center-start center center-end'
       'bottom-start bottom-center bottom-end';
-    grid-template-rows:
-      minmax(min-content, auto) minmax(min-content, auto)
-      minmax(min-content, auto);
+    grid-template-rows: minmax(min-content, auto) minmax(
+        min-content,
+        auto
+      ) minmax(min-content, auto);
     height: 100%;
     padding: 0.625em;
     overflow-x: hidden;

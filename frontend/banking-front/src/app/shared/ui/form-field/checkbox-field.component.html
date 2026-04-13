@@ -1,0 +1,17 @@
+<label
+  class="field__checkbox"
+  [attr.for]="fieldId"
+  data-testid="checkbox-label"
+>
+  <input
+    class="field__checkbox-input"
+    type="checkbox"
+    data-testid="checkbox"
+    [id]="fieldId"
+    [checked]="value()"
+    [disabled]="disabled()"
+    (change)="onCheckboxChange($event)"
+    (blur)="markTouched()"
+  />
+  {{ label() }}
+</label>
