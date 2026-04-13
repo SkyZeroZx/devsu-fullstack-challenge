@@ -1,12 +1,4 @@
-# docker-compose.staging.yml
-# Usage: docker compose -f docker-compose.yml -f docker-compose.staging.yml up --build
-#
-# First run: postgres auto-runs BaseDatos.sql (schema) from docker-entrypoint-initdb.d.
-# Then the seed service inserts admin + 50 records per table (idempotent).
-# banking-service, auth-service and api-gateway wait for the seed to finish.
-
 services:
-
   seed:
     image: postgres:18-alpine
     environment:
