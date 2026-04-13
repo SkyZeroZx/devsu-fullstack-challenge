@@ -29,6 +29,8 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectKey>skyzerozx_backend-fullstack</sonar.projectKey>
         <sonar.projectName>backend-fullstack</sonar.projectName>
+        <sonar.exclusions>**/*Test.java,**/*IT.java,**/*.spec.ts,**/*.test.ts</sonar.exclusions>
+        <sonar.test.exclusions>**/*Test.java,**/*IT.java,**/*.spec.ts,**/*.test.ts</sonar.test.exclusions>
         
         <java.version>21</java.version>
         <spring-cloud.version>2024.0.1</spring-cloud.version>
@@ -38,9 +40,8 @@
         <spotless.version>2.43.0</spotless.version>
         <checkstyle.version>3.5.0</checkstyle.version>
         <checkstyle.core.version>10.20.1</checkstyle.core.version>
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.language>java</sonar.language>
+        
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencyManagement>
