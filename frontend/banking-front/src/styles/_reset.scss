@@ -1,44 +1,53 @@
+// ==========================================================================
+// Minimal CSS Reset
+// ==========================================================================
+
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-html {
-  color-scheme: light dark;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-  hanging-punctuation: first allow-end last;
-}
-
+body,
 h1,
 h2,
 h3,
 h4,
 h5,
-h6 {
-  text-wrap: balance;
-}
-
-p {
-  text-wrap: pretty;
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
 }
 
 ul,
-ol,
-dl {
-  list-style-position: inside;
-
-  ul,
-  ol,
-  dl {
-    padding-inline-start: 1lh;
-  }
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-* {
-  all: unset;
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
 }
