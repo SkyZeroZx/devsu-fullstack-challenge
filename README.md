@@ -191,8 +191,8 @@ backend/auth-service/target/site/jacoco/index.html
 
 ```bash
 cd frontend/banking-front
-npm test                  # ejecución única
-npm run test:coverage     # con informe de cobertura
+npm test
+npm run test:coverage
 ```
 
 ## Tests E2E (Karate)
