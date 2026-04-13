@@ -27,8 +27,8 @@ Feature: Report generation
     When method get
     Then status 200
     And match response == '#array'
-    And match response[0].Cliente == '#string'
-    And match response[0]['Numero Cuenta'] == '#string'
+    And match response[0].cliente == '#string'
+    And match response[0].numeroCuenta == '#string'
     * print 'Report entries:', response.length
 
   @id:2 @sinAutorizacion

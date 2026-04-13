@@ -20,7 +20,7 @@ function fn() {
     };
 
     var names = ['Jose Lema', 'Marianela Montalvo', 'Juan Osorio', 'Carlos Lopez', 'Ana Torres', 'Luis Garcia', 'Maria Perez'];
-    var genders = ['Masculino', 'Femenino'];
+    var genders = ['MASCULINO', 'FEMENINO'];
     var streets = ['Otavalo sn y principal', 'Amazonas y NNUU', '13 junio y Equinoccial', 'Av. 10 de Agosto', 'Calle Cuenca 123'];
     var accountTypes = ['Ahorro', 'Corriente'];
 
