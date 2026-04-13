@@ -63,12 +63,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >
-          mvn sonar:sonar
-          --batch-mode
-          --no-transfer-progress
-          -Dsonar.organization=${{ vars.SONAR_ORG }}
-          -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY_BACKEND }}
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
-          -Dsonar.coverage.jacoco.xmlReportPaths=**/target/site/jacoco/jacoco.xml
+        run: mvn --batch-mode --no-transfer-progress org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=skyzerozx_backend-fullstack
