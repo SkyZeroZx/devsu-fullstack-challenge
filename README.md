@@ -79,6 +79,16 @@ https://github.com/user-attachments/assets/3b6e33e3-b972-4ccc-952d-2bbd36268c17
 
   ![Sonar](docs/image/sonar.png)
 
+-- **Coverage**: Reportes de cobertura generados por JaCoCo para backend y Jest para frontend.
+
+  <img width="651" height="428" alt="image" src="https://github.com/user-attachments/assets/706dfb76-abad-47d1-acf4-9a16c6c3865f" />
+  
+  <img width="513" height="252" alt="image" src="https://github.com/user-attachments/assets/a580d258-e56a-4294-92b3-40fa499928e6" />
+
+  <img width="477" height="230" alt="image" src="https://github.com/user-attachments/assets/74fdc5de-9f93-4ea0-a162-ee9c1025698f" />
+
+  <img width="433" height="234" alt="image" src="https://github.com/user-attachments/assets/58ebdd9c-c156-4233-b667-b8a209a01375" />
+
 ## Estructura del proyecto
 
 ```
