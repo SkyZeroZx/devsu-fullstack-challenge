@@ -93,7 +93,6 @@ describe('ClientsComponent', () => {
     component.onDelete(mockClient);
     await fixture.whenStable();
     await flushMacrotask();
-    await fixture.whenStable();
 
     expect(clientServiceSpy.delete).toHaveBeenCalledWith('1');
     expect(toastSpy.success).toHaveBeenCalled();

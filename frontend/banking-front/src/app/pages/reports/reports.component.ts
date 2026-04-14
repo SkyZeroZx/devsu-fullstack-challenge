@@ -103,7 +103,6 @@ export class ReportsComponent {
   constructor() {
     toObservable(this.loadTrigger)
       .pipe(
-        debounceTime(0),
         filter(({ params }) => params !== null),
         tap(() => this.loading.set(true)),
         switchMap(({ params, page }) =>
@@ -128,8 +127,8 @@ export class ReportsComponent {
 
     this.form.controls.todosClientes.valueChanges
       .pipe(takeUntilDestroyed())
-      .subscribe((todos) => {
-        if (todos) {
+      .subscribe((all) => {
+        if (all) {
           this.form.controls.cliente.disable();
           this.form.controls.cliente.reset('');
         } else {

@@ -76,7 +76,6 @@ export class MovementsComponent {
 
   readonly data = toSignal(
     toObservable(this.loadTrigger).pipe(
-      debounceTime(0),
       switchMap(({ page, search }) =>
         this.movementService
           .getAll({

@@ -74,7 +74,6 @@ export class ClientsComponent {
 
   readonly data = toSignal(
     toObservable(this.loadTrigger).pipe(
-      debounceTime(0),
       switchMap(({ page, search }) =>
         this.clientService
           .getAll({

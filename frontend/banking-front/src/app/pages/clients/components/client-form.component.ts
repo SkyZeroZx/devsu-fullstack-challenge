@@ -74,12 +74,6 @@ export class ClientFormComponent implements ControlValueAccessor, Validator {
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   onChangeFn: (val: unknown) => void = () => {};
 
-  /**
-   * Called by the parent edit component via viewChild.
-   * Injecting NgControl (self) alongside NG_VALIDATORS causes a circular
-   * dependency (NgControl → NG_VALIDATORS → this component), so we expose
-   * this method and let the host trigger it directly.
-   */
   markAllAsTouched(): void {
     this.form.markAllAsTouched();
   }
