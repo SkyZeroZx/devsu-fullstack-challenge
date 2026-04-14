@@ -1,10 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, ErrorHandler, isDevMode, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AnalyticsAdapter } from '../services/analytics/analytics.adapter';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   private readonly router = inject(Router);
+  private readonly analytics = inject(AnalyticsAdapter);
 
   handleError(error: unknown) {
     let rejection: unknown;
@@ -13,13 +15,15 @@ export class GlobalErrorHandler implements ErrorHandler {
       rejection = (error as { [key: string]: unknown })?.['rejection']; // get the error object
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const url = this.router.url;
 
     console.error(GlobalErrorHandler.name, { error, rejection });
 
     if (!isDevMode()) {
-      // Send error to the server or log it in production
+      this.analytics.trackEvent('error', {
+        error: error instanceof Error ? error.message : String(error),
+        url,
+      });
     }
   }
 }
