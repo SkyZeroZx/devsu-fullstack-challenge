@@ -37,7 +37,9 @@
       <app-input-field
         label="Teléfono"
         formControlName="telefono"
-        [customErrors]="{ pattern: 'Ingrese un número celular ecuatoriano válido (09XXXXXXXX)' }"
+        [customErrors]="{
+          pattern: 'Ingrese un número celular ecuatoriano válido (09XXXXXXXX)',
+        }"
       />
     </div>
   </div>

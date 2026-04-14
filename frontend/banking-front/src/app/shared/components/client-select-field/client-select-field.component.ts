@@ -11,7 +11,6 @@ import { ClientService } from '@core/services/client/client.service';
 import { ClientResponse } from '@core/interface';
 import { SelectFieldComponent } from '../../ui/form-field/select-field/select-field.component';
 import { BasePagedSelectComponent } from '../base-paged-select';
- 
 
 @Component({
   selector: 'app-client-select',
