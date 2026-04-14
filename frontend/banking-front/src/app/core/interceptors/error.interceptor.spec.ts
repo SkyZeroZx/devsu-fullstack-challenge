@@ -1,5 +1,6 @@
 import {
   HttpClient,
+  HttpContext,
   provideHttpClient,
   withInterceptors,
 } from '@angular/common/http';
@@ -12,6 +13,7 @@ import { provideRouter, Router } from '@angular/router';
 import { errorInterceptor } from './error.interceptor';
 import { AuthService } from '@core/services/auth/auth.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
+import { SKIP_ERROR_INTERCEPTOR } from '@core/http/http-context.tokens';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
 describe('errorInterceptor', () => {
@@ -52,7 +54,9 @@ describe('errorInterceptor', () => {
   it('passes login URL errors through without side-effects', () => {
     let errorThrown = false;
     http
-      .get('/api/auth/login/test')
+      .get('/api/auth/login/test', {
+        context: new HttpContext().set(SKIP_ERROR_INTERCEPTOR, true),
+      })
       .subscribe({ error: () => (errorThrown = true) });
     flushError('/api/auth/login/test', 401);
 

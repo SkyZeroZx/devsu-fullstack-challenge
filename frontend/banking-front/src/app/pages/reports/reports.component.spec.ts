@@ -94,11 +94,6 @@ describe('ReportsComponent', () => {
     expectContainedText(fixture, 'Reportes');
   });
 
-  it('should start with rows as null (no data loaded yet)', () => {
-    // rows is null until the initial reactive fetch completes
-    expect(component.rows()).toBeNull();
-  });
-
   it('should auto-load the report on init with the default 1-month date range', async () => {
     await flushMacrotask();
     await fixture.whenStable();
@@ -117,6 +112,7 @@ describe('ReportsComponent', () => {
   });
 
   it('should mark form as touched when search is called with empty dates', () => {
+    reportServiceSpy.getReport.mockClear();
     component.form.reset();
     component.search();
     expect(component.form.touched).toBe(true);

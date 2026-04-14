@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '@core/services/auth/auth.service';
 import { ToastService } from '@shared/ui/toast/toast.service';
+import { SKIP_ERROR_INTERCEPTOR } from '@core/http/http-context.tokens';
 
 interface ErrorHandler {
   type: 'error' | 'warn';
@@ -30,7 +31,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (req.url.includes('/api/auth/login')) {
+      if (req.context?.get(SKIP_ERROR_INTERCEPTOR)) {
         return throwError(() => error);
       }
 
