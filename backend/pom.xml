@@ -32,6 +32,17 @@
         <sonar.exclusions>**/*Test.java,**/*IT.java,**/*.spec.ts,**/*.test.ts</sonar.exclusions>
         <sonar.test.exclusions>**/*Test.java,**/*IT.java,**/*.spec.ts,**/*.test.ts</sonar.test.exclusions>
         
+        <sonar.coverage.exclusions>
+            **/*Application.java,
+            **/*Config.java,
+            **/*Properties.java,
+            **/*Mapper.java,
+            **/*DTO.java,
+            **/*Exception.java,
+            **/*Adapter.java,
+            **/*ErrorHandler.java
+        </sonar.coverage.exclusions>
+
         <java.version>21</java.version>
         <spring-cloud.version>2024.0.1</spring-cloud.version>
         <mapstruct.version>1.6.3</mapstruct.version>
