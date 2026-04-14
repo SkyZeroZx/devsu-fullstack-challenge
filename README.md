@@ -49,6 +49,10 @@ De esta forma, puedes probar cualquier endpoint de **Clientes**, **Cuentas**, **
 >
 > Esto se debe a que, en el estado actual de Angular, estas funcionalidades aún son **experimentales** y no se consideran adecuadas para un entorno de producción.
 
+## Demo
+
+https://github.com/user-attachments/assets/3b6e33e3-b972-4ccc-952d-2bbd36268c17
+
 ## Tecnologías
 
 | Capa          | Tecnología                                 |
@@ -63,18 +67,17 @@ De esta forma, puedes probar cualquier endpoint de **Clientes**, **Cuentas**, **
 ## Integración Continua (CI) y Calidad
 
 - **Pipelines:** Ejecutamos CI para backend y frontend mediante GitHub Actions. Enlaces a los workflows:
-    - Backend CI: https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml
-    - Frontend CI: https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml
+  - Backend CI: https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml
+  - Frontend CI: https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml
 
 - **Badges:**
 
-    [![CI Backend](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml/badge.svg)](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml)
-    [![CI Frontend](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml/badge.svg)](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml)
+  [![CI Backend](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml/badge.svg)](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml)
+  [![CI Frontend](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml/badge.svg)](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml)
 
 - **Análisis de calidad (Sonar):** Ejecutamos análisis estático en CI. Imagen de referencia:
 
-    ![Sonar](docs/image/sonar.png)
-
+  ![Sonar](docs/image/sonar.png)
 
 ## Estructura del proyecto
 
