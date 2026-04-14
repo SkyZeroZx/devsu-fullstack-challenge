@@ -79,7 +79,7 @@ public class RedisConfig implements CachingConfigurer {
                         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                         .activateDefaultTyping(
                                 ptv,
-                                ObjectMapper.DefaultTyping.EVERYTHING,
+                                ObjectMapper.DefaultTyping.NON_FINAL,
                                 JsonTypeInfo.As.PROPERTY);
 
         return new GenericJackson2JsonRedisSerializer(mapper);
