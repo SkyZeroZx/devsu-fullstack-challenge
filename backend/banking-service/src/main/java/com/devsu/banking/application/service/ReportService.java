@@ -2,6 +2,7 @@ package com.devsu.banking.application.service;
 
 import com.devsu.banking.application.dto.PagedResponseDTO;
 import com.devsu.banking.application.dto.ReportResponseDTO;
+import com.devsu.banking.domain.exception.ReportGenerationException;
 import com.devsu.banking.domain.model.Account;
 import com.devsu.banking.domain.model.Transaction;
 import com.devsu.banking.domain.repository.TransactionRepository;
@@ -134,7 +135,7 @@ public class ReportService {
             return Base64.getEncoder().encodeToString(baos.toByteArray());
         } catch (Exception e) {
             log.error("Error generating PDF: {}", e.getMessage(), e);
-            throw new RuntimeException("Error generating PDF report", e);
+            throw new ReportGenerationException("Error generating PDF report", e);
         }
     }
 
@@ -171,7 +172,7 @@ public class ReportService {
 
             return table;
         } catch (Exception e) {
-            throw new RuntimeException("Error building PDF table", e);
+            throw new ReportGenerationException("Error building PDF table", e);
         }
     }
 

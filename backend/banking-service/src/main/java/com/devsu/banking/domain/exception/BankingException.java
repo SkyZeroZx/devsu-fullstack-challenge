@@ -11,6 +11,11 @@ public abstract class BankingException extends RuntimeException {
         this.status = status;
     }
 
+    protected BankingException(String message, HttpStatus status, Throwable cause) {
+        super(message, cause);
+        this.status = status;
+    }
+
     public HttpStatus getStatus() {
         return status;
     }
