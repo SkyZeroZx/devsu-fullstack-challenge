@@ -2,6 +2,30 @@
 
 Aplicación bancaria full-stack con autenticación JWT, API Gateway y un frontend reactivo en Angular. Construida como parte del desafío técnico de Devsu.
 
+## Inicio Rapido
+
+Levanta el proyecto completo en dos pasos con Docker:
+
+**1. Backend** (con datos de prueba listos):
+
+```bash
+cd backend
+docker compose -f docker-compose.yml -f docker-compose.staging.yml up --build
+```
+
+**2. Frontend** (nueva terminal):
+
+```bash
+cd frontend/banking-front
+docker compose up --build
+```
+
+Abre **http://localhost:4200** e inicia sesión con:
+
+| Usuario | Contraseña |
+| ------- | ---------- |
+| `admin` | `admin123` |
+
 ## Pruebas con Postman
 
 En la raíz del proyecto encontrarás el archivo `devsu-banking.postman_collection.json`. Este archivo contiene la colección completa de endpoints del API.
