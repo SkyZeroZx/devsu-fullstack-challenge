@@ -60,6 +60,22 @@ De esta forma, puedes probar cualquier endpoint de **Clientes**, **Cuentas**, **
 | Infra         | Docker, Docker Compose, Nginx              |
 | Testing       | JaCoCo, Karate E2E, Jest                   |
 
+## Integración Continua (CI) y Calidad
+
+- **Pipelines:** Ejecutamos CI para backend y frontend mediante GitHub Actions. Enlaces a los workflows:
+    - Backend CI: https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml
+    - Frontend CI: https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml
+
+- **Badges:**
+
+    [![CI Backend](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml/badge.svg)](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-backend.yml)
+    [![CI Frontend](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml/badge.svg)](https://github.com/SkyZeroZx/devsu-fullstack-challenge/actions/workflows/ci-frontend.yml)
+
+- **Análisis de calidad (Sonar):** Ejecutamos análisis estático en CI. Imagen de referencia:
+
+    ![Sonar](docs/image/sonar.png)
+
+
 ## Estructura del proyecto
 
 ```
