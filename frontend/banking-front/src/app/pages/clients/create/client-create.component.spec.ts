@@ -70,7 +70,7 @@ describe('ClientCreateComponent', () => {
       edad: 30,
       identificacion: '1234567890',
       direccion: 'Otavalo sn y principal',
-      telefono: '098254785',
+      telefono: '0982547850',
       contrasena: 'secret',
       estado: true,
     };

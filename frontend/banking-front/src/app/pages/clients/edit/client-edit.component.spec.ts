@@ -23,7 +23,7 @@ const mockClient: ClientResponse = {
   edad: 28,
   identificacion: '9876543210',
   direccion: 'Quito',
-  telefono: '099000000',
+  telefono: '0990000001',
   estado: true,
 };
 

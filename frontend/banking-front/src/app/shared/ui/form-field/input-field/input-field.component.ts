@@ -90,9 +90,20 @@ export class InputFieldComponent implements ControlValueAccessor, OnInit {
     this.disabled.set(isDisabled);
   }
 
+  private getInputValue(
+    el: HTMLInputElement,
+    type: string,
+  ): string | number | null {
+    if (type === 'number') {
+      return el.value === '' ? null : el.valueAsNumber;
+    }
+
+    return el.value;
+  }
+
   protected onInputChange(event: Event): void {
     const el = event.target as HTMLInputElement;
-    const val = this.type() === 'number' ? el.valueAsNumber : el.value;
+    const val = this.getInputValue(el, this.type());
     this.value.set(val);
     this.onChangeFn(val);
   }

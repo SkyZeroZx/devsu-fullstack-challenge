@@ -61,10 +61,10 @@ export class ClientFormComponent implements ControlValueAccessor, Validator {
   readonly form = this.fb.nonNullable.group({
     nombre: ['', [Validators.required, Validators.maxLength(100)]],
     genero: ['', Validators.required],
-    edad: [0, [Validators.required, Validators.min(1)]],
+    edad: [null, [Validators.required, Validators.min(18)]],
     identificacion: ['', [Validators.required, Validators.maxLength(20)]],
     direccion: ['', Validators.required],
-    telefono: ['', Validators.required],
+    telefono: ['', [Validators.required, Validators.pattern(/^09\d{8}$/)]],
     contrasena: ['', [Validators.required, Validators.minLength(4)]],
     estado: [true],
   });

@@ -9,9 +9,9 @@ import {
   withFetch,
   withInterceptors,
 } from '@angular/common/http';
-import { globalErrorHandler } from './core/errors';
+import { globalErrorHandler } from '@core/errors';
 import { provideServiceWorker } from '@angular/service-worker';
-import { swRegistrationOptions } from './core/config/service-worker';
+import { swRegistrationOptions } from '@core/config/service-worker';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { errorInterceptor } from '@core/interceptors/error.interceptor';
 import { provideAnalytics } from '@core/services/analytics/analytics.adapter';

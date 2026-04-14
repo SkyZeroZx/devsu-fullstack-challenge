@@ -34,7 +34,11 @@
       <app-input-field label="Dirección" formControlName="direccion" />
     </div>
     <div>
-      <app-input-field label="Teléfono" formControlName="telefono" />
+      <app-input-field
+        label="Teléfono"
+        formControlName="telefono"
+        [customErrors]="{ pattern: 'Ingrese un número celular ecuatoriano válido (09XXXXXXXX)' }"
+      />
     </div>
   </div>
   @if (showPassword()) {

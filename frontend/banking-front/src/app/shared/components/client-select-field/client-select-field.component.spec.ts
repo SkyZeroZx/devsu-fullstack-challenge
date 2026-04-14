@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { ClientSelectFieldComponent } from './client-select-field.component';

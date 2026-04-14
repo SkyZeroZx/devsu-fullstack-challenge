@@ -20,7 +20,7 @@ import { AccountRequest, AccountType, FormType } from '@core/interface';
 import { CheckboxFieldComponent } from '@shared/ui/form-field/checkbox-field/checkbox-field.component';
 import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
 import { SelectFieldComponent } from '@shared/ui/form-field/select-field/select-field.component';
-import { ClientSelectFieldComponent } from '@shared/ui/form-field/client-select-field/client-select-field.component';
+import { ClientSelectFieldComponent } from '@shared/components/client-select-field/client-select-field.component';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
 
 @Component({

@@ -18,7 +18,7 @@ import {
 import { MovementType } from '@core/interface';
 import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
 import { SelectFieldComponent } from '@shared/ui/form-field/select-field/select-field.component';
-import { AccountSelectFieldComponent } from '@shared/ui/form-field/account-select-field/account-select-field.component';
+import { AccountSelectFieldComponent } from '@app/shared/components/account-select-field/account-select-field.component';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
 
 @Component({

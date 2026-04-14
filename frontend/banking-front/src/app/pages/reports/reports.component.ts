@@ -33,12 +33,12 @@ import {
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ClickTrackingDirective } from '@shared/directives/click-tracking/click-tracking.directive';
 import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
-import { ClientSelectFieldComponent } from '@shared/ui/form-field/client-select-field/client-select-field.component';
+import { ClientSelectFieldComponent } from '@shared/components/client-select-field/client-select-field.component';
 import { DecimalPipe } from '@angular/common';
 import { ControlErrorModule } from '@app/shared/ui/control-error/control-error.module';
 import { DataTableComponent } from '@shared/ui/data-table/data-table.component';
 import { TableColumnDirective } from '@shared/ui/data-table/table-column.directive';
-import { IconComponent } from '@shared/ui/icon/icon.component';
+import { IconComponent } from '@app/shared/ui/icon/icon.component';
 import { defaultDateRange } from '@core/utils/util';
 
 @Component({
