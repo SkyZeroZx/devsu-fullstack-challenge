@@ -1,13 +1,14 @@
 package com.devsu.banking.gateway.filter;
 
+import com.devsu.banking.gateway.config.GatewaySecurityProperties;
+import com.devsu.banking.gateway.dto.ErrorResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import javax.crypto.SecretKey;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
@@ -24,17 +25,15 @@ import reactor.core.publisher.Mono;
 @Order(-2)
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter implements GlobalFilter {
 
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final List<String> OPEN_PATHS = List.of("/auth/**", "/actuator/**");
 
-    private final SecretKey secretKey;
+    private final SecretKey jwtSecretKey;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
-
-    public JwtAuthenticationFilter(@Value("${jwt.secret}") String secret) {
-        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-    }
+    private final GatewaySecurityProperties securityProperties;
+    private final ObjectMapper objectMapper;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -70,22 +69,28 @@ public class JwtAuthenticationFilter implements GlobalFilter {
     }
 
     Claims parseToken(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
+        return Jwts.parser().verifyWith(jwtSecretKey).build().parseSignedClaims(token).getPayload();
     }
 
     private boolean isOpenPath(String path) {
-        return OPEN_PATHS.stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
+        return securityProperties.getOpenPaths().stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
 
     private Mono<Void> rejectWith(ServerWebExchange exchange, String message) {
         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        String body =
-                String.format(
-                        "{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"%s\"}", message);
-        DataBuffer buffer =
-                exchange.getResponse().bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
-        return exchange.getResponse().writeWith(Mono.just(buffer));
+        try {
+            byte[] body =
+                    objectMapper.writeValueAsBytes(
+                            new ErrorResponse(
+                                    HttpStatus.UNAUTHORIZED.value(), "Unauthorized", message));
+            DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(body);
+            return exchange.getResponse().writeWith(Mono.just(buffer));
+        } catch (JsonProcessingException e) {
+            log.error("Failed to serialize error response", e);
+            return exchange.getResponse().setComplete();
+        }
     }
 }
