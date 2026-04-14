@@ -1,11 +1,6 @@
 <ng-container [formGroup]="form" (focusout)="onTouchedFn()">
   <div>
-    <app-select-field
-      label="Cuenta"
-      formControlName="numeroCuenta"
-      [options]="accountOptions()"
-      placeholder="Seleccione cuenta"
-    />
+    <app-account-select formControlName="numeroCuenta" />
   </div>
 
   <div class="form__row">

@@ -11,12 +11,14 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { IntegerOnlyDirective } from '@shared/directives/integer-only/integer-only.directive';
 
 let nextInputId = 0;
 
 @Component({
   selector: 'app-input-field',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [IntegerOnlyDirective],
   templateUrl: './input-field.component.html',
   styleUrl: './input-field.component.scss',
   host: {
@@ -38,6 +40,7 @@ export class InputFieldComponent implements ControlValueAccessor, OnInit {
   readonly step = input<string | undefined>(undefined);
   readonly min = input<string | undefined>(undefined);
   readonly readonly = input(false);
+  readonly integer = input(false);
 
   readonly fieldId = `input-field-${++nextInputId}`;
 

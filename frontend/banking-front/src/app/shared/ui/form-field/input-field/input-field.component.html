@@ -10,10 +10,11 @@
   [type]="type()"
   [placeholder]="placeholder()"
   [disabled]="disabled()"
-  [attr.step]="step()"
+  [attr.step]="integer() ? '1' : step()"
   [attr.min]="min()"
   [attr.readonly]="readonly() ? '' : null"
   [attr.aria-invalid]="invalid() || null"
+  [appIntegerOnly]="integer() || null"
   (input)="onInputChange($event)"
   (blur)="markTouched()"
   #inputRef

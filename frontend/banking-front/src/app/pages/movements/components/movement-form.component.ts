@@ -12,16 +12,13 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   forwardRef,
   inject,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
 import { MovementType } from '@core/interface';
-import { AccountService } from '@core/services/account/account.service';
 import { InputFieldComponent } from '@shared/ui/form-field/input-field/input-field.component';
 import { SelectFieldComponent } from '@shared/ui/form-field/select-field/select-field.component';
+import { AccountSelectFieldComponent } from '@shared/ui/form-field/account-select-field/account-select-field.component';
 import { ControlErrorModule } from '@shared/ui/control-error/control-error.module';
 
 @Component({
@@ -32,6 +29,7 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
     FormsModule,
     InputFieldComponent,
     SelectFieldComponent,
+    AccountSelectFieldComponent,
     ControlErrorModule,
   ],
   templateUrl: './movement-form.component.html',
@@ -50,25 +48,12 @@ import { ControlErrorModule } from '@shared/ui/control-error/control-error.modul
   ],
 })
 export class MovementFormComponent implements ControlValueAccessor, Validator {
-  private readonly accountService = inject(AccountService);
   private readonly fb = inject(FormBuilder);
-
-  readonly accounts = toSignal(
-    this.accountService.getAll({ size: 10 }).pipe(catchError(() => of(null))),
-    { initialValue: null },
-  );
 
   readonly movementTypeOptions = [
     { value: 'CREDITO' as MovementType, label: 'Crédito' },
     { value: 'DEBITO' as MovementType, label: 'Débito' },
   ];
-
-  readonly accountOptions = computed(() =>
-    (this.accounts()?.content ?? []).map((a) => ({
-      value: a.numeroCuenta,
-      label: `${a.numeroCuenta} — ${a.cliente}`,
-    })),
-  );
 
   readonly form = this.fb.nonNullable.group({
     numeroCuenta: ['', Validators.required],
