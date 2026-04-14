@@ -1,6 +1,6 @@
 # Desafío Devsu Banking
 
-Aplicación bancaria full-stack con autenticación JWT, API Gateway y un frontend reactivo en Angular. Construida como parte del desafío técnico de Devsu.
+Aplicación bancaria full-stack con autenticación JWT, API Gateway y un frontend reactivo en Angular. Construida como parte del desafío técnico Fullstack.
 
 ## Inicio Rapido
 
